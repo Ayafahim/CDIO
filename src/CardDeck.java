@@ -21,7 +21,7 @@ public class CardDeck {
     }
 
     public void populate() throws IOException {
-        File file = new File("./resources/cards.txt");
+        File file = new File("cards.txt");
         if (!file.exists())
             throw new FileNotFoundException("Could not find " + file.getPath());
 
