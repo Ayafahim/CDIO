@@ -13,7 +13,7 @@ public class Game {
         board.initialDeck.populate();
         board.initialDeck.shuffleDeck();
         board.initialPopulateBoard();
-        //board.printBoard();
+        AI ai = new AI(new Search(board), board);
 
         Scanner sc = new Scanner(System.in);
         String input;
