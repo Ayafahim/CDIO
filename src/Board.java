@@ -1,3 +1,5 @@
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
@@ -6,7 +8,6 @@ public class Board {
     //Initialize all the piles contained in the board
     CardDeck initialDeck = new CardDeck("Initial Deck"); //id = "deck"
     CardDeck drawDeck = new CardDeck("Draw Pile"); // "draw"
-    CardDeck drawDiscard = new CardDeck("Discard Pile"); // "discard"
     CardDeck pile1 = new CardDeck("Pile 1"); // "1"
     CardDeck pile2 = new CardDeck("Pile 2"); // "2"
     CardDeck pile3 = new CardDeck("Pile 3"); // "3"
@@ -21,22 +22,19 @@ public class Board {
 
     /** Author STEVEN
      *  Parses text input for manual use of the program
-     *  Cheatsheet -> piles 1-7, foundations 8-11, draw 12, discard 13
+     *  Cheatsheet -> piles 1-7, foundations 8-11,
      */
     public void parseInput(String input) throws Exception {
         switch (input) {
             case "goodbye": {return;}
             case "shuffle": {drawDeck.shuffleDeck();break;}
-            case "draw": {attemptMove(new Move(drawDeck,drawDiscard, drawDeck.size()-1));break;}
             case "ai": {
                 System.out.println("No AI implemented yet.");
                 break;
             }
-            case "free 5": {drawUntilCardAvailable(5);break;}
             case "restart": {
                 initialDeck.clearDeck();
                 drawDeck.clearDeck();
-                drawDiscard.clearDeck();
                 pile1.clearDeck();
                 pile2.clearDeck();
                 pile3.clearDeck();
@@ -77,30 +75,6 @@ public class Board {
                 cd.get(cd.size()-1).setFaceUp(true);
             }
         }
-        if (drawDiscard.size() > 0) {
-            if (!drawDiscard.get(drawDiscard.size() - 1).isFaceUp()) {
-                drawDiscard.get(drawDiscard.size() - 1).setFaceUp(true);
-            }
-        }
-    }
-    /** Author STEVEN
-     Moves a card given by an index from anywhere in the draw pile to the top of the discard pile naturally
-     */
-    public void drawUntilCardAvailable(int index) {
-        int num = drawDeck.size() - index;
-        for (int i = 0; i < num; i++) {
-            drawCard(drawDeck,drawDiscard);
-        }
-    }
-    /** Author STEVEN
-     Moves a card given by an index from anywhere in the draw pile to the top of the discard pile naturally
-     */
-    public void emptyDiscardPile() {
-        for (int i = 0; i < drawDiscard.size()-1; i++) {
-            drawDiscard.get(i).setFaceUp(false);
-            drawDeck.add(drawDiscard.get(i));
-            drawDiscard.remove(i);
-        }
     }
 
     /** Author STEVEN
@@ -128,25 +102,6 @@ public class Board {
         //Attempts to move card from foundation to number pile
         else if (isFoundationPile(s) && isNumberPile(d)) {
             if (canMoveToNumberPile(s, d, x)) {
-                moveCardDeckToDeck(s, d, x, true);
-                return true;
-            }
-        }
-        //Attempts to move card from Draw to Discard
-        else if (isDrawPile(s) && isDiscardPile(d)) {
-            drawCard(s,d);
-            return true;
-        }
-        //Attempts to move card from Discard to Number pile
-        else if (isDiscardPile(s) && isNumberPile(d)) {
-            if (canMoveToNumberPile(s, d, x)) {
-                moveCardDeckToDeck(s, d, x, true);
-                return true;
-            }
-        }
-        //Attempts to move card from Discard to Foundation
-        else if (isDiscardPile(s) && isFoundationPile(d)) {
-            if (canMoveToFoundation(s, d, x)) {
                 moveCardDeckToDeck(s, d, x, true);
                 return true;
             }
@@ -243,7 +198,7 @@ public class Board {
         }
     }
 
-    /** Author ZAINAB + STEVEN
+    /** Author STEVEN
      *  Draws a card from the deck and puts it in the discard pile face-up. If the draw pile is empty, fills the draw
      *  pile with the discard pile, retaining their natural order before drawing a card again.
      */
@@ -308,12 +263,6 @@ public class Board {
     /** Author STEVEN
      * Helper function for determining pile type.
      */
-    public boolean isDiscardPile(CardDeck source) {
-        return source == drawDiscard;
-    }
-    /** Author STEVEN
-     * Helper function for determining pile type.
-     */
     public boolean isDrawPile(CardDeck source) {
         return source == drawDeck;
     }
@@ -333,7 +282,6 @@ public class Board {
         return switch (input) {
             case "-1", "deck" -> initialDeck;
             case "12", "draw" -> drawDeck;
-            case "13", "discard" -> drawDiscard;
             case "1" -> pile1;
             case "2" -> pile2;
             case "3" -> pile3;
@@ -355,7 +303,6 @@ public class Board {
     public String getDeckName(CardDeck deck) {
         if (deck.equals(initialDeck)) {return "Initial Deck";}
         else if (deck.equals(drawDeck)) {return "Draw Pile";}
-        else if (deck.equals(drawDiscard)) {return "Discard Pile";}
         else if (deck.equals(pile1)) {return "Pile 1";}
         else if (deck.equals(pile2)) {return "Pile 2";}
         else if (deck.equals(pile3)) {return "Pile 3";}
@@ -393,7 +340,7 @@ public class Board {
 
         // Create new super print method with formatting
         System.out.println("DR" + tab + drawDeck.printCard(drawDeck.size()-1) + dtab + "FH" + tab + "FS" + tab + "FD" + tab + "FC");
-        System.out.println("DI" + tab + drawDiscard.printCard(drawDiscard.size()-1) + dtab +heartsPile.printCard(heartsPile.size() - 1) + tab + spadesPile.printCard(spadesPile.size() - 1)
+        System.out.println(tab + dtab +heartsPile.printCard(heartsPile.size() - 1) + tab + spadesPile.printCard(spadesPile.size() - 1)
                 + tab + diamondsPile.printCard(diamondsPile.size() - 1) + tab + clubsPile.printCard(clubsPile.size() - 1));
         System.out.println("P1  P2  P3  P4  P5  P6  P7");
         for (int i = 0; i < longestNumberPileLength(); i++) {
