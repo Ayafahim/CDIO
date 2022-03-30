@@ -1,12 +1,14 @@
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Board {
 
     //Initialize all the piles contained in the board
     CardDeck initialDeck = new CardDeck("Initial Deck"); //id = "deck"
+
     CardDeck drawDeck = new CardDeck("Draw Pile"); // "draw"
     CardDeck pile1 = new CardDeck("Pile 1"); // "1"
     CardDeck pile2 = new CardDeck("Pile 2"); // "2"
@@ -19,6 +21,10 @@ public class Board {
     CardDeck spadesPile = new CardDeck("Spades Foundation"); // "spades"
     CardDeck diamondsPile = new CardDeck("Diamonds Foundation"); // "diamonds"
     CardDeck clubsPile = new CardDeck("Clubs Foundation"); // "clubs"
+
+    ArrayList<CardDeck> numberPiles = new ArrayList<>(Arrays.asList(pile1,pile2,pile3,pile4,pile5,pile6,pile7));
+    ArrayList<CardDeck> foundationPiles = new ArrayList<>(Arrays.asList(heartsPile,spadesPile,diamondsPile,clubsPile));
+
 
     /** Author STEVEN
      *  Parses text input for manual use of the program
