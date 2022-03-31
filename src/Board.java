@@ -1,5 +1,3 @@
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.StringTokenizer;
@@ -91,24 +89,32 @@ public class Board {
         CardDeck d = move.getDestinationDeck();
         int x = move.getIndex();
 
+        //Attempts to move a card from the draw pile to number pile
+        if (isDrawPile(s) && isNumberPile(d)) {
+
+        }
+        //Attempts to move a card from the draw pile to a foundation
+        else if (isDrawPile(s) && isFoundationPile(d)) {
+
+        }
         //Attempts to move card(s) from number pile to number pile.
-        if (isNumberPile(s) && isNumberPile(d)) {
+        else if (isNumberPile(s) && isNumberPile(d)) {
             if (canMoveToNumberPile(s, d, x)) {
-                moveCardDeckToDeck(s, d, x, true);
+                moveCardPileToPile(s, d, x, true);
                 return true;
             }
         }
         //Attempts to move card from number pile to foundation
         else if (isNumberPile(s) && isFoundationPile(d)) {
             if (canMoveToFoundation(s, d, x)) {
-                moveCardDeckToDeck(s, d, x, true);
+                moveCardPileToPile(s, d, x, true);
                 return true;
             }
         }
         //Attempts to move card from foundation to number pile
         else if (isFoundationPile(s) && isNumberPile(d)) {
             if (canMoveToNumberPile(s, d, x)) {
-                moveCardDeckToDeck(s, d, x, true);
+                moveCardPileToPile(s, d, x, true);
                 return true;
             }
         }
@@ -166,6 +172,11 @@ public class Board {
         if (source.size() - 1 == index) {
             legalIndex = true;
         }
+        //Any index can be moved from the draw pile
+        else if (isDrawPile(source)) {
+            legalIndex = true;
+        }
+
         //Suits must match on source & destination
         if ((suit == Suit.HEARTS && destination == heartsPile)
                 || (suit == Suit.SPADES && destination == spadesPile)
@@ -192,10 +203,28 @@ public class Board {
     }
 
     /** Author STEVEN
+     * Moves a card from the draw pile to a destination without regard for the legality of the move.
+     */
+    public void moveCardDrawPileToPile(Move move) {
+        CardDeck s = move.getSourceDeck();
+        CardDeck d = move.getDestinationDeck();
+        int x = move.getIndex();
+
+        //Double-checking
+        if (!isDrawPile(s)) {
+            System.out.println("ERROR -> sending non-drawPile to moveCardDrawPileToPile");
+            return;
+        }
+
+        d.add(s.get(x));
+        s.remove(x);
+    }
+
+    /** Author STEVEN
      * Simply moves a card or several from 1 deck to another. Checks for legality of moves must be done before calling
      * this function. The function moves every card from the given index to the end of the list, in order.
      */
-    public void moveCardDeckToDeck(CardDeck source, CardDeck destination, int index, boolean flipFaceUp) {
+    public void moveCardPileToPile(CardDeck source, CardDeck destination, int index, boolean flipFaceUp) {
 
         while (source.size() > index) {
             destination.add(source.get(index));
@@ -329,12 +358,12 @@ public class Board {
     public void initialPopulateBoard() {
         for (int i = 1; i <= 7; i++) {
             //Fills each card pile with 1-7 cards, respectively. Then it flips the last card face up.
-            moveCardDeckToDeck(initialDeck, getDeck(Integer.toString(i)),
+            moveCardPileToPile(initialDeck, getDeck(Integer.toString(i)),
                     initialDeck.size() - (i), false);
             getDeck(Integer.toString(i)).get(i - 1).setFaceUp(true);
 
         }
-        moveCardDeckToDeck(initialDeck, drawDeck, 0, false);
+        moveCardPileToPile(initialDeck, drawDeck, 0, false);
     }
 
     /** Author STEVEN
