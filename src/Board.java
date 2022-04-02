@@ -1,5 +1,3 @@
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.StringTokenizer;
@@ -35,7 +33,7 @@ public class Board {
             case "goodbye": {return;}
             case "shuffle": {drawDeck.shuffleDeck();break;}
             case "ai": {
-                System.out.println("No AI implemented yet.");
+
                 break;
             }
             case "restart": {

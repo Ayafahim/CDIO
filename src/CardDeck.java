@@ -14,6 +14,11 @@ import java.util.Scanner;
 public class CardDeck {
 
     private final ArrayList<Card> cards = new ArrayList<>(52);
+
+    public String getName() {
+        return name;
+    }
+
     private final String name;
 
     public CardDeck(String name) {
