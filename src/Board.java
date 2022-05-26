@@ -208,8 +208,23 @@ public class Board {
      *  Draws a card from the deck and puts it in the discard pile face-up. If the draw pile is empty, fills the draw
      *  pile with the discard pile, retaining their natural order before drawing a card again.
      */
-    public void drawCard(CardDeck source, CardDeck destination) {
-        int n = destination.size()-1;
+    public void draw3Cards() {
+        //New code to fit the competition requirements. Old code commented out below.
+        CardDeck draw = drawPile;
+        CardDeck discard = discardPile;
+        if (draw.size() >= 3) {
+            for (int i = 0; i < 3; i++) {
+                //add card to discard and remove it from draw
+                discard.add(draw.get(draw.size()-1));
+                draw.remove(draw.size()-1);
+                discard.get(discard.size()-1).setFaceUp(true);
+            }
+        }
+        else {
+            shuffleDiscardIntoDraw();
+        }
+
+        /*int n = destination.size()-1;
         if ( source.size() == 0 ){
             while(destination.size() != 0){
 
@@ -218,7 +233,7 @@ public class Board {
                 destination.remove(n);
                 n--;
             }
-            drawCard(source, destination);
+            draw3Cards(source, destination);
 
         }
         else{
@@ -232,8 +247,20 @@ public class Board {
 
             destination.get(destination.size()-1).setFaceUp(true);
 
-        }
+        }*/
 
+    }
+
+    /** Author STEVEN
+     * Moves the cards one by one from the bottom of the discard pile to the bottom of the draw pile, as outlined
+     * in the competition rules. NEEDS TESTING STILL :)
+     */
+    public void shuffleDiscardIntoDraw() {
+        for (int i = 0; i < discardPile.size(); i++) {
+            drawPile.appendToIndexOne(discardPile.get(0));
+            drawPile.get(0).setFaceUp(false);
+            discardPile.remove(0);
+        }
     }
 
     /** Author STEVEN

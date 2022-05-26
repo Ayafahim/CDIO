@@ -56,6 +56,13 @@ public class CardDeck {
         };
     }
 
+    /**
+    Used in order to move the discard pile back to the draw pile, UNDER the cards already there.
+    */
+    public void appendToIndexOne(Card card) {
+        cards.add(0,card);
+    }
+
     private int parseValue(String s) {
         //new code to follow specifications for the competition. Old code commented out below.
         return Integer.parseInt(s);
