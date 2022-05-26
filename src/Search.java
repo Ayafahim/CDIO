@@ -55,7 +55,7 @@ public class Search {
                     case SPADES -> destination = board.spadesPile;
                     case DIAMONDS -> destination = board.diamondsPile;
                     case CLUBS -> destination = board.clubsPile;
-                    default -> destination = board.initialDeck;
+                    default -> destination = board.initialPile;
                 }
                 setDeckNumber(i);
                 setAceIndex(sourceTopCard.getValue());
@@ -63,8 +63,8 @@ public class Search {
             }
         }
         if (deckNumber == 0 && aceIndex == 0) {
-            for (int i = 0; i <= this.board.drawDeck.size(); i++) {
-                CardDeck sourceDeck = this.board.drawDeck;
+            for (int i = 0; i <= this.board.drawPile.size(); i++) {
+                CardDeck sourceDeck = this.board.drawPile;
                 Card card = sourceDeck.get(i);
                 if (card.getValue() == 1) {
                     switch (card.getSuit()) {
@@ -72,7 +72,7 @@ public class Search {
                         case SPADES -> destination = board.spadesPile;
                         case DIAMONDS -> destination = board.diamondsPile;
                         case CLUBS -> destination = board.clubsPile;
-                        default -> destination = board.initialDeck;
+                        default -> destination = board.initialPile;
                     }
                     setDeckNumber(12);
                     setAceIndex(i);

@@ -11,8 +11,8 @@ public class Game {
 
     public void startGame() throws Exception {
         Board board = new Board();
-        board.initialDeck.populate();
-        board.initialDeck.shuffleDeck();
+        board.initialPile.populate();
+        board.initialPile.shuffleDeck();
         board.initialPopulateBoard();
         AI ai = new AI(new Search(board), board);
 

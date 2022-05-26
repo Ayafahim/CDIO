@@ -30,14 +30,17 @@ public class Card {
     }
 
     public String parseValueReverse(int n) {
-        return switch (n) {
+        //New code to follow the competition specifications. Old code below.
+        return String.valueOf(n);
+
+        /*return switch (n) {
             case 1 -> "A";
             case 10 -> "T";
             case 11 -> "J";
             case 12 -> "Q";
             case 13 -> "K";
             default -> String.valueOf(n);
-        };
+        };*/
     }
 
     public boolean isRed() {

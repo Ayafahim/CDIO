@@ -5,9 +5,9 @@ import java.util.StringTokenizer;
 public class Board {
 
     //Initialize all the piles contained in the board
-    CardDeck initialDeck = new CardDeck("Initial Deck"); //id = "deck"
-
-    CardDeck drawDeck = new CardDeck("Draw Pile"); // "draw"
+    CardDeck initialPile = new CardDeck("Initial Deck"); //id = "deck"
+    CardDeck drawPile = new CardDeck("Draw Pile"); // "draw"
+    CardDeck discardPile = new CardDeck("Discard Pile"); //id = "discard"
     CardDeck pile1 = new CardDeck("Pile 1"); // "1"
     CardDeck pile2 = new CardDeck("Pile 2"); // "2"
     CardDeck pile3 = new CardDeck("Pile 3"); // "3"
@@ -20,6 +20,7 @@ public class Board {
     CardDeck diamondsPile = new CardDeck("Diamonds Foundation"); // "diamonds"
     CardDeck clubsPile = new CardDeck("Clubs Foundation"); // "clubs"
 
+    ArrayList<CardDeck> drawAndDiscardPiles = new ArrayList<>(Arrays.asList(drawPile,discardPile));
     ArrayList<CardDeck> numberPiles = new ArrayList<>(Arrays.asList(pile1,pile2,pile3,pile4,pile5,pile6,pile7));
     ArrayList<CardDeck> foundationPiles = new ArrayList<>(Arrays.asList(heartsPile,spadesPile,diamondsPile,clubsPile));
 
@@ -31,14 +32,15 @@ public class Board {
     public void parseInput(String input) throws Exception {
         switch (input) {
             case "goodbye": {return;}
-            case "shuffle": {drawDeck.shuffleDeck();break;}
+            case "shuffle": {
+                drawPile.shuffleDeck();break;}
             case "ai": {
 
                 break;
             }
             case "restart": {
-                initialDeck.clearDeck();
-                drawDeck.clearDeck();
+                initialPile.clearDeck();
+                drawPile.clearDeck();
                 pile1.clearDeck();
                 pile2.clearDeck();
                 pile3.clearDeck();
@@ -50,8 +52,8 @@ public class Board {
                 spadesPile.clearDeck();
                 diamondsPile.clearDeck();
                 clubsPile.clearDeck();
-                this.initialDeck.populate();
-                this.initialDeck.shuffleDeck();
+                this.initialPile.populate();
+                this.initialPile.shuffleDeck();
                 this.initialPopulateBoard();
                 break;
             }
@@ -268,7 +270,7 @@ public class Board {
      * Helper function for determining pile type.
      */
     public boolean isDrawPile(CardDeck source) {
-        return source == drawDeck;
+        return source == drawPile;
     }
     /** Author STEVEN
      * Helper function for determining pile type.
@@ -284,8 +286,8 @@ public class Board {
      */
     public CardDeck getDeck(String input) {
         return switch (input) {
-            case "-1", "deck" -> initialDeck;
-            case "12", "draw" -> drawDeck;
+            case "-1", "deck" -> initialPile;
+            case "12", "draw" -> drawPile;
             case "1" -> pile1;
             case "2" -> pile2;
             case "3" -> pile3;
@@ -305,8 +307,8 @@ public class Board {
      * Returns a nicer representation of deck names for use in TUI or debugging.
      */
     public String getDeckName(CardDeck deck) {
-        if (deck.equals(initialDeck)) {return "Initial Deck";}
-        else if (deck.equals(drawDeck)) {return "Draw Pile";}
+        if (deck.equals(initialPile)) {return "Initial Deck";}
+        else if (deck.equals(drawPile)) {return "Draw Pile";}
         else if (deck.equals(pile1)) {return "Pile 1";}
         else if (deck.equals(pile2)) {return "Pile 2";}
         else if (deck.equals(pile3)) {return "Pile 3";}
@@ -327,12 +329,12 @@ public class Board {
     public void initialPopulateBoard() {
         for (int i = 1; i <= 7; i++) {
             //Fills each card pile with 1-7 cards, respectively. Then it flips the last card face up.
-            moveCardDeckToDeck(initialDeck, getDeck(Integer.toString(i)),
-                    initialDeck.size() - (i), false);
+            moveCardDeckToDeck(initialPile, getDeck(Integer.toString(i)),
+                    initialPile.size() - (i), false);
             getDeck(Integer.toString(i)).get(i - 1).setFaceUp(true);
 
         }
-        moveCardDeckToDeck(initialDeck, drawDeck, 0, false);
+        moveCardDeckToDeck(initialPile, drawPile, 0, false);
     }
 
     /** Author STEVEN
@@ -343,7 +345,7 @@ public class Board {
         String dtab = "\t\t";
 
         // Create new super print method with formatting
-        System.out.println("DR" + tab + drawDeck.printCard(drawDeck.size()-1) + dtab + "FH" + tab + "FS" + tab + "FD" + tab + "FC");
+        System.out.println("DR" + tab + drawPile.printCard(drawPile.size()-1) + dtab + "FH" + tab + "FS" + tab + "FD" + tab + "FC");
         System.out.println(tab + dtab +heartsPile.printCard(heartsPile.size() - 1) + tab + spadesPile.printCard(spadesPile.size() - 1)
                 + tab + diamondsPile.printCard(diamondsPile.size() - 1) + tab + clubsPile.printCard(clubsPile.size() - 1));
         System.out.println("P1  P2  P3  P4  P5  P6  P7");

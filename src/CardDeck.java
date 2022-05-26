@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 /** Author STEVEN
  * CardDeck object that holds Card objects. Lots of methods for indirect manipulation of the underlying ArrayList as
@@ -31,10 +32,16 @@ public class CardDeck {
             throw new FileNotFoundException("Could not find " + file.getPath());
 
         Scanner scanner = new Scanner(file);
-        String next;
+        /*String next;
         while (scanner.hasNextLine()) {
             next = scanner.nextLine();
             cards.add(new Card(parseSuit(next), parseValue(next)));
+        }*/
+
+        String input = scanner.nextLine();
+        String[] rawCardInput = input.split("[a-zA-Z][0-9]+,");
+        for (int i = 0; i < rawCardInput.length-1; i++) {
+            cards.add(new Card(parseSuit(rawCardInput[i]), parseValue(rawCardInput[i])));
         }
         scanner.close();
     }
@@ -50,14 +57,17 @@ public class CardDeck {
     }
 
     private int parseValue(String s) {
-        return switch (s.split("")[1]) {
+        //new code to follow specifications for the competition. Old code commented out below.
+        return Integer.parseInt(s);
+
+        /*return switch (s.split("")[1]) {
             case "A" -> 1;
             case "T" -> 10;
             case "J" -> 11;
             case "Q" -> 12;
             case "K" -> 13;
             default -> Integer.parseInt(s.split("")[1]);
-        };
+        };*/
     }
 
     public void shuffleDeck() {
