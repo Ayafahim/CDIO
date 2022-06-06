@@ -26,8 +26,8 @@ public class CardDeck {
         this.name = name;
     }
 
-    public void populate() throws IOException {
-        File file = new File("resources/cards.txt");
+    public void populate(String deckName) throws IOException {
+        File file = new File("resources/" + deckName);
         if (!file.exists())
             throw new FileNotFoundException("Could not find " + file.getPath());
 

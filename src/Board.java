@@ -52,7 +52,7 @@ public class Board {
                 spadesPile.clearDeck();
                 diamondsPile.clearDeck();
                 clubsPile.clearDeck();
-                this.initialPile.populate();
+                this.initialPile.populate("cards.txt"); //Needs redo in order to choose which deck of cards is loaded in
                 this.initialPile.shuffleDeck();
                 this.initialPopulateBoard();
                 break;
