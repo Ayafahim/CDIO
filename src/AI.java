@@ -15,6 +15,7 @@ public class AI {
     }
 
     public void aceMove(){
+        /*
         System.out.println(search.aceSearch());
         CardDeck src = board.getDeck(Integer.toString(search.getDeckNumber()));
         CardDeck destination = null;
@@ -26,5 +27,6 @@ public class AI {
             case "Hearts Foundation" -> destination = board.getDeck("8");
         }
         Move move = new Move(src,destination,search.getAceIndex());
+         */
     }
 }
