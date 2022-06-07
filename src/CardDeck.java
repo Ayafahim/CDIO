@@ -39,9 +39,9 @@ public class CardDeck {
         }*/
 
         String input = scanner.nextLine();
-        String[] rawCardInput = input.split("[a-zA-Z][0-9]+,");
+        String[] rawCardInput = input.split(",");
         for (int i = 0; i < rawCardInput.length-1; i++) {
-            cards.add(new Card(parseSuit(rawCardInput[i]), parseValue(rawCardInput[i])));
+            cards.add(new Card(parseSuit(rawCardInput[i]), parseValue(rawCardInput[i].substring(1))));
         }
         scanner.close();
     }
