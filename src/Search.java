@@ -4,45 +4,16 @@ import java.util.List;
 public class Search {
 
     private final Board board;
-    int aceIndex = 0;
-    int deckNumber = 0;
-    CardDeck destination = null;
-
-    public int getAceIndex() {
-        return aceIndex;
-    }
-
-    public void setAceIndex(int aceIndex) {
-        this.aceIndex = aceIndex;
-    }
-
-
-    public int getDeckNumber() {
-        return deckNumber;
-    }
-
-    public void setDeckNumber(int deckNumber) {
-        this.deckNumber = deckNumber;
-    }
-
-    public CardDeck getDestination() {
-        return destination;
-    }
-
-    public void setDestination(CardDeck destination) {
-        this.destination = destination;
-    }
-
 
     public Search(Board board) {
         this.board = board;
     }
 
-    public void doShit() {
-        System.out.println(board.toString());
-    }
-
     public List<Object> aceSearch() {
+
+        int aceIndex = 0;
+        int deckNumber = 0;
+        CardDeck destination = null;
 
         for (int i = 1; i <= 7; i++) {
             CardDeck sourceDeck = this.board.getDeck(Integer.toString(i));
@@ -57,8 +28,8 @@ public class Search {
                     case CLUBS -> destination = board.clubsPile;
                     default -> destination = board.initialPile;
                 }
-                setDeckNumber(i);
-                setAceIndex(sourceTopCard.getValue());
+                deckNumber = i;
+                aceIndex = sourceTopCard.getValue();
                 break;
             }
         }
@@ -74,8 +45,8 @@ public class Search {
                         case CLUBS -> destination = board.clubsPile;
                         default -> destination = board.initialPile;
                     }
-                    setDeckNumber(12);
-                    setAceIndex(i);
+                    deckNumber = 12;
+                    aceIndex = i;
                     break;
                 }
             }
