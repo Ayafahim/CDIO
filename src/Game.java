@@ -39,6 +39,35 @@ public class Game {
 
     }
 
+    public void startDebug()  throws Exception {
+        Board board = new Board();
+        Scanner sc = new Scanner(System.in);
+        int input = -1;
+        do {
+            System.out.println("type the number for the debug deck you wish to initialize on the board.");
+            if (sc.hasNextInt()) {
+                input = sc.nextInt();
+                break;
+            }
+        } while (!sc.hasNextInt());
+
+        board.initialPile.populate("debug" + input + ".txt");
+        board.initialPopulateBoard();
+        AI ai = new AI(new Search(board), board);
+
+        String textInput;
+        do {
+            board.updateBoardState();
+            board.printBoard();
+            ai.aceMove();
+            //System.out.println(board.getDeck("draw"));
+            //System.out.println(board.getDeck("discard"));
+            System.out.println("Ready for Input");
+            textInput = sc.nextLine();
+            board.parseInput(textInput);
+        } while (!Objects.equals(textInput, "goodbye"));
+    }
+
     public void winGame() {
         //you won. good job
     }

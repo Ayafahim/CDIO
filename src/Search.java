@@ -5,6 +5,8 @@ public class Search {
 
     private final Board board;
     int aceIndex = 0;
+    int deckNumber = 0;
+    CardDeck destination = null;
 
     public int getAceIndex() {
         return aceIndex;
@@ -31,8 +33,6 @@ public class Search {
         this.destination = destination;
     }
 
-    int deckNumber = 0;
-    CardDeck destination = null;
 
     public Search(Board board) {
         this.board = board;
