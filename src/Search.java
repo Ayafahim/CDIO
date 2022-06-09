@@ -12,11 +12,10 @@ public class Search {
 
     /**
      * Author Aya
-     * Searches for Ace and returns pile number, row number (column index), suit)
+     * Searches for a given cardvalue and returns pile number, row number (column index), suit)
      */
-    public List<Object> aceSearch() {
-
-        int aceIndex = 0;
+    public List<Object> someSearch(int cardValue) {
+        int cardValueIndex = 0;
         int deckNumber = 0;
         CardDeck destination = null;
 
@@ -25,7 +24,7 @@ public class Search {
             int sourceTopCardIndex = sourceDeck.getBottomFaceCardIndex();
             Card sourceTopCard = sourceDeck.get(sourceTopCardIndex);
 
-            if (sourceTopCard.getValue() == 1) {
+            if (sourceTopCard.getValue() == cardValue) {
                 switch (sourceTopCard.getSuit()) {
                     case HEARTS -> destination = board.heartsPile;
                     case SPADES -> destination = board.spadesPile;
@@ -34,11 +33,11 @@ public class Search {
                     default -> destination = board.initialPile;
                 }
                 deckNumber = i;
-                aceIndex = sourceTopCardIndex;
+                cardValueIndex = sourceTopCardIndex;
                 break;
             }
         }
-        if (deckNumber == 0 && aceIndex == 0) {
+        if (deckNumber == 0 && cardValueIndex == 0) {
             for (int i = 0; i <= this.board.drawPile.size(); i++) {
                 CardDeck sourceDeck = this.board.drawPile;
                 Card card = sourceDeck.get(i);
@@ -51,59 +50,17 @@ public class Search {
                         default -> destination = board.initialPile;
                     }
                     deckNumber = 12;
-                    aceIndex = i;
+                    cardValueIndex = i;
                     break;
                 }
             }
         }
-        return Arrays.asList(deckNumber, aceIndex, destination.getName());
+        return Arrays.asList(deckNumber, cardValueIndex, destination.getName());
     }
 
-    /**
-     * Author Aya
-     * Searches for deuce and returns pile number, row number (column index), suit)
-     */
-    public List<Object> deuceSearch() {
-        int deuceIndex = 0;
-        int deckNumber = 0;
-        CardDeck destination = null;
 
-        for (int i = 1; i <= 7; i++) {
-            CardDeck sourceDeck = this.board.getDeck(Integer.toString(i));
-            int sourceTopCardIndex = sourceDeck.getBottomFaceCardIndex();
-            Card sourceTopCard = sourceDeck.get(sourceTopCardIndex);
 
-            if (sourceTopCard.getValue() == 2) {
-                switch (sourceTopCard.getSuit()) {
-                    case HEARTS -> destination = board.heartsPile;
-                    case SPADES -> destination = board.spadesPile;
-                    case DIAMONDS -> destination = board.diamondsPile;
-                    case CLUBS -> destination = board.clubsPile;
-                    default -> destination = board.initialPile;
-                }
-                deckNumber = i;
-                deuceIndex = sourceTopCardIndex;
-                break;
-            }
-        }
-        if (deckNumber == 0 && deuceIndex == 0) {
-            for (int i = 0; i <= this.board.drawPile.size(); i++) {
-                CardDeck sourceDeck = this.board.drawPile;
-                Card card = sourceDeck.get(i);
-                if (card.getValue() == 1) {
-                    switch (card.getSuit()) {
-                        case HEARTS -> destination = board.heartsPile;
-                        case SPADES -> destination = board.spadesPile;
-                        case DIAMONDS -> destination = board.diamondsPile;
-                        case CLUBS -> destination = board.clubsPile;
-                        default -> destination = board.initialPile;
-                    }
-                    deckNumber = 12;
-                    deuceIndex = i;
-                    break;
-                }
-            }
-        }
-        return Arrays.asList(deckNumber, deuceIndex, destination.getName());
-    }
+
+
+
 }
