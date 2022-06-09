@@ -378,7 +378,7 @@ public class Board {
 
         // Create new super print method with formatting
         System.out.println("DR" + tab + drawPile.printCard(drawPile.size()-1) + dtab + "FH" + tab + "FS" + tab + "FD" + tab + "FC");
-        System.out.println("DI" + tab + discardPile.printCard(discardPile.size()-1) + tab + heartsPile.printCard(heartsPile.size() - 1) + tab + spadesPile.printCard(spadesPile.size() - 1)
+        System.out.println("DI" + tab + discardPile.printCard(discardPile.size()-1) + dtab + heartsPile.printCard(heartsPile.size() - 1) + tab + spadesPile.printCard(spadesPile.size() - 1)
                 + tab + diamondsPile.printCard(diamondsPile.size() - 1) + tab + clubsPile.printCard(clubsPile.size() - 1));
         System.out.println("P1  P2  P3  P4  P5  P6  P7");
         for (int i = 0; i < longestNumberPileLength(); i++) {
