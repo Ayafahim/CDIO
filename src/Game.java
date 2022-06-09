@@ -18,6 +18,7 @@ public class Game {
 
         Scanner sc = new Scanner(System.in);
         String input;
+        printCommandOptions();
         do {
             board.updateBoardState();
             board.printBoard();
@@ -55,6 +56,8 @@ public class Game {
         board.initialPopulateBoard();
         AI ai = new AI(new Search(board), board);
 
+        printCommandOptions();
+
         String textInput;
         do {
             board.updateBoardState();
@@ -70,6 +73,19 @@ public class Game {
 
     public void winGame() {
         //you won. good job
+    }
+
+    public void printCommandOptions() {
+        System.out.println("You have the following input options:\n" +
+                "goodbye -> ends program\n" +
+                "shuffle -> shuffles deck\n" +
+                "ai -> calls the ai to make a move for you\n" +
+                "restart -> restarts the game using the default cards.txt\n" +
+                "3 numbers separated by spaces to indicate a move with the following syntax:\n" +
+                "source pile : destination pile: card index in source pile\n" +
+                "The numbers representing the piles are 1-7, 8-11 for foundations, 12 for draw, and 13 for discard\n" +
+                "You can use \"last\" to replace the index number\n" +
+                "--------------------------------------------------------------------------------------------------");
     }
 
 }

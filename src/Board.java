@@ -27,15 +27,19 @@ public class Board {
 
     /** Author STEVEN
      *  Parses text input for manual use of the program
-     *  Cheatsheet -> piles 1-7, foundations 8-11,
+     *  Cheatsheet -> piles 1-7, foundations 8-11, draw/discard 12-13, initial -1
      */
     public void parseInput(String input) throws Exception {
-        switch (input) {
+         switch (input) {
             case "goodbye": {return;}
             case "shuffle": {
                 drawPile.shuffleDeck();break;}
             case "ai": {
-
+                System.out.println("AI is not working right now :)");
+                break;
+            }
+            case "draw": {
+                draw3Cards();
                 break;
             }
             case "restart": {
@@ -315,6 +319,7 @@ public class Board {
         return switch (input) {
             case "-1", "deck" -> initialPile;
             case "12", "draw" -> drawPile;
+            case "13", "discard" -> discardPile;
             case "1" -> pile1;
             case "2" -> pile2;
             case "3" -> pile3;
@@ -373,7 +378,7 @@ public class Board {
 
         // Create new super print method with formatting
         System.out.println("DR" + tab + drawPile.printCard(drawPile.size()-1) + dtab + "FH" + tab + "FS" + tab + "FD" + tab + "FC");
-        System.out.println(tab + dtab +heartsPile.printCard(heartsPile.size() - 1) + tab + spadesPile.printCard(spadesPile.size() - 1)
+        System.out.println("DI" + tab + discardPile.printCard(discardPile.size()-1) + tab + heartsPile.printCard(heartsPile.size() - 1) + tab + spadesPile.printCard(spadesPile.size() - 1)
                 + tab + diamondsPile.printCard(diamondsPile.size() - 1) + tab + clubsPile.printCard(clubsPile.size() - 1));
         System.out.println("P1  P2  P3  P4  P5  P6  P7");
         for (int i = 0; i < longestNumberPileLength(); i++) {
