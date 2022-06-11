@@ -56,7 +56,7 @@ public class Search {
         int destnDeckNumber = 0;
 
         // Search all number piles
-        for (int i = 1; i < 7; i++) {
+        for (int i = 7; i > 0; i--) {
 
             // Number pile variables for source deck
             CardDeck srcDeck = this.board.getDeck(Integer.toString(i));
@@ -68,7 +68,7 @@ public class Search {
                 CardDeck destnDeck;
 
                 // Search all number piles. Number piles variables for destination deck
-                for (int j = 1; j < 7; j++) {
+                for (int j = 7; j > 0; j--) {
                     destnDeck = this.board.getDeck(Integer.toString(j));
                     int destnTopCardIndex = destnDeck.getBottomFaceCardIndex();
                     Card destnTopCard = destnDeck.get(destnTopCardIndex);
