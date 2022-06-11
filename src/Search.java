@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -55,6 +56,49 @@ public class Search {
         }
         System.out.println("pile " + deckNumber +" has most facedown cards, with:" + longest + " facedown cards");
     }
+
+    /**
+     * Author Alec
+     * Searches to see if there is a play to free a downcard, if there are multiple, always free
+     * the pile which have the most downcards.
+     */
+
+    public List<Object>searchIfDownCardCanBeFreed(){
+        boolean found = false;
+        int sourceDeckNumber = 0;
+        int destinationDeckNumber = 0;
+
+        for (int i = 1; i <= 7 ; i++) {
+            CardDeck sourceDeck = this.board.getDeck(Integer.toString(i));
+            int sourceTopCardIndex = sourceDeck.getBottomFaceCardIndex();
+            Card sourceTopCard = sourceDeck.get(sourceTopCardIndex);
+
+            if (sourceDeck.canFreeDownCard()){
+               CardDeck destinationDeck;
+
+                for (int j = 1; j <= 7 ; j++) {
+                    destinationDeck = this.board.getDeck(Integer.toString(j));
+                    int dTopCardIndex = destinationDeck.getBottomFaceCardIndex();
+                    Card dTopCard = destinationDeck.get(dTopCardIndex);
+
+
+                if (sourceTopCard.getValue() - dTopCard.getValue() == -1){
+                    if (sourceTopCard.isBlack() && dTopCard.isRed() || sourceTopCard.isRed() && dTopCard.isBlack())
+                    sourceDeckNumber = i;
+                    destinationDeckNumber = j;
+                    found = true;
+
+                    }
+                }
+                if (found){
+                    break;
+                }
+            }
+        }
+        return Arrays.asList("Source Deck: " + sourceDeckNumber,"Destination Deck: " + destinationDeckNumber);
+
+    }
+
 
 
 }
