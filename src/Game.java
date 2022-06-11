@@ -22,9 +22,7 @@ public class Game {
         do {
             board.updateBoardState();
             board.printBoard();
-            ai.aceMove();
-            //ai.aceMove();
-            ai.freeDownCardMove();
+            //ai.freeDownCardMove();
             //System.out.println(board.getDeck("draw"));
             //System.out.println(board.getDeck("discard"));
             System.out.println("Ready for Input");
@@ -85,6 +83,8 @@ public class Game {
                 goodbye -> ends program
                 shuffle -> shuffles deck
                 ai -> calls the ai to make a move for you
+                ace -> looks for ace and moves to foundation pile
+                deuce -> looks for ace and moves to foundation pile
                 restart -> restarts the game using the default cards.txt
                 3 numbers separated by spaces to indicate a move with the following syntax:
                 source pile : destination pile: card index in source pile

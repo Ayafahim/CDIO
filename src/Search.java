@@ -43,7 +43,13 @@ public class Search {
         }
         return Arrays.asList(deckNumber, cardValueIndex, cardSuit);
     }
-    // Searches for pile with most facedown cards
+
+
+    /**
+     * Author Aya
+     * Searches for pile with most facedown cards
+     */
+
     public void mostFacedownSearch() {
         int longest = 0;
         int deckNumber = 0;
@@ -87,7 +93,7 @@ public class Search {
                     Card destnTopCard = destnDeck.get(destnTopCardIndex);
 
                 /*
-                An algoritme that sets the value of source deck number and destination deck number
+                An algorithm that sets the value of source deck number and destination deck number
                 if top source deck minus top destination deck gives -1, and if the color of those 2 decks is not the same.
                  */
                     if (srcTopCard.getValue() - destnTopCard.getValue() == -1) {

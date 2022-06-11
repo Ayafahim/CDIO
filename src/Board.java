@@ -19,11 +19,11 @@ public class Board {
     CardDeck spadesPile = new CardDeck("Spades Foundation"); // "spades"
     CardDeck diamondsPile = new CardDeck("Diamonds Foundation"); // "diamonds"
     CardDeck clubsPile = new CardDeck("Clubs Foundation"); // "clubs"
+    AI ai = new AI(new Search(this), this);
 
     ArrayList<CardDeck> drawAndDiscardPiles = new ArrayList<>(Arrays.asList(drawPile,discardPile));
     ArrayList<CardDeck> numberPiles = new ArrayList<>(Arrays.asList(pile1,pile2,pile3,pile4,pile5,pile6,pile7));
     ArrayList<CardDeck> foundationPiles = new ArrayList<>(Arrays.asList(heartsPile,spadesPile,diamondsPile,clubsPile));
-
 
     /** Author STEVEN
      *  Parses text input for manual use of the program
@@ -38,6 +38,14 @@ public class Board {
                 System.out.println("AI is not working right now :)");
                 break;
             }
+             case "ace":{
+                 ai.aceMoveToFoundation();
+                 break;
+             }
+             case  "deuce": {
+                 ai.deuceMoveToFoundation();
+                 break;
+             }
             case "draw": {
                 draw3Cards();
                 break;
