@@ -50,13 +50,13 @@ public class Search {
      * the pile which have the most downcards.
      */
 
-    public List<Object>searchIfDownCardCanBeFreed(){
+    public List<Object> searchIfDownCardCanBeFreed() {
         boolean found = false;
         int srcDeckNumber = 0;
         int destnDeckNumber = 0;
 
         // Search all number piles
-        for (int i = 1; i <= 7 ; i++) {
+        for (int i = 1; i < 7; i++) {
 
             // Number pile variables for source deck
             CardDeck srcDeck = this.board.getDeck(Integer.toString(i));
@@ -64,11 +64,11 @@ public class Search {
             Card srcTopCard = srcDeck.get(srcTopCardIndex);
 
             //Check if moving a card will free a downcard
-            if (srcDeck.canFreeDownCard()){
-               CardDeck destnDeck;
+            if (srcDeck.canFreeDownCard()) {
+                CardDeck destnDeck;
 
                 // Search all number piles. Number piles variables for destination deck
-                for (int j = 1; j <= 7 ; j++) {
+                for (int j = 1; j < 7; j++) {
                     destnDeck = this.board.getDeck(Integer.toString(j));
                     int destnTopCardIndex = destnDeck.getBottomFaceCardIndex();
                     Card destnTopCard = destnDeck.get(destnTopCardIndex);
@@ -77,23 +77,24 @@ public class Search {
                 An algoritme that sets the value of source deck number and destination deck number
                 if top source deck minus top destination deck gives -1, and if the color of those 2 decks is not the same.
                  */
-                if (srcTopCard.getValue() - destnTopCard.getValue() == -1){
-                    if (srcTopCard.isBlack() && destnTopCard.isRed() || srcTopCard.isRed() && destnTopCard.isBlack())
-                    srcDeckNumber = i;
-                    destnDeckNumber = j;
-                    found = true;
+                    if (srcTopCard.getValue() - destnTopCard.getValue() == -1) {
+                        if (srcTopCard.isBlack() && destnTopCard.isRed() || srcTopCard.isRed() && destnTopCard.isBlack()) {
+                            srcDeckNumber = i;
+                            destnDeckNumber = j;
+                            found = true;
+                        }
                     }
-                }
-                if (found){
-                    break;
-                }
+                    if (found) {
+                        break;
+                    }
 
+                }
             }
+
+
         }
-        return Arrays.asList("Source Deck: " + srcDeckNumber,"Destination Deck: " + destnDeckNumber);
 
+        return Arrays.asList("Source Deck: " + srcDeckNumber, "Destination Deck: " + destnDeckNumber);
     }
-
-
 
 }
