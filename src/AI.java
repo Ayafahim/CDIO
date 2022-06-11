@@ -15,7 +15,8 @@ public class AI {
     }
 
     public void aceMove(){
-        System.out.println(search.someSearch(1));
+        //System.out.println(search.someCardSearch(1));
+        search.mostFacedownSearch();
         /*
         System.out.println(search.aceSearch());
         CardDeck src = board.getDeck(Integer.toString(search.getDeckNumber()));

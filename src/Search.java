@@ -12,9 +12,9 @@ public class Search {
 
     /**
      * Author Aya
-     * Searches for a given cardvalue and returns pile number, row number (column index), suit)
+     * Searches for a given cardvalue (faceup in pile 1-7) and returns pile number, row number (column index), suit)
      */
-    public List<Object> someSearch(int cardValue) {
+    public List<Object> someCardSearch(int cardValue) {
         int cardValueIndex = 0;
         int deckNumber = 0;
         String cardSuit = "0";
@@ -42,10 +42,19 @@ public class Search {
         }
         return Arrays.asList(deckNumber, cardValueIndex, cardSuit);
     }
-
-
-
-
+    // Searches for pile with most facedown cards
+    public void mostFacedownSearch() {
+        int longest = 0;
+        int deckNumber = 0;
+        for (int i = 1; i <= 7; i++) {
+            CardDeck sourceDeck = this.board.getDeck(Integer.toString(i));
+            if(sourceDeck.getNumberOfFaceDownCards() > longest){
+               longest = sourceDeck.getNumberOfFaceDownCards();
+               deckNumber = i;
+            }
+        }
+        System.out.println("pile " + deckNumber +" has most facedown cards, with:" + longest + " facedown cards");
+    }
 
 
 }
