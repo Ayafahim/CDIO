@@ -62,43 +62,52 @@ public class Search {
      * Searches to see if there is a play to free a downcard, if there are multiple, always free
      * the pile which have the most downcards.
      */
-
-    public List<Object>searchIfDownCardCanBeFreed(){
+    // Algoritmen er ikke helt færdig inu, den kan udvides 
+    public List<Object> searchIfDownCardCanBeFreed() {
         boolean found = false;
-        int sourceDeckNumber = 0;
-        int destinationDeckNumber = 0;
+        int srcDeckNumber = 0;
+        int destnDeckNumber = 0;
 
-        for (int i = 1; i <= 7 ; i++) {
-            CardDeck sourceDeck = this.board.getDeck(Integer.toString(i));
-            int sourceTopCardIndex = sourceDeck.getBottomFaceCardIndex();
-            Card sourceTopCard = sourceDeck.get(sourceTopCardIndex);
+        // Search all number piles
+        for (int i = 7; i > 0; i--) {
 
-            if (sourceDeck.canFreeDownCard()){
-               CardDeck destinationDeck;
+            // Number pile variables for source deck
+            CardDeck srcDeck = this.board.getDeck(Integer.toString(i));
+            int srcTopCardIndex = srcDeck.getBottomFaceCardIndex();
+            Card srcTopCard = srcDeck.get(srcTopCardIndex);
 
-                for (int j = 1; j <= 7 ; j++) {
-                    destinationDeck = this.board.getDeck(Integer.toString(j));
-                    int dTopCardIndex = destinationDeck.getBottomFaceCardIndex();
-                    Card dTopCard = destinationDeck.get(dTopCardIndex);
+            //Check if moving a card will free a downcard
+            if (srcDeck.canFreeDownCard()) {
+                CardDeck destnDeck;
 
+                // Search all number piles. Number piles variables for destination deck
+                for (int j = 7; j > 0; j--) {
+                    destnDeck = this.board.getDeck(Integer.toString(j));
+                    int destnTopCardIndex = destnDeck.getBottomFaceCardIndex();
+                    Card destnTopCard = destnDeck.get(destnTopCardIndex);
 
-                if (sourceTopCard.getValue() - dTopCard.getValue() == -1){
-                    if (sourceTopCard.isBlack() && dTopCard.isRed() || sourceTopCard.isRed() && dTopCard.isBlack())
-                    sourceDeckNumber = i;
-                    destinationDeckNumber = j;
-                    found = true;
-
+                /*
+                An algoritme that sets the value of source deck number and destination deck number
+                if top source deck minus top destination deck gives -1, and if the color of those 2 decks is not the same.
+                 */
+                    if (srcTopCard.getValue() - destnTopCard.getValue() == -1) {
+                        if (srcTopCard.isBlack() && destnTopCard.isRed() || srcTopCard.isRed() && destnTopCard.isBlack()) {
+                            srcDeckNumber = i;
+                            destnDeckNumber = j;
+                            found = true;
+                        }
                     }
-                }
-                if (found){
-                    break;
+                    if (found) {
+                        break;
+                    }
+
                 }
             }
+
+
         }
-        return Arrays.asList("Source Deck: " + sourceDeckNumber,"Destination Deck: " + destinationDeckNumber);
 
+        return Arrays.asList("Source Deck: " + srcDeckNumber, "Destination Deck: " + destnDeckNumber);
     }
-
-
 
 }
