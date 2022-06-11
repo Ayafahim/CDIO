@@ -49,7 +49,7 @@ public class Search {
      * Searches to see if there is a play to free a downcard, if there are multiple, always free
      * the pile which have the most downcards.
      */
-
+    // Algoritmen er ikke helt færdig inu, den kan udvides 
     public List<Object> searchIfDownCardCanBeFreed() {
         boolean found = false;
         int srcDeckNumber = 0;
