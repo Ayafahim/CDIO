@@ -30,4 +30,9 @@ public class AI {
         Move move = new Move(src,destination,search.getAceIndex());
          */
     }
+
+
+    public void freeDownCardMove(){
+        System.out.println(search.searchIfDownCardCanBeFreed());
+    }
 }

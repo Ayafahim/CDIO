@@ -23,6 +23,7 @@ public class Game {
             board.updateBoardState();
             board.printBoard();
             //ai.aceMove();
+            ai.freeDownCardMove();
             //System.out.println(board.getDeck("draw"));
             //System.out.println(board.getDeck("discard"));
             System.out.println("Ready for Input");
