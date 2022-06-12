@@ -55,12 +55,12 @@ public class Search {
         int deckNumber = 0;
         for (int i = 1; i <= 7; i++) {
             CardDeck sourceDeck = this.board.getDeck(Integer.toString(i));
-            if(sourceDeck.getNumberOfFaceDownCards() > longest){
-               longest = sourceDeck.getNumberOfFaceDownCards();
-               deckNumber = i;
+            if (sourceDeck.getNumberOfFaceDownCards() > longest) {
+                longest = sourceDeck.getNumberOfFaceDownCards();
+                deckNumber = i;
             }
         }
-        System.out.println("pile " + deckNumber +" has most facedown cards, with:" + longest + " facedown cards");
+        System.out.println("pile " + deckNumber + " has most facedown cards, with:" + longest + " facedown cards");
     }
 
     /**
@@ -68,12 +68,13 @@ public class Search {
      * Searches to see if there is a play to free a downcard, if there are multiple, always free
      * the pile which have the most downcards.
      */
-    // Algoritmen er ikke helt færdig inu, den kan udvides 
+    // Algoritmen er ikke helt færdig inu, den kan udvides
     public List<Object> searchIfDownCardCanBeFreed() {
+        int cardValueIndex = 0;
         boolean found = false;
         int srcDeckNumber = 0;
         int destnDeckNumber = 0;
-
+        String foundationPile;
         // Search all number piles
         for (int i = 7; i > 0; i--) {
 
@@ -98,6 +99,7 @@ public class Search {
                  */
                     if (srcTopCard.getValue() - destnTopCard.getValue() == -1) {
                         if (srcTopCard.isBlack() && destnTopCard.isRed() || srcTopCard.isRed() && destnTopCard.isBlack()) {
+                            cardValueIndex = srcTopCardIndex;
                             srcDeckNumber = i;
                             destnDeckNumber = j;
                             found = true;
@@ -106,14 +108,24 @@ public class Search {
                     if (found) {
                         break;
                     }
-
+                    if (destnTopCard.getValue() - srcTopCard.getValue() == -1) {
+                        switch (srcTopCard.getSuit()) {
+                            case HEARTS -> foundationPile = "8";
+                            case SPADES -> foundationPile = "9";
+                            case DIAMONDS -> foundationPile = "10";
+                            case CLUBS -> foundationPile = "11";
+                            default -> foundationPile = "0";
+                        }
+                        destnDeckNumber = Integer.parseInt(foundationPile);
+                        srcDeckNumber = i;
+                        cardValueIndex = srcTopCardIndex;
+                        found = true;
+                    }
                 }
             }
-
-
         }
-
-        return Arrays.asList("Source Deck: " + srcDeckNumber, "Destination Deck: " + destnDeckNumber);
+        return Arrays.asList("Source Deck: " + srcDeckNumber, "Destination Deck: " + destnDeckNumber,
+                "Source Deck Index: " + cardValueIndex);
     }
 
 }
