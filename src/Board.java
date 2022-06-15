@@ -46,6 +46,9 @@ public class Board {
                  ai.deuceMoveToFoundation();
                  break;
              }
+             case "downcard":{
+                 ai.freeDownCardMove();
+             }
             case "draw": {
                 draw3Cards();
                 break;
