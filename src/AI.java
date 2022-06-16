@@ -52,6 +52,10 @@ public class AI {
 
     }
 
+    public void freeSpotForKingCheck() {
+
+    }
+
     public void deuceMoveToFoundation() {
 
         System.out.println(search.someCardSearch(2));

@@ -96,11 +96,10 @@ public class CardDeck {
 
     public String toString() {
         StringBuilder s = new StringBuilder();
-        s.append(name).append(" includes the following:\n");
+        s.append(name).append(" includes the following: ");
         for (Card card : cards) {
-            s.append(card.toString()).append(" - Face Up -> ").append(card.isFaceUp()).append("\n");
+            s.append(card.toString()).append("; ");
         }
-        s.append("\n");
         return s.toString();
     }
 

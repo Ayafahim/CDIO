@@ -29,14 +29,6 @@ public class Game {
             board.parseInput(input);
         } while (!Objects.equals(input, "goodbye"));
 
-
-        /*do {
-            board.executeAI();
-            if (board.ai.gameIsWon) {
-                winGame();
-            }
-        } while (!board.ai.gameIsLost);*/
-
     }
 
     public void startDebug()  throws Exception {

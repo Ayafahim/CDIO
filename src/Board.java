@@ -88,13 +88,11 @@ public class Board {
 
     /** Author STEVEN
      Flips newly revealed cards to face-up.
+     /ToDo Needs change/deletion once OpenCV is added because cards will be given face-up.
      */
     public void updateBoardState() {
-        for (int i = 1; i < 8; i++) {
-            CardDeck cd = getDeck(Integer.toString(i));
-            if (cd.size() > 0) {
-                cd.get(cd.size()-1).setFaceUp(true);
-            }
+        for (int i = 0; i < numberPiles.size(); i++) {
+            numberPiles.get(i).get(numberPiles.get(i).size()-1).setFaceUp(true);
         }
     }
 
@@ -221,7 +219,7 @@ public class Board {
 
     /** Author STEVEN
      *  Draws a card from the deck and puts it in the discard pile face-up. If the draw pile is empty, fills the draw
-     *  pile with the discard pile, retaining their natural order before drawing a card again.
+     *  pile with the discard pile, retaining their natural order.
      */
     public void draw3Cards() {
         //New code to fit the competition requirements. Old code commented out below.
@@ -229,52 +227,30 @@ public class Board {
         CardDeck discard = discardPile;
         if (draw.size() >= 3) {
             for (int i = 0; i < 3; i++) {
-                //add card to discard and remove it from draw
+                //add card to discard in modified order and remove it from draw
+                //modified order simulates flipping 3 cards simultaneously
                 discard.add(draw.get(draw.size()-1));
                 draw.remove(draw.size()-1);
                 discard.get(discard.size()-1).setFaceUp(true);
+                System.out.println(drawPile.size() + drawPile.toString() + "\n" + discardPile.size() + discardPile.toString());
             }
         }
         else {
             shuffleDiscardIntoDraw();
+            //does not call the method again as they're considered separate moves.
         }
-
-        /*int n = destination.size()-1;
-        if ( source.size() == 0 ){
-            while(destination.size() != 0){
-
-                source.add(destination.get(n));
-                source.get(source.size()-1).setFaceUp(false);
-                destination.remove(n);
-                n--;
-            }
-            draw3Cards(source, destination);
-
-        }
-        else{
-            destination.add(source.get(source.size()-1));
-            source.remove(source.size()-1);
-
-
-            for (int i = 0; i <= destination.size()-1 ; i++){
-                destination.get(i).setFaceUp(false);
-            }
-
-            destination.get(destination.size()-1).setFaceUp(true);
-
-        }*/
 
     }
 
     /** Author STEVEN
      * Moves the cards one by one from the bottom of the discard pile to the bottom of the draw pile, as outlined
-     * in the competition rules. NEEDS TESTING STILL :)
+     * in the competition rules.
      */
     public void shuffleDiscardIntoDraw() {
-        for (int i = 0; i < discardPile.size(); i++) {
+        for (int i = discardPile.size(); i > 0; i--) {
             drawPile.appendToIndexOne(discardPile.get(0));
-            drawPile.get(0).setFaceUp(false);
             discardPile.remove(0);
+            System.out.println("moved a card x" + i);
         }
     }
 
@@ -344,26 +320,6 @@ public class Board {
             case "11", "clubs" -> clubsPile;
             default -> null; //Asking for a non-existing pile will cause a null-pointer exception from this.
         };
-    }
-
-    /** Author STEVEN
-     * Returns a nicer representation of deck names for use in TUI or debugging.
-     */
-    public String getDeckName(CardDeck deck) {
-        if (deck.equals(initialPile)) {return "Initial Deck";}
-        else if (deck.equals(drawPile)) {return "Draw Pile";}
-        else if (deck.equals(pile1)) {return "Pile 1";}
-        else if (deck.equals(pile2)) {return "Pile 2";}
-        else if (deck.equals(pile3)) {return "Pile 3";}
-        else if (deck.equals(pile4)) {return "Pile 4";}
-        else if (deck.equals(pile5)) {return "Pile 5";}
-        else if (deck.equals(pile6)) {return "Pile 6";}
-        else if (deck.equals(pile7)) {return "Pile 7";}
-        else if (deck.equals(heartsPile)) {return "Hearts Foundation";}
-        else if (deck.equals(spadesPile)) {return "Spades Foundation";}
-        else if (deck.equals(diamondsPile)) {return "Diamonds Foundation";}
-        else if (deck.equals(clubsPile)) {return "Clubs Foundation";}
-        else return "IMPOSSIBLE PILE (error)";
     }
 
     /** Author STEVEN
