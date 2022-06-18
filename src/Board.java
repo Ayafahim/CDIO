@@ -49,6 +49,9 @@ public class Board {
              case "downcard":{
                  ai.freeDownCardMove();
              }
+             case "kingtodeck":{
+                 ai.moveKingIfDeckEmpty();
+             }
             case "draw": {
                 draw3Cards();
                 break;

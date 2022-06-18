@@ -90,7 +90,7 @@ public class Search {
                 // Search all number piles. Number piles variables for destination deck
                 for (int j = 7; j > 0; j--) {
                     destnDeck = this.board.getDeck(Integer.toString(j));
-                    int destnTopCardIndex = destnDeck.getBottomFaceCardIndex();
+                    int destnTopCardIndex = (destnDeck.size()-1);
                     Card destnTopCard = destnDeck.get(destnTopCardIndex);
 
                 /*
@@ -108,7 +108,6 @@ public class Search {
                     if (found) {
                         break;
                     }
-
                 }
             }
         }
