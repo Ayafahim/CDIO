@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class Board {
@@ -30,59 +31,81 @@ public class Board {
      *  Cheatsheet -> piles 1-7, foundations 8-11, draw/discard 12-13, initial -1
      */
     public void parseInput(String input) throws Exception {
-         switch (input) {
-            case "goodbye": {return;}
-            case "shuffle": {
-                drawPile.shuffleDeck();break;}
-            case "ai": {
-                System.out.println("AI is not working right now :)");
-                break;
-            }
-             case "ace":{
-                 ai.aceMoveToFoundation();
-                 break;
-             }
-             case  "deuce": {
-                 ai.deuceMoveToFoundation();
-                 break;
-             }
-             case "downcard":{
-                 ai.freeDownCardMove();
-             }
-            case "draw": {
-                draw3Cards();
-                break;
-            }
-            case "restart": {
-                initialPile.clearDeck();
-                drawPile.clearDeck();
-                pile1.clearDeck();
-                pile2.clearDeck();
-                pile3.clearDeck();
-                pile4.clearDeck();
-                pile5.clearDeck();
-                pile6.clearDeck();
-                pile7.clearDeck();
-                heartsPile.clearDeck();
-                spadesPile.clearDeck();
-                diamondsPile.clearDeck();
-                clubsPile.clearDeck();
-                this.initialPile.populate("cards.txt"); //Needs redo in order to choose which deck of cards is loaded in
-                this.initialPile.shuffleDeck();
-                this.initialPopulateBoard();
-                break;
-            }
-            default: {StringTokenizer st = new StringTokenizer(input," ");
-                String s = st.nextToken();
-                String d = st.nextToken();
-                String i = st.nextToken();
-                if (i.equals("last")) {
-                    i = String.valueOf(getDeck(s).size()-1);
+        try {
+            switch (input) {
+                case "goodbye": {
+                    return;
                 }
-                Move move = new Move(getDeck(s),getDeck(d),Integer.parseInt(i));
-                System.out.println("Move is: " + move);
-                attemptMove(move);}
-        }
+                case "shuffle": {
+                    drawPile.shuffleDeck();
+                    break;
+                }
+                case "ai": {
+                    System.out.println("AI is not working right now :)");
+                    break;
+                }
+                case "ace": {
+                    ai.aceMoveToFoundation();
+                    break;
+                }
+                case "deuce": {
+                    ai.deuceMoveToFoundation();
+                    break;
+                }
+                case "downcard": {
+                    ai.freeDownCardMove();
+                }
+                case "draw": {
+                    draw3Cards();
+                    break;
+                }
+                case "king": {
+                    ai.moveKingIfDeckEmpty();
+                    break;
+                }
+                case "restart": {
+                    initialPile.clearDeck();
+                    drawPile.clearDeck();
+                    pile1.clearDeck();
+                    pile2.clearDeck();
+                    pile3.clearDeck();
+                    pile4.clearDeck();
+                    pile5.clearDeck();
+                    pile6.clearDeck();
+                    pile7.clearDeck();
+                    heartsPile.clearDeck();
+                    spadesPile.clearDeck();
+                    diamondsPile.clearDeck();
+                    clubsPile.clearDeck();
+                    this.initialPile.populate("cards.txt"); //Needs redo in order to choose which deck of cards is loaded in
+                    this.initialPile.shuffleDeck();
+                    this.initialPopulateBoard();
+                    break;
+                }
+                default: {
+                    StringTokenizer st = new StringTokenizer(input, " ");
+                    String s = st.nextToken();
+                    String d = st.nextToken();
+                    String i = st.nextToken();
+                    if (i.equals("last")) {
+                        i = String.valueOf(getDeck(s).size() - 1);
+                    }
+                    Move move = new Move(getDeck(s), getDeck(d), Integer.parseInt(i));
+                    System.out.println("Move is: " + move);
+                    attemptMove(move);
+                }
+            }
+            /**
+             * Quick add from Jacob
+             */
+        } catch (Exception e) {
+            System.out.println("You have to write something we can use, you dummy");
+            Scanner sc = new Scanner(System.in);
+            String input2 = sc.nextLine();
+            parseInput(input2);
+
+            
+        } 
 
     }
 

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class AI {
@@ -134,5 +135,56 @@ public class AI {
 
     }
 
+
+    //5. Don't clear a spot unless there's a King IMMEDIATELY waiting to occupy it.
+    /**
+     * AUTHOR Jacob
+     */
+
+    public void moveKingIfDeckEmpty() {
+        //TODO
+        // Shouldn't be able to clear a spot if there isn't a king to take that cleared spot
+        System.out.println(search.someCardSearch(13)); //Searching for king
+        try {
+            List<Object> searchForKing = search.someCardSearch(13);
+            Object srcDeck = searchForKing.get(0); //This one must be changed later on, we have to move a king from the BIGGEST pile, not just the first king we find.
+            CardDeck src = board.getDeck(srcDeck.toString());
+            int index = src.getBottomFaceCardIndex();
+                for (int i = 1; i<8; i++){
+                    if (board.getDeck(Integer.toString(i)).size() == 0){
+                        CardDeck dest = board.getDeck(Integer.toString(i));
+                        Move move = new Move(src, dest, index);
+                        try {
+                            System.out.println("Move is: " + move);
+                            board.attemptMove(move);
+                        } catch (Exception e) {
+                            System.out.println("move couldn't be done");
+                        }
+                    } else System.out.println("No destination for the king to be put"); //Prints out for all decks, will edit later.
+                }
+        } catch (Exception e) {
+            System.out.println("No kings available");
+        }
+
+
+
+       // board.canMoveToNumberPile()
+
+    }
+
+
+
+
+
+    /*
+    6. Only play a King that will benefit the column(s) with the biggest pile of downcards,
+    unless the play of another King will at least allow a transfer that frees a downcard.
+
+    - Søg efter konger
+        - hvis der er flere konger, så tag den konge der er i den pile der er flest kort i, altså med flest downcards
+        - med mindre, at ved at man spiller en anden konge, vil tillade en flytning der frigør et downcard
+
+
+     */
 
 }
