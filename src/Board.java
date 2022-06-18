@@ -81,7 +81,9 @@ public class Board {
                 }
                 Move move = new Move(getDeck(s),getDeck(d),Integer.parseInt(i));
                 System.out.println("Move is: " + move);
-                attemptMove(move);}
+                attemptMove(move);
+                //moveCardDeckToDeck(move.getSourceDeck(),move.getDestinationDeck(),move.getIndex(),true);
+            }
         }
 
     }
@@ -92,7 +94,9 @@ public class Board {
      */
     public void updateBoardState() {
         for (int i = 0; i < numberPiles.size(); i++) {
-            numberPiles.get(i).get(numberPiles.get(i).size()-1).setFaceUp(true);
+            if (numberPiles.get(i).size() > 0) {
+                numberPiles.get(i).get(numberPiles.get(i).size()-1).setFaceUp(true);
+            }
         }
     }
 
