@@ -62,6 +62,9 @@ public class Board {
                 case "king": {
                     ai.moveKingIfDeckEmpty();
                     break;
+                }case "king1": {
+                    ai.moveKingFromBiggestPile();
+                    break;
                 }
                 case "restart": {
                     initialPile.clearDeck();

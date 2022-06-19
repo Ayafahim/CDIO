@@ -16,13 +16,56 @@ public class Search {
      * Searches for a given cardvalue (faceup in pile 1-7) and returns pile number, row number (column index), suit)
      */
     public List<Object> someCardSearch(int cardValue) {
+        int cardIndex = 0;
+        int deckNumber = 0;
+        String cardSuit = "0";
+
+        List<Object> returnList = new ArrayList<>();
+
+
+        //for loop iterates through each pile and checks value of each card facing up
+        for (int i = 7; i >= 1; i--) { //edit Jacob: Searching from the biggest pile to smallest
+            //Further edit: add all the piles with that card that you're searching for, into a list and return that list
+            CardDeck sourceDeck = this.board.getDeck(Integer.toString(i));
+            int sourceTopCardIndex = sourceDeck.getBottomFaceCardIndex();
+            Card sourceTopCard = sourceDeck.get(sourceTopCardIndex);
+
+            if (sourceTopCard.getValue() == cardValue) {
+                switch (sourceTopCard.getSuit()) {
+                    case HEARTS -> cardSuit = "Hearts";
+                    case SPADES -> cardSuit = "Spades";
+                    case DIAMONDS -> cardSuit = "Diamonds";
+                    case CLUBS -> cardSuit = "Clubs";
+                    default -> cardSuit = "0";
+                }
+                //if card of certain value isn't facing up deckNumber and cardIndex will be 0
+                deckNumber = i;
+                cardIndex = sourceTopCardIndex;
+                returnList.add(deckNumber);
+                returnList.add(cardIndex);
+                returnList.add(cardSuit);
+
+//                break;
+            }
+        }
+        return returnList;
+  //      return Arrays.asList(deckNumber, cardIndex, cardSuit);
+    }
+
+
+    public List<Object> someDeckSearch(int cardValue) {
+        //Finding a deck with specific card in it.
+        //Returns all decks with the specific card in.
         int cardValueIndex = 0;
         int deckNumber = 0;
         String cardSuit = "0";
 
+        List<Object> returnList = new ArrayList<>();
+
 
         //for loop iterates through each pile and checks value of each card facing up
-        for (int i = 1; i <= 7; i++) {
+        for (int i = 7; i >= 1; i--) { //edit Jacob: Searching from the biggest pile to smallest
+            //Further edit: add all the piles with that card that you're searching for, into a list and return that list
             CardDeck sourceDeck = this.board.getDeck(Integer.toString(i));
             int sourceTopCardIndex = sourceDeck.getBottomFaceCardIndex();
             Card sourceTopCard = sourceDeck.get(sourceTopCardIndex);
@@ -38,11 +81,17 @@ public class Search {
                 //if card of certain value isn't facing up deckNumber and cardValueIndex will be 0
                 deckNumber = i;
                 cardValueIndex = sourceTopCardIndex;
-                break;
+                returnList.add(deckNumber);
+                returnList.add(cardValueIndex);
+                returnList.add(cardSuit);
+
+//                break;
             }
         }
-        return Arrays.asList(deckNumber, cardValueIndex, cardSuit);
+        return returnList;
+        //      return Arrays.asList(deckNumber, cardValueIndex, cardSuit);
     }
+
 
 
     /**

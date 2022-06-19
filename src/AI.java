@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AI {
@@ -61,6 +63,8 @@ public class AI {
         try {
             List<Object> searchForKing = search.someCardSearch(13);
             Object srcDeck = searchForKing.get(0); //This one must be changed later on, we have to move a king from the BIGGEST pile, not just the first king we find.
+            System.out.println("Printer al information om det deck der er konge i: " + Arrays.toString(searchForKing.toArray()));
+
             CardDeck src = board.getDeck(srcDeck.toString());
             int index = src.getBottomFaceCardIndex();
             for (int i = 1; i<8; i++){
@@ -157,4 +161,55 @@ public class AI {
             System.out.println("move couldn't be done");
         }
     }
+
+
+
+    public void moveKingFromBiggestPile() {
+        try {
+            List<Object> searchForKing = search.someCardSearch(13);
+
+            //Edited the someCardSearch to return all decks with the card in you're searching for.
+
+            System.out.println("Printer al information om det deck der er konge i: " + Arrays.toString(searchForKing.toArray()));
+            int size = searchForKing.size();
+            CardDeck currentDeck = board.getDeck("7");
+            for (int i = 0; i<size; i=i+3){
+                if (board.getDeck(Integer.toString(i)).size()>currentDeck.size() ){
+                    CardDeck source = board.getDeck((String) searchForKing.get(i));
+                    System.out.println(source);
+                } else System.out.println(currentDeck);
+            }
+/*
+            CardDeck src = board.getDeck(srcDeck.toString());
+            int index = src.getBottomFaceCardIndex();
+            for (int i = 1; i<8; i++){
+                if (board.getDeck(Integer.toString(i)).size() == 0){
+                    CardDeck dest = board.getDeck(Integer.toString(i));
+                    Move move = new Move(src, dest, index);
+                    try {
+                        System.out.println("Move is: " + move);
+                        board.attemptMove(move);
+                    } catch (Exception e) {
+                        System.out.println("move couldn't be done");
+                    }
+                } else System.out.println("No destination for the king to be put"); //Prints out for all decks, will edit later.
+            }
+
+ */
+        } catch (Exception e) {
+            System.out.println("No kings available");
+        }
+    }
 }
+
+    /*
+    6. Only play a King that will benefit the column(s) with the biggest pile of downcards,
+    unless the play of another King will at least allow a transfer that frees a downcard.
+
+    - Søg efter konger
+        - hvis der er flere konger, så tag den konge der er i den pile der er flest kort i, altså med flest downcards
+        - med mindre, at ved at man spiller en anden konge, vil tillade en flytning der frigør et downcard
+
+
+     */
+
