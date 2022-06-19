@@ -2,7 +2,7 @@ import java.util.List;
 
 public class AI {
 
-    private final Search search;
+    public final Search search;
     private final Board board;
 
     public AI(Search search, Board board) {
@@ -52,12 +52,13 @@ public class AI {
 
     }
 
+    /**
+     * Not finished
+     */
     public void moveKingIfDeckEmpty() {
         //TODO
         // Shouldn't be able to clear a spot if there isn't a king to take that cleared spot
-        /**
-         * Not finished
-         */
+
         try {
             List<Object> searchForKing = search.someCardSearch(13);
             Object srcDeck = searchForKing.get(0); //This one must be changed later on, we have to move a king from the BIGGEST pile, not just the first king we find.
@@ -157,4 +158,5 @@ public class AI {
             System.out.println("move couldn't be done");
         }
     }
+
 }
