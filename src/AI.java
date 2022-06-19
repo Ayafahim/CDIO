@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class AI {
@@ -54,6 +52,9 @@ public class AI {
 
     }
 
+    /**
+     * Not finished
+     */
     public void moveKingIfDeckEmpty() {
         //TODO
         // Shouldn't be able to clear a spot if there isn't a king to take that cleared spot

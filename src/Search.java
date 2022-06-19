@@ -10,6 +10,15 @@ public class Search {
         this.board = board;
     }
 
+    /**
+     * Returns a boolean of whether a move will free a downcard.
+     */
+    public boolean checkIfMoveFreesDowncard(Move move) {
+        //Checks if there are multiple cards in the pile, therefore a possible downcard exists. Also checks if the card 1 less than the index is FaceDown, therefore
+        //meaning that the move will free it.
+        //This code will not throw an exception if there are 0 or 1 cards in the deck as the 2nd part of the conjucation isn't evaluated.
+        return (move.getSourceDeck().size() > 1 && !move.getSourceDeck().get(move.getIndex() - 1).isFaceUp());
+    }
 
     /**
      * Author Aya
