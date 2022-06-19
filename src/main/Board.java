@@ -1,3 +1,5 @@
+package main;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -6,25 +8,25 @@ import java.util.StringTokenizer;
 public class Board {
 
     //Initialize all the piles contained in the board
-    CardDeck initialPile = new CardDeck("Initial Deck"); //id = "deck"
-    CardDeck drawPile = new CardDeck("Draw Pile"); // "draw"
-    CardDeck discardPile = new CardDeck("Discard Pile"); //id = "discard"
-    CardDeck pile1 = new CardDeck("Pile 1"); // "1"
-    CardDeck pile2 = new CardDeck("Pile 2"); // "2"
-    CardDeck pile3 = new CardDeck("Pile 3"); // "3"
-    CardDeck pile4 = new CardDeck("Pile 4"); // "4"
-    CardDeck pile5 = new CardDeck("Pile 5"); // "5"
-    CardDeck pile6 = new CardDeck("Pile 6"); // "6"
-    CardDeck pile7 = new CardDeck("Pile 7"); // "7"
-    CardDeck heartsPile = new CardDeck("Hearts Foundation"); // "hearts"
-    CardDeck spadesPile = new CardDeck("Spades Foundation"); // "spades"
-    CardDeck diamondsPile = new CardDeck("Diamonds Foundation"); // "diamonds"
-    CardDeck clubsPile = new CardDeck("Clubs Foundation"); // "clubs"
+    public CardDeck initialPile = new CardDeck("Initial Deck"); //id = "deck"
+    public CardDeck drawPile = new CardDeck("Draw Pile"); // "draw"
+    public CardDeck discardPile = new CardDeck("Discard Pile"); //id = "discard"
+    public CardDeck pile1 = new CardDeck("Pile 1"); // "1"
+    public CardDeck pile2 = new CardDeck("Pile 2"); // "2"
+    public CardDeck pile3 = new CardDeck("Pile 3"); // "3"
+    public CardDeck pile4 = new CardDeck("Pile 4"); // "4"
+    public CardDeck pile5 = new CardDeck("Pile 5"); // "5"
+    public CardDeck pile6 = new CardDeck("Pile 6"); // "6"
+    public CardDeck pile7 = new CardDeck("Pile 7"); // "7"
+    public CardDeck heartsPile = new CardDeck("Hearts Foundation"); // "hearts"
+    public CardDeck spadesPile = new CardDeck("Spades Foundation"); // "spades"
+    public CardDeck diamondsPile = new CardDeck("Diamonds Foundation"); // "diamonds"
+    public CardDeck clubsPile = new CardDeck("Clubs Foundation"); // "clubs"
     AI ai = new AI(new Search(this), this);
 
-    ArrayList<CardDeck> drawAndDiscardPiles = new ArrayList<>(Arrays.asList(drawPile,discardPile));
-    ArrayList<CardDeck> numberPiles = new ArrayList<>(Arrays.asList(pile1,pile2,pile3,pile4,pile5,pile6,pile7));
-    ArrayList<CardDeck> foundationPiles = new ArrayList<>(Arrays.asList(heartsPile,spadesPile,diamondsPile,clubsPile));
+    public ArrayList<CardDeck> drawAndDiscardPiles = new ArrayList<>(Arrays.asList(drawPile,discardPile));
+    public ArrayList<CardDeck> numberPiles = new ArrayList<>(Arrays.asList(pile1,pile2,pile3,pile4,pile5,pile6,pile7));
+    public ArrayList<CardDeck> foundationPiles = new ArrayList<>(Arrays.asList(heartsPile,spadesPile,diamondsPile,clubsPile));
 
     /** Author STEVEN
      *  Parses text input for manual use of the program
@@ -41,7 +43,7 @@ public class Board {
                     break;
                 }
                 case "ai": {
-                    System.out.println("AI is not working right now :)");
+                    System.out.println("main.AI is not working right now :)");
                     break;
                 }
                 case "ace": {
@@ -94,7 +96,7 @@ public class Board {
                         i = String.valueOf(getDeck(s).size() - 1);
                     }
                     Move move = new Move(getDeck(s), getDeck(d), Integer.parseInt(i));
-                    System.out.println("Move is: " + move);
+                    System.out.println("main.Move is: " + move);
                     attemptMove(move);
                 }
             }
@@ -150,6 +152,13 @@ public class Board {
         else if (isFoundationPile(s) && isNumberPile(d)) {
             if (canMoveToNumberPile(s, d, x)) {
                 moveCardDeckToDeck(s, d, x, true);
+                return true;
+            }
+        }
+
+        else if (s == discardPile && isFoundationPile(d) || isNumberPile(d)) {
+            if (x == s.size()-1) {
+                moveCardDeckToDeck(s,d,x,true);
                 return true;
             }
         }
@@ -260,7 +269,6 @@ public class Board {
                 discard.add(draw.get(draw.size()-1));
                 draw.remove(draw.size()-1);
                 discard.get(discard.size()-1).setFaceUp(true);
-                System.out.println(drawPile.size() + drawPile.toString() + "\n" + discardPile.size() + discardPile.toString());
             }
         }
         else {
@@ -278,7 +286,6 @@ public class Board {
         for (int i = discardPile.size(); i > 0; i--) {
             drawPile.appendToIndexOne(discardPile.get(0));
             discardPile.remove(0);
-            System.out.println("moved a card x" + i);
         }
     }
 
