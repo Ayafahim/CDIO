@@ -104,8 +104,8 @@ public class Board {
             String input2 = sc.nextLine();
             parseInput(input2);
 
-            
-        } 
+
+        }
 
     }
 
@@ -115,7 +115,9 @@ public class Board {
      */
     public void updateBoardState() {
         for (int i = 0; i < numberPiles.size(); i++) {
-            numberPiles.get(i).get(numberPiles.get(i).size()-1).setFaceUp(true);
+            if (numberPiles.get(i).size() > 0) {
+                numberPiles.get(i).get(numberPiles.get(i).size()-1).setFaceUp(true);
+            }
         }
     }
 
