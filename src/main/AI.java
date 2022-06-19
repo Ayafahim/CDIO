@@ -1,3 +1,6 @@
+package main;
+
+import java.util.Arrays;
 import java.util.List;
 
 public class AI {
@@ -44,7 +47,7 @@ public class AI {
 
         Move move = new Move(src, destination, (Integer) aceInfo.get(1));
         try {
-            System.out.println("Move is: " + move);
+            System.out.println("main.Move is: " + move);
             board.attemptMove(move);
         } catch (Exception e) {
             System.out.println("move couldn't be done");
@@ -73,7 +76,7 @@ public class AI {
                     CardDeck dest = board.getDeck(Integer.toString(i));
                     Move move = new Move(src, dest, index);
                     try {
-                        System.out.println("Move is: " + move);
+                        System.out.println("main.Move is: " + move);
                         board.attemptMove(move);
                     } catch (Exception e) {
                         System.out.println("move couldn't be done");
@@ -114,7 +117,7 @@ public class AI {
 
         Move move = new Move(src, destination, (Integer) aceInfo.get(1));
         try {
-            System.out.println("Move is: " + move);
+            System.out.println("main.Move is: " + move);
             board.attemptMove(move);
         } catch (Exception e) {
             System.out.println("move couldn't be done");
@@ -156,7 +159,7 @@ public class AI {
 
         Move move = new Move(src, destination, (Integer) openDownCard.get(2));
         try {
-            System.out.println("Move is: " + move);
+            System.out.println("main.Move is: " + move);
             board.attemptMove(move);
         } catch (Exception e) {
             System.out.println("move couldn't be done");
@@ -181,14 +184,14 @@ public class AI {
                 } else System.out.println(currentDeck);
             }
 /*
-            CardDeck src = board.getDeck(srcDeck.toString());
+            main.CardDeck src = board.getDeck(srcDeck.toString());
             int index = src.getBottomFaceCardIndex();
             for (int i = 1; i<8; i++){
                 if (board.getDeck(Integer.toString(i)).size() == 0){
-                    CardDeck dest = board.getDeck(Integer.toString(i));
-                    Move move = new Move(src, dest, index);
+                    main.CardDeck dest = board.getDeck(Integer.toString(i));
+                    main.Move move = new main.Move(src, dest, index);
                     try {
-                        System.out.println("Move is: " + move);
+                        System.out.println("main.Move is: " + move);
                         board.attemptMove(move);
                     } catch (Exception e) {
                         System.out.println("move couldn't be done");

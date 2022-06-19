@@ -1,3 +1,5 @@
+package main;
+
 public class Move {
     private CardDeck sourceDeck;
     private CardDeck destinationDeck;
