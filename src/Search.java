@@ -28,6 +28,7 @@ public class Search {
         int cardIndex = 0;
         int deckNumber = 0;
         String cardSuit = "0";
+        boolean isCardInPile = false;
 
         List<Object> returnList = new ArrayList<>();
 
@@ -36,7 +37,7 @@ public class Search {
         for (int i = 7; i >= 1; i--) { //edit Jacob: Searching from the biggest pile to smallest
             //Further edit: add all the piles with that card that you're searching for, into a list and return that list
             CardDeck sourceDeck = this.board.getDeck(Integer.toString(i));
-            int sourceTopCardIndex = sourceDeck.getBottomFaceCardIndex();
+            int sourceTopCardIndex = (sourceDeck.size()-1);
             Card sourceTopCard = sourceDeck.get(sourceTopCardIndex);
 
             if (sourceTopCard.getValue() == cardValue) {
@@ -56,6 +57,9 @@ public class Search {
 
 //                break;
             }
+            if (!(deckNumber == 0 && cardSuit.equals("0"))){
+                isCardInPile = true;
+            }
         }
         return returnList;
   //      return Arrays.asList(deckNumber, cardIndex, cardSuit);
@@ -68,6 +72,7 @@ public class Search {
         int cardValueIndex = 0;
         int deckNumber = 0;
         String cardSuit = "0";
+
 
         List<Object> returnList = new ArrayList<>();
 
@@ -98,7 +103,7 @@ public class Search {
             }
         }
         return returnList;
-        //      return Arrays.asList(deckNumber, cardValueIndex, cardSuit);
+        //return Arrays.asList(deckNumber, cardValueIndex, cardSuit, isCardInPile);
     }
 
 
@@ -160,7 +165,6 @@ public class Search {
                                 cardValueIndex = srcTopCardIndex;
                                 srcDeckNumber = i;
                                 destnDeckNumber = j;
-                                found = true;
                             }
                     }
                     if (found) {
