@@ -1,23 +1,55 @@
 package main;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class AI {
-
     private final Search search;
     private final Board board;
+
+    public ArrayList<Move> movesList = new ArrayList<>();
 
     public AI(Search search, Board board) {
         this.search = search;
         this.board = board;
     }
 
-    public void doShit() {
-        System.out.println(search.toString());
-        System.out.println(board.toString());
+    /*ToDo
+        Deck/Discard need to be searchable, with a number of DRAW moves printed in order to obtain the wanted card.
+        Unknown cards need to be taken care of, taking input from the image recognition to be given their values.
 
-    }
+      ToDo
+        Look through move types and add them to the list. Moves must have a weight, given by their priority.
+        Moves in order of priority:
+        Ace to foundation
+        Deuce to foundation
+        King to empty spot
+        Number to number
+        Number from discard to number
+
+
+      ToDo
+        Checks that can change priority:
+        Play that frees a downcard (can be recursive) (MAJOR CHECK)
+        Moves that free downcards, should always be prioritized in the order of piles with most downcards (MINOR CHECK)
+        Moves that free a spot must have a waiting King to occupy the spot. Otherwise drop priority to zero. (MAJOR CHECK)
+        Play kings that benefit the column with the most downcards. (MINOR CHECK)
+        Moves to foundations that aren't aces or deuces should only be done if: (MAJOR CHECK)
+            They do not interfere with next-card protection
+            Allow a play/transfer that free a downcard
+            Open a space for a same-color card pile transfer that frees a downcard
+            Clears a spot for an immediate waiting King
+        Don't play/transfer 5-6-7-8 ANYWHERE unless one of these apply:
+            It is smooth
+            It allows for freeing a downcard
+            There have no been any other cards played to the column (only 1 face-up card present)
+            You have NO other choices (MAKE DEBUG STATEMENT FOR THIS SINCE IT'S A BAD SIGN)
+        If stuck in a position, look to re-arrange stacks or play to ace stacks until you can clear an
+        existing pile enough to use an existing card as substitute for the necessary card (DIFFICULT LAST-PRIORITY FEATURE)
+
+
+    */
 
     public void aceMoveToFoundation() {
 

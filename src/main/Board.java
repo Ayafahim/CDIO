@@ -114,6 +114,9 @@ public class Board {
 
     }
 
+    //ToDo Deck/Discard need to be searchable, with a number of DRAW moves printed in order to obtain the wanted card.
+
+
     /** Author STEVEN
      Flips newly revealed cards to face-up.
      /ToDo Needs change/deletion once OpenCV is added because cards will be given face-up.
