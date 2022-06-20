@@ -1,3 +1,5 @@
+package main;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -136,7 +138,7 @@ public class Search {
         int srcDeckNumber = 0;
         int destnDeckNumber = 0;
 
-        // Search all number piles
+        // main.Search all number piles
         for (int i = 7; i > 0; i--) {
 
             // Number pile variables for source deck
@@ -148,7 +150,7 @@ public class Search {
             if (srcDeck.canFreeDownCard()) {
                 CardDeck destnDeck;
 
-                // Search all number piles. Number piles variables for destination deck
+                // main.Search all number piles. Number piles variables for destination deck
                 for (int j = 7; j > 0; j--) {
                     destnDeck = this.board.getDeck(Integer.toString(j));
                     int destnTopCardIndex = (destnDeck.size()-1);

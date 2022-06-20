@@ -1,5 +1,7 @@
+package main;
+
 /** Author STEVEN
- * Card object to be used in Arraylists representing the board.
+ * main.Card object to be used in Arraylists representing the board.
  */
 public class Card {
 

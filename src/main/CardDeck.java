@@ -1,3 +1,5 @@
+package main;
+
 import Exceptions.NotEnoughCardsException;
 
 import java.io.File;
@@ -6,10 +8,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
-import java.util.StringTokenizer;
 
 /** Author STEVEN
- * CardDeck object that holds Card objects. Lots of methods for indirect manipulation of the underlying ArrayList as
+ * main.CardDeck object that holds main.Card objects. Lots of methods for indirect manipulation of the underlying ArrayList as
  * well as various printing, parsing, etc.
  */
 public class CardDeck {
@@ -35,7 +36,7 @@ public class CardDeck {
         /*String next;
         while (scanner.hasNextLine()) {
             next = scanner.nextLine();
-            cards.add(new Card(parseSuit(next), parseValue(next)));
+            cards.add(new main.Card(parseSuit(next), parseValue(next)));
         }*/
 
         String input = scanner.nextLine();
