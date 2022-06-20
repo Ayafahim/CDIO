@@ -29,6 +29,7 @@ public class AI {
 
       ToDo
         Checks that can change priority:
+        Increase priority if king can be moved to empty pile from another pile which allows for freeing a downcard
         IF a card is sitting on another one, do NOT let it move to another card of the same color its sitting on, i.e. a black 4 sitting on a red 5 should
         not move to another red 5 as that is pointless and results in a loop.
         IF a king is already the top card of a stack (not on a downcard), it should never move to another empty pile.
@@ -57,10 +58,10 @@ public class AI {
 
         movesList.clear(); //empty the list first every time!
 
-        aceMoveToFoundation(); //Add any acemoves to the list with priority 9
-        //deuceMoveToFoundation(); //Add any deucemoves to the list with priority 8
-        moveKingIfDeckEmpty(); //Add any kingmoves to the list with priority 7
-        moveNumberToNumber(); //Add any generic numbermoves to the list with priority 6
+        aceMoveToFoundation(); //Add any acemoves to the list with priority 90
+        //deuceMoveToFoundation(); //Add any deucemoves to the list with priority 80
+        moveKingIfDeckEmpty(); //Add any kingmoves to the list with priority 70
+        moveNumberToNumber(); //Add any generic numbermoves to the list with priority 60
 
         movesList.sort( Collections.reverseOrder(Comparator.comparingInt(Move::getPriority))); //Sort the available moves by priority
         System.out.println("Sorted moves list:\n" + movesList);
@@ -85,7 +86,7 @@ public class AI {
         for (CardDeck pile :p) { //Separate check that adds any move available from the discard pile with priority 5
             if (d.size() > 0) {
                 if (board.canMoveToNumberPile(d,pile,d.getLast())) {
-                    movesList.add(new Move(d,pile,d.getLast(),5));
+                    movesList.add(new Move(d,pile,d.getLast(),50));
                 }
             }
         }
@@ -96,7 +97,7 @@ public class AI {
                     if (pile.get(i).isFaceUp()) { //We only bother checking for cards that are actually face-up (SOURCE)
                         for (CardDeck pile2: p) { //Again looping through piles (DESTINATION)
                                 if (board.canMoveToNumberPile(pile,pile2,i)) { //Check if the source card can be moved to this destination (LAST CARD)
-                                    movesList.add(new Move(pile,pile2,i,6));
+                                    movesList.add(new Move(pile,pile2,i,60));
                                 }
                         }
                     }
@@ -114,14 +115,14 @@ public class AI {
         //Check for discard pile.
         if (d.size() > 0) {
             if (d.get(d.getLast()).getValue() == 1) {
-                movesList.add(new Move(d, search.parseFoundation(d.get(d.getLast())), d.getLast(), 9));
+                movesList.add(new Move(d, search.parseFoundation(d.get(d.getLast())), d.getLast(), 90));
             }
         }
         //Check for number piles
         for (CardDeck pile: p) {
             if (pile.size() > 0) {
                 if (pile.get(pile.getLast()).getValue() == 1) {
-                    movesList.add(new Move(pile, search.parseFoundation(pile.get(pile.getLast())), pile.getLast(), 9));
+                    movesList.add(new Move(pile, search.parseFoundation(pile.get(pile.getLast())), pile.getLast(), 90));
                 }
             }
         }
@@ -187,7 +188,7 @@ public class AI {
             for (int i = 1; i<8; i++){
                 if (board.getDeck(Integer.toString(i)).size() == 0){
                     CardDeck dest = board.getDeck(Integer.toString(i));
-                    Move move = new Move(src, dest, index,7);//ToDo FIX PRIORITY
+                    Move move = new Move(src, dest, index,70);//ToDo FIX PRIORITY
                     try {
                         //System.out.println("main.Move is: " + move);
                         //board.attemptMove(move);
@@ -234,7 +235,7 @@ public class AI {
             case "7" -> src = board.getDeck("7");
         }
 
-        Move move = new Move(src, destination, (Integer) aceInfo.get(1),8);//ToDo FIX PRIORITY
+        Move move = new Move(src, destination, (Integer) aceInfo.get(1),80);//ToDo FIX PRIORITY
         try {
             //System.out.println("main.Move is: " + move);
             //board.attemptMove(move);
@@ -277,7 +278,7 @@ public class AI {
             case "7" -> destination = board.getDeck("7");
         }
 
-        Move move = new Move(src, destination, (Integer) openDownCard.get(2),10);//ToDo FIX PRIORITY
+        Move move = new Move(src, destination, (Integer) openDownCard.get(2),100);//ToDo FIX PRIORITY
         try {
             //System.out.println("main.Move is: " + move);
             //board.attemptMove(move);

@@ -30,8 +30,6 @@ public class Search {
         int cardIndex = 0;
         int deckNumber = 0;
         String cardSuit = "0";
-        boolean isCardInPile = false;
-        boolean isCardInDraw = false;
 
         List<Object> returnList = new ArrayList<>();
 
