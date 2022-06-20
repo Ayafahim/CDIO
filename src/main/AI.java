@@ -63,6 +63,11 @@ public class AI {
         // Shouldn't be able to clear a spot if there isn't a king to take that cleared spot
         /**
          * Not finished
+         * Man skal undersøge hvor mange facedown cards der er i et deck, før man laver trækket fra det deck.
+         * Hvis der er 0 facedown kort, så fortsæt heri:
+         *      - Forudsætningen af at der er 0 facedown kort, gør at man gerne vil rykke alle kortene herfra over til en anden bunke.
+         *      - Man må ikke rykke alle kort fra et deck, med mindre der er en konge der kan tage dets plads.
+         *      - Hvis der er en konge, så giv tilladelse til at "clear a spot".
          */
         try {
             List<Object> searchForKing = search.someCardSearch(13);
@@ -168,8 +173,24 @@ public class AI {
 
 
 
+    /*
+    6. Only play a King that will benefit the column(s) with the biggest pile of downcards,
+    unless the play of another King will at least allow a transfer that frees a downcard.
+
+    - Søg efter konger
+        - hvis der er flere konger, så tag den konge der er i den pile der er flest kort i, altså med flest downcards
+        - med mindre, at ved at man spiller en anden konge, vil tillade en flytning der frigør et downcard
+
+        SNAKKET MED ALEC OG AYA:
+        "unless": der er en konge i draw pile, der kan sættes i spil, sådan så at en dronning kan rykkes, og free et downcard.
+        dvs. at man ikke altid rykker en konge fra det største pile, da man hellere vil have en konge ud af draw.
+
+
+     */
     public void moveKingFromBiggestPile() {
         try {
+            //have to edit: Biggest pile of DOWNCARDS! not just biggest pile.
+            //have to check for the piles face-down cards.
             List<Object> searchForKing = search.someCardSearch(13);
 
             //Edited the someCardSearch to return all decks with the card in you're searching for.
@@ -178,13 +199,19 @@ public class AI {
 
             System.out.println("Printer al information om det deck der er konge i: " + Arrays.toString(searchForKing.toArray()));
             int size = searchForKing.size();
-            Object currentDeckSize = searchForKing.get(1);
-            int currentDeckSize1 = (int) currentDeckSize;
 
-            for (int i = 1; i<size; i=i+4){
-                if (currentDeckSize1<board.getDeck(Integer.toString(i)).size()){
+            CardDeck deck = board.getDeck((String) searchForKing.get(0));
+            int currentDeckSize1 = deck.size();
+            //Skal ændres^^skal tjekke for flest facedown card, og ikke bare size()
+
+
+            search.mostFacedownSearch();
+
+            for (int i = 0; i<size; i=i+3){
+                //mangler at ændre
+                if (currentDeckSize1<board.getDeck(searchForKing.get(i).size()){
                     CardDeck source = board.getDeck((String) searchForKing.get(i));
-                } else System.out.println(currentDeckSize);
+                }
             }
             //Nu har vi source fra det deck der har flest kort i sig
 /*
@@ -210,24 +237,6 @@ public class AI {
     }
 
 
-    /*
-    7. Only build your Ace stacks (with anything other than an Ace or Deuce) when the play will:
-
-Not interfere with your Next Card Protection
-Allow a play or transfer that frees (or allows a play that frees) a downcard
-Open up a space for a same-color card pile transfer that allows a downcard to be freed
-Clear a spot for an IMMEDIATE waiting King (it cannot be to simply clear a spot)
-
-     */
-
-    public void whenToPlayAce() {
-
-    }
-
-
-
-
-
 
 
     /*
@@ -238,16 +247,7 @@ It will allow a play or transfer that will IMMEDIATELY free a downcard
 There have not been any other cards already played to the column
 You have ABSOLUTELY no other choice to continue playing (this is not a good sign)
      */
+
 }
 
-    /*
-    6. Only play a King that will benefit the column(s) with the biggest pile of downcards,
-    unless the play of another King will at least allow a transfer that frees a downcard.
-
-    - Søg efter konger
-        - hvis der er flere konger, så tag den konge der er i den pile der er flest kort i, altså med flest downcards
-        - med mindre, at ved at man spiller en anden konge, vil tillade en flytning der frigør et downcard
-
-
-     */
 
