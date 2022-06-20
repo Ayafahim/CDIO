@@ -24,8 +24,8 @@ public class Game {
         do {
             board.updateBoardState();
             board.printBoard();
-            //System.out.println(board.getDeck("draw"));
-            //System.out.println(board.getDeck("discard"));
+//            System.out.println(board.getDeck("draw"));
+//            System.out.println(board.getDeck("discard"));
             System.out.println("Ready for Input");
             input = sc.nextLine();
             board.parseInput(input);

@@ -29,20 +29,18 @@ public class Search {
     public List<Object> someCardSearch(int cardValue) {
         int cardIndex = 0;
         int deckNumber = 0;
-        //int deckSize = 0;
         String cardSuit = "0";
         boolean isCardInPile = false;
+        boolean isCardInDraw = false;
 
         List<Object> returnList = new ArrayList<>();
-
 
         //for loop iterates through each pile and checks value of each card facing up
         for (int i = 7; i >= 1; i--) { //edit Jacob: Searching from the biggest pile to smallest
             //Further edit: add all the piles with that card that you're searching for, into a list and return that list
             CardDeck sourceDeck = this.board.getDeck(Integer.toString(i));
-            int sourceTopCardIndex = (sourceDeck.size()-1);
+            int sourceTopCardIndex = (sourceDeck.size() - 1);
             Card sourceTopCard = sourceDeck.get(sourceTopCardIndex);
-            //deckSize = sourceDeck.size();
 
             if (sourceTopCard.getValue() == cardValue) {
                 switch (sourceTopCard.getSuit()) {
@@ -56,18 +54,32 @@ public class Search {
                 deckNumber = i;
                 cardIndex = sourceTopCardIndex;
                 returnList.add(deckNumber);
-                //returnList.add(deckSize);
                 returnList.add(cardIndex);
                 returnList.add(cardSuit);
-
-//                break;
             }
-            if (!(deckNumber == 0 && cardSuit.equals("0"))){
-                isCardInPile = true;
+        }
+        //Edit changed to look through discard too, so that the list includes every pile. List is empty if the card is not in any pile.
+        CardDeck discardPile = this.board.discardPile;
+        if (discardPile.size() > 0) {
+
+            int discardTopCardIndex = discardPile.getLast();
+            Card discardTopCard = discardPile.get(discardTopCardIndex);
+            if (discardTopCard.getValue() == cardValue) {
+                switch (discardTopCard.getSuit()) {
+                    case HEARTS -> cardSuit = "Hearts";
+                    case SPADES -> cardSuit = "Spades";
+                    case DIAMONDS -> cardSuit = "Diamonds";
+                    case CLUBS -> cardSuit = "Clubs";
+                    default -> cardSuit = "0";
+                }
+                deckNumber = 13;
+                cardIndex = discardTopCardIndex;
+                returnList.add(deckNumber);
+                returnList.add(cardIndex);
+                returnList.add(cardSuit);
             }
         }
         return returnList;
-  //      return Arrays.asList(deckNumber, cardIndex, cardSuit);
     }
 
 
@@ -112,11 +124,10 @@ public class Search {
     }
 
 
-
     /**
      * Author Aya
      * Searches for pile with most facedown cards
-     *
+     * <p>
      * edit: might change code, to check for most facedown cards pile, that includes a card that you're searching for.
      */
 
@@ -160,7 +171,7 @@ public class Search {
                 // main.Search all number piles. Number piles variables for destination deck
                 for (int j = 7; j > 0; j--) {
                     destnDeck = this.board.getDeck(Integer.toString(j));
-                    int destnTopCardIndex = (destnDeck.size()-1);
+                    int destnTopCardIndex = (destnDeck.size() - 1);
                     Card destnTopCard = destnDeck.get(destnTopCardIndex);
 
                 /*
@@ -168,11 +179,11 @@ public class Search {
                 if top source deck minus top destination deck gives -1, and if the color of those 2 decks is not the same.
                  */
                     if (srcTopCard.getValue() - destnTopCard.getValue() == -1) {
-                            if (srcTopCard.isBlack() && destnTopCard.isRed() || srcTopCard.isRed() && destnTopCard.isBlack()) {
-                                cardValueIndex = srcTopCardIndex;
-                                srcDeckNumber = i;
-                                destnDeckNumber = j;
-                            }
+                        if (srcTopCard.isBlack() && destnTopCard.isRed() || srcTopCard.isRed() && destnTopCard.isBlack()) {
+                            cardValueIndex = srcTopCardIndex;
+                            srcDeckNumber = i;
+                            destnDeckNumber = j;
+                        }
                     }
                     if (found) {
                         break;

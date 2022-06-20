@@ -110,6 +110,9 @@ public class AI {
 
         List<Object> aceInfo = search.someCardSearch(1);
 
+        if (aceInfo.size() > 1) {
+            for ()
+
         Object srcDeck = aceInfo.get(0);
         CardDeck src = board.getDeck("0");
         CardDeck destination = null;
@@ -130,14 +133,14 @@ public class AI {
             case "7" -> src = board.getDeck("7");
         }
 
-        Move move = new Move(src, destination, (Integer) aceInfo.get(1),9);//ToDo FIX PRIORITY
+        Move move = new Move(src, destination, (Integer) aceInfo.get(1), 9);//ToDo FIX PRIORITY
         try {
             System.out.println("main.Move is: " + move);
-            //board.attemptMove(move);
             movesList.add(move);
         } catch (Exception e) {
             System.out.println("move couldn't be done");
         }
+    }
 
     }
 
@@ -301,12 +304,12 @@ public class AI {
 
             search.mostFacedownSearch();
 
-            for (int i = 0; i<size; i=i+3){
-                //mangler at ændre
-                if (currentDeckSize1<board.getDeck(searchForKing.get(i).size()){
-                    CardDeck source = board.getDeck((String) searchForKing.get(i));
-                }
-            }
+//            for (int i = 0; i<size; i=i+3){
+//                //mangler at ændre
+//                if (currentDeckSize1<board.getDeck(searchForKing.get(i).size()){
+//                    CardDeck source = board.getDeck((String) searchForKing.get(i));
+//                }
+//            }
             //Nu har vi source fra det deck der har flest kort i sig
 /*
             main.CardDeck src = board.getDeck(srcDeck.toString());

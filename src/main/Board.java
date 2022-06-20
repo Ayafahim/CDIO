@@ -108,14 +108,14 @@ public class Board {
             }
             /*
              * Quick add from Jacob
+             * Edit Aya: just changed it to print exception
              */
-        } catch (Exception e) {
-            System.out.println("You have to write something we can use, you dummy");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
             Scanner sc = new Scanner(System.in);
             String input2 = sc.nextLine();
             parseInput(input2);
-
-
         }
 
     }
