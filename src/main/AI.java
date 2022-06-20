@@ -211,6 +211,23 @@ public class AI {
      */
     public void deuceMoveToFoundation() {
 
+        ArrayList<CardDeck> p = board.numberPiles;
+        CardDeck d = board.discardPile;
+        //Check for discard pile.
+        if (d.size() > 0) {
+            if (d.get(d.getLast()).getValue() == 2) {
+                movesList.add(new Move(d, search.parseFoundation(d.get(d.getLast())), d.getLast(), 9));
+            }
+        }
+        //Check for number piles
+        for (CardDeck pile: p) {
+            if (pile.size() > 0) {
+                if (pile.get(pile.getLast()).getValue() == 1) {
+                    movesList.add(new Move(pile, search.parseFoundation(pile.get(pile.getLast())), pile.getLast(), 9));
+                }
+            }
+        }
+        /*
         //System.out.println(search.someCardSearch(2));
 
         List<Object> aceInfo = search.someCardSearch(2);
@@ -242,7 +259,7 @@ public class AI {
             movesList.add(move);
         } catch (Exception e) {
             //System.out.println("move couldn't be done");
-        }
+        }*/
 
     }
 
