@@ -41,7 +41,7 @@ public class CardDeck {
 
         String input = scanner.nextLine();
         String[] rawCardInput = input.split(",");
-        for (int i = 0; i < rawCardInput.length-1; i++) {
+        for (int i = 0; i < rawCardInput.length; i++) {
             cards.add(new Card(parseSuit(rawCardInput[i]), parseValue(rawCardInput[i].substring(1))));
         }
         scanner.close();

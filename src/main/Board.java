@@ -40,6 +40,7 @@ public class Board {
                     drawPile.shuffleDeck();
                     break;
                 }
+                case "":
                 case "ai": {
                     System.out.println("AI in testing phase :)");
                     ai.think();
@@ -190,7 +191,7 @@ public class Board {
     public boolean canMoveToNumberPile(CardDeck source, CardDeck destination, int index) {
         boolean value = false;
         boolean suit = false;
-        boolean isFaceUp;
+        boolean isFaceUp = false;
         boolean legalNumberOfCards = true;
         //Checks for attempting a move of king to empty pile.
         if (destination.size() == 0 ) {
@@ -204,18 +205,20 @@ public class Board {
             else return false;
         }
         //Source number value is 1 less than destination number.
-        if (destination.get(destination.size() - 1).getValue() - source.get(index).getValue() == 1) {
-            value = true;
-        }
-        //Source color is opposite of destination color
-        if ((source.get(index).isRed() && destination.get(destination.size() - 1).isBlack()) || (source.get(index).isBlack() && destination.get(destination.size()-1).isRed())) {
-            suit = true;
-        }
-        //Both cards must be face-up for the move to make any sense
-        isFaceUp = areFaceUp(source, destination, index);
-        //Can only move multiple cards if the source deck is a number pile.
-        if (source.size() - 1 > index && !isNumberPile(source)) {
-            legalNumberOfCards = false;
+        if (destination.size() > 0) {
+            if (destination.get(destination.size() - 1).getValue() - source.get(index).getValue() == 1) {
+                value = true;
+            }
+            //Source color is opposite of destination color
+            if ((source.get(index).isRed() && destination.get(destination.size() - 1).isBlack()) || (source.get(index).isBlack() && destination.get(destination.size() - 1).isRed())) {
+                suit = true;
+            }
+            //Both cards must be face-up for the move to make any sense
+            isFaceUp = areFaceUp(source, destination, index);
+            //Can only move multiple cards if the source deck is a number pile.
+            if (source.size() - 1 > index && !isNumberPile(source)) {
+                legalNumberOfCards = false;
+            }
         }
         //System.out.println("canMoveToNumberPile boolean results -> " + value + " " + suit + " " + isFaceUp + " " + legalNumberOfCards);
         return (value && suit && isFaceUp && legalNumberOfCards);
@@ -399,9 +402,11 @@ public class Board {
         String dtab = "\t\t";
 
         // Create new super print method with formatting
-        System.out.println("DR" + tab + drawPile.printCard(drawPile.size()-1) + dtab + "FH" + tab + "FS" + tab + "FD" + tab + "FC");
-        System.out.println("DI" + tab + discardPile.printCard(discardPile.size()-1) + dtab + heartsPile.printCard(heartsPile.size() - 1) + tab + spadesPile.printCard(spadesPile.size() - 1)
-                + tab + diamondsPile.printCard(diamondsPile.size() - 1) + tab + clubsPile.printCard(clubsPile.size() - 1));
+        System.out.println("DR" + tab + drawPile.printCard(drawPile.size()-1) + dtab + "FH" + tab + "FS" + tab + "FD" + tab + "FC" + tab + "Number of cards: " + numberOfCardsOnBoard());
+        System.out.println("DI" + tab + discardPile.printCard(discardPile.size()-1) + dtab +
+                heartsPile.printCard(heartsPile.size() - 1) + tab + spadesPile.printCard(spadesPile.size() - 1)
+                + tab + diamondsPile.printCard(diamondsPile.size() - 1) + tab + clubsPile.printCard(clubsPile.size() - 1) +
+                tab + "Cards in Draw/Discard: " + (drawPile.size() + discardPile.size()));
         System.out.println("P1  P2  P3  P4  P5  P6  P7");
         for (int i = 0; i < longestNumberPileLength(); i++) {
             System.out.println(pile1.printCard(i) + tab
@@ -414,6 +419,10 @@ public class Board {
         }
 
 
+    }
+
+    public int numberOfCardsOnBoard() {
+        return drawPile.size() + discardPile.size() + pile1.size() + pile2.size() + pile3.size() + pile4.size() + pile5.size() + pile6.size() + pile7.size() + heartsPile.size() + spadesPile.size() + diamondsPile.size() + clubsPile.size();
     }
 
     /** Author STEVEN

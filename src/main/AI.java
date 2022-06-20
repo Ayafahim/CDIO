@@ -59,7 +59,7 @@ public class AI {
         movesList.clear(); //empty the list first every time!
 
         aceMoveToFoundation(); //Add any acemoves to the list with priority 90
-        //deuceMoveToFoundation(); //Add any deucemoves to the list with priority 80
+        deuceMoveToFoundation(); //Add any deucemoves to the list with priority 80
         moveKingIfDeckEmpty(); //Add any kingmoves to the list with priority 70
         moveNumberToNumber(); //Add any generic numbermoves to the list with priority 60
         drawMove(); //Draws cards with priority 10
@@ -224,14 +224,18 @@ public class AI {
         //Check for discard pile.
         if (d.size() > 0) {
             if (d.get(d.getLast()).getValue() == 2) {
-                movesList.add(new Move(d, search.parseFoundation(d.get(d.getLast())), d.getLast(), 9));
+                if (search.parseFoundation(d.get(d.getLast())).size() == 1) {
+                    movesList.add(new Move(d, search.parseFoundation(d.get(d.getLast())), d.getLast(), 80));
+                }
             }
         }
         //Check for number piles
         for (CardDeck pile: p) {
             if (pile.size() > 0) {
-                if (pile.get(pile.getLast()).getValue() == 1) {
-                    movesList.add(new Move(pile, search.parseFoundation(pile.get(pile.getLast())), pile.getLast(), 9));
+                if (pile.get(pile.getLast()).getValue() == 2) {
+                    if (search.parseFoundation(pile.get(pile.getLast())).size() == 1) {
+                        movesList.add(new Move(pile, search.parseFoundation(pile.get(pile.getLast())), pile.getLast(), 80));
+                    }
                 }
             }
         }
