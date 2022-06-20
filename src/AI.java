@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.List;
 
 public class AI {
@@ -171,15 +172,19 @@ public class AI {
 
             //Edited the someCardSearch to return all decks with the card in you're searching for.
 
+            //Have to change this code, to allow the player to make the move from, if there is a king available.
+
             System.out.println("Printer al information om det deck der er konge i: " + Arrays.toString(searchForKing.toArray()));
             int size = searchForKing.size();
-            CardDeck currentDeck = board.getDeck("7");
-            for (int i = 0; i<size; i=i+3){
-                if (board.getDeck(Integer.toString(i)).size()>currentDeck.size() ){
+            Object currentDeckSize = searchForKing.get(1);
+            int currentDeckSize1 = (int) currentDeckSize;
+
+            for (int i = 1; i<size; i=i+4){
+                if (currentDeckSize1<board.getDeck(Integer.toString(i)).size()){
                     CardDeck source = board.getDeck((String) searchForKing.get(i));
-                    System.out.println(source);
-                } else System.out.println(currentDeck);
+                } else System.out.println(currentDeckSize);
             }
+            //Nu har vi source fra det deck der har flest kort i sig
 /*
             CardDeck src = board.getDeck(srcDeck.toString());
             int index = src.getBottomFaceCardIndex();
@@ -201,6 +206,36 @@ public class AI {
             System.out.println("No kings available");
         }
     }
+
+
+    /*
+    7. Only build your Ace stacks (with anything other than an Ace or Deuce) when the play will:
+
+Not interfere with your Next Card Protection
+Allow a play or transfer that frees (or allows a play that frees) a downcard
+Open up a space for a same-color card pile transfer that allows a downcard to be freed
+Clear a spot for an IMMEDIATE waiting King (it cannot be to simply clear a spot)
+
+     */
+
+    public void whenToPlayAce() {
+
+    }
+
+
+
+
+
+
+
+    /*
+    8. Don't play or transfer a 5, 6, 7 or 8 anywhere unless at least one of these situations will apply after the play:
+
+It is smooth with it's next highest even/odd partner in the column
+It will allow a play or transfer that will IMMEDIATELY free a downcard
+There have not been any other cards already played to the column
+You have ABSOLUTELY no other choice to continue playing (this is not a good sign)
+     */
 }
 
     /*
@@ -213,4 +248,6 @@ public class AI {
 
 
      */
+
+
 
