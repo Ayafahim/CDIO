@@ -51,7 +51,8 @@ public class AI {
         existing pile enough to use an existing card as substitute for the necessary card (DIFFICULT LAST-PRIORITY FEATURE)
     */
 
-    /** Author: Steven
+    /**
+     * Author: Steven
      * The main function driving the AI that calls all other functions when looking for a move chosen by the AI!
      */
     public void think() {
@@ -63,8 +64,9 @@ public class AI {
         moveKingIfDeckEmpty(); //Add any kingmoves to the list with priority 70
         moveNumberToNumber(); //Add any generic numbermoves to the list with priority 60
         drawMove(); //Draws cards with priority 10
+        freeDownCardMove();
 
-        movesList.sort( Collections.reverseOrder(Comparator.comparingInt(Move::getPriority))); //Sort the available moves by priority
+        movesList.sort(Collections.reverseOrder(Comparator.comparingInt(Move::getPriority))); //Sort the available moves by priority
         System.out.println("Sorted moves list:\n" + movesList);
         try {
             System.out.println("Attempting the best move:");
@@ -80,33 +82,34 @@ public class AI {
      * PRIORITY 10 FOR DRAWING CARDS.
      */
     public void drawMove() {
-        movesList.add(new Move(board.drawPile,board.discardPile,0,10));
+        movesList.add(new Move(board.drawPile, board.discardPile, 0, 10));
     }
 
     //ToDo Needs to search the top of the discard pile for an ace as well.
 
-    /** Author: Steven
+    /**
+     * Author: Steven
      * Sends any regular discard/number pile to number pile moves to the list with priority 5/6 respectively.
      */
     public void moveNumberToNumber() {
         ArrayList<CardDeck> p = board.numberPiles;
         CardDeck d = board.discardPile;
-        for (CardDeck pile :p) { //Separate check that adds any move available from the discard pile with priority 5
+        for (CardDeck pile : p) { //Separate check that adds any move available from the discard pile with priority 5
             if (d.size() > 0) {
-                if (board.canMoveToNumberPile(d,pile,d.getLast())) {
-                    movesList.add(new Move(d,pile,d.getLast(),50));
+                if (board.canMoveToNumberPile(d, pile, d.getLast())) {
+                    movesList.add(new Move(d, pile, d.getLast(), 50));
                 }
             }
         }
 
-        for (CardDeck pile: p) { //Loops through number piles (SOURCE)
+        for (CardDeck pile : p) { //Loops through number piles (SOURCE)
             if (pile.size() > 0) { //There must be at least 1 card in the pile to be moved. (SOURCE)
                 for (int i = 0; i < pile.size(); i++) { //Loop through all cards in the pile (INDEX)
                     if (pile.get(i).isFaceUp()) { //We only bother checking for cards that are actually face-up (SOURCE)
-                        for (CardDeck pile2: p) { //Again looping through piles (DESTINATION)
-                                if (board.canMoveToNumberPile(pile,pile2,i)) { //Check if the source card can be moved to this destination (LAST CARD)
-                                    movesList.add(new Move(pile,pile2,i,60));
-                                }
+                        for (CardDeck pile2 : p) { //Again looping through piles (DESTINATION)
+                            if (board.canMoveToNumberPile(pile, pile2, i)) { //Check if the source card can be moved to this destination (LAST CARD)
+                                movesList.add(new Move(pile, pile2, i, 60));
+                            }
                         }
                     }
                 }
@@ -115,7 +118,7 @@ public class AI {
     }
 
     /**
-     *  PRIORITY 9
+     * PRIORITY 9
      */
     public void aceMoveToFoundation() {
         ArrayList<CardDeck> p = board.numberPiles;
@@ -127,7 +130,7 @@ public class AI {
             }
         }
         //Check for number piles
-        for (CardDeck pile: p) {
+        for (CardDeck pile : p) {
             if (pile.size() > 0) {
                 if (pile.get(pile.getLast()).getValue() == 1) {
                     movesList.add(new Move(pile, search.parseFoundation(pile.get(pile.getLast())), pile.getLast(), 90));
@@ -172,8 +175,8 @@ public class AI {
     }
 
     /**
-     *  PRIORITY 7
-     *  NOT FINISHED
+     * PRIORITY 7
+     * NOT FINISHED
      */
     public void moveKingIfDeckEmpty() {
         //TODO
@@ -193,10 +196,10 @@ public class AI {
 
             CardDeck src = board.getDeck(srcDeck.toString());
             int index = src.getBottomFaceCardIndex();
-            for (int i = 1; i<8; i++){
-                if (board.getDeck(Integer.toString(i)).size() == 0){
+            for (int i = 1; i < 8; i++) {
+                if (board.getDeck(Integer.toString(i)).size() == 0) {
                     CardDeck dest = board.getDeck(Integer.toString(i));
-                    Move move = new Move(src, dest, index,70);//ToDo FIX PRIORITY
+                    Move move = new Move(src, dest, index, 70);//ToDo FIX PRIORITY
                     try {
                         //System.out.println("main.Move is: " + move);
                         //board.attemptMove(move);
@@ -214,8 +217,9 @@ public class AI {
     }
 
     //ToDo Needs to search the top of the discard pile for a deuce as well.
+
     /**
-     *  PRIORITY 8
+     * PRIORITY 8
      */
     public void deuceMoveToFoundation() {
 
@@ -230,7 +234,7 @@ public class AI {
             }
         }
         //Check for number piles
-        for (CardDeck pile: p) {
+        for (CardDeck pile : p) {
             if (pile.size() > 0) {
                 if (pile.get(pile.getLast()).getValue() == 2) {
                     if (search.parseFoundation(pile.get(pile.getLast())).size() == 1) {
@@ -280,7 +284,25 @@ public class AI {
      * makes a move that frees a downcard if it is possble
      */
     public void freeDownCardMove() {
-        //System.out.println(search.searchIfDownCardCanBeFreed());
+
+        ArrayList<CardDeck> sP = board.numberPiles;
+        ArrayList<CardDeck> dP = board.numberPiles;
+
+        for (CardDeck sourcePile : sP) {
+            if (sourcePile.canFreeDownCard()) {
+                for (CardDeck destinationPile : dP) {
+                    if (sourcePile.size() > 0 && destinationPile.size() > 0) {
+                        if (sourcePile.get(sourcePile.getLast()).getValue() - destinationPile.get(destinationPile.getLast()).getValue() == -1) {
+                            if (sourcePile.get(sourcePile.getLast()).isBlack() && destinationPile.get(destinationPile.getLast()).isRed()
+                                    || sourcePile.get(sourcePile.getLast()).isRed() && destinationPile.get(destinationPile.getLast()).isBlack()) {
+                                movesList.add(new Move(sourcePile, destinationPile, sourcePile.getLast(), 100));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+       /* //System.out.println(search.searchIfDownCardCanBeFreed());
 
         List<Object> openDownCard = search.searchIfDownCardCanBeFreed();
         Object srcDeck = openDownCard.get(0);
@@ -315,8 +337,9 @@ public class AI {
         } catch (Exception e) {
             //System.out.println("move couldn't be done");
         }
-    }
 
+        */
+    }
 
 
     /*
@@ -353,10 +376,10 @@ public class AI {
 
             search.mostFacedownSearch();
 
-            for (int i = 0; i<size; i=i+3){
+            for (int i = 0; i < size; i = i + 3) {
                 //mangler at ændre
                 //if (currentDeckSize1<board.getDeck(searchForKing.get(i).size()){
-                  //  CardDeck source = board.getDeck((String) searchForKing.get(i));
+                //  CardDeck source = board.getDeck((String) searchForKing.get(i));
                 //}
             }
             //Nu har vi source fra det deck der har flest kort i sig
