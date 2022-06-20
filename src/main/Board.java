@@ -110,12 +110,7 @@ public class Board {
              * Quick add from Jacob
              */
         } catch (Exception e) {
-            System.out.println("You have to write something we can use, you dummy");
-            Scanner sc = new Scanner(System.in);
-            String input2 = sc.nextLine();
-            parseInput(input2);
-
-
+            System.out.println("You have to write something we can use :)");
         }
 
     }
