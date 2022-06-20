@@ -62,6 +62,7 @@ public class AI {
         //deuceMoveToFoundation(); //Add any deucemoves to the list with priority 80
         moveKingIfDeckEmpty(); //Add any kingmoves to the list with priority 70
         moveNumberToNumber(); //Add any generic numbermoves to the list with priority 60
+        drawMove(); //Draws cards with priority 10
 
         movesList.sort( Collections.reverseOrder(Comparator.comparingInt(Move::getPriority))); //Sort the available moves by priority
         System.out.println("Sorted moves list:\n" + movesList);
@@ -73,6 +74,13 @@ public class AI {
             System.out.println("movesList was empty :(");
         }
 
+    }
+
+    /**
+     * PRIORITY 10 FOR DRAWING CARDS.
+     */
+    public void drawMove() {
+        movesList.add(new Move(board.drawPile,board.discardPile,0,10));
     }
 
     //ToDo Needs to search the top of the discard pile for an ace as well.

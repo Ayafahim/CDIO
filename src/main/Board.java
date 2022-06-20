@@ -145,6 +145,12 @@ public class Board {
         CardDeck d = move.getDestinationDeck();
         int x = move.getIndex();
 
+        //Only for Draw Move
+        if (s == drawPile && d == discardPile) {
+            draw3Cards();
+            return true;
+        }
+
         //Attempts to move card(s) from number pile to number pile.
         if (isNumberPile(s) && isNumberPile(d)) {
             if (canMoveToNumberPile(s, d, x)) {
@@ -286,6 +292,7 @@ public class Board {
         }
         else {
             shuffleDiscardIntoDraw();
+            System.out.println("Perform STOCK move!");
             //does not call the method again as they're considered separate moves.
         }
 
