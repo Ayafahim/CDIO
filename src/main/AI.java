@@ -57,7 +57,8 @@ public class AI {
         aceMoveToFoundation(); //Add any acemoves to the list with priority 9
         //deuceMoveToFoundation(); //Add any deucemoves to the list with priority 8
         moveKingIfDeckEmpty(); //Add any kingmoves to the list with priority 7
-        moveNumberToNumber();
+        moveNumberToNumber(); //Add any generic numbermoves to the list with priority 6
+
         movesList.sort( Collections.reverseOrder(Comparator.comparingInt(Move::getPriority))); //Sort the available moves by priority
         System.out.println("Sorted moves list:\n" + movesList);
         try {
@@ -72,15 +73,15 @@ public class AI {
     //ToDo Needs to search the top of the discard pile for an ace as well.
 
     /**
-     * Sends any regular discard/number pile to number pile moves to the list with priority 6.
+     * Sends any regular discard/number pile to number pile moves to the list with priority 5/6 respectively.
      */
     public void moveNumberToNumber() {
         ArrayList<CardDeck> p = board.numberPiles;
         CardDeck d = board.discardPile;
-        for (CardDeck pile :p) {
+        for (CardDeck pile :p) { //Separate check that adds any move available from the discard pile with priority 5
             if (d.size() > 0) {
                 if (board.canMoveToNumberPile(d,pile,d.getLast())) {
-                    movesList.add(new Move(d,pile,d.getLast(),6));
+                    movesList.add(new Move(d,pile,d.getLast(),5));
                 }
             }
         }
