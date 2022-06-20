@@ -150,6 +150,11 @@ public class AI {
         // Shouldn't be able to clear a spot if there isn't a king to take that cleared spot
         /**
          * Not finished
+         * Man skal undersøge hvor mange facedown cards der er i et deck, før man laver trækket fra det deck.
+         * Hvis der er 0 facedown kort, så fortsæt heri:
+         *      - Forudsætningen af at der er 0 facedown kort, gør at man gerne vil rykke alle kortene herfra over til en anden bunke.
+         *      - Man må ikke rykke alle kort fra et deck, med mindre der er en konge der kan tage dets plads.
+         *      - Hvis der er en konge, så giv tilladelse til at "clear a spot".
          */
         try {
             List<Object> searchForKing = search.someCardSearch(13);
@@ -262,21 +267,47 @@ public class AI {
 
 
 
+    /*
+    6. Only play a King that will benefit the column(s) with the biggest pile of downcards,
+    unless the play of another King will at least allow a transfer that frees a downcard.
+
+    - Søg efter konger
+        - hvis der er flere konger, så tag den konge der er i den pile der er flest kort i, altså med flest downcards
+        - med mindre, at ved at man spiller en anden konge, vil tillade en flytning der frigør et downcard
+
+        SNAKKET MED ALEC OG AYA:
+        "unless": der er en konge i draw pile, der kan sættes i spil, sådan så at en dronning kan rykkes, og free et downcard.
+        dvs. at man ikke altid rykker en konge fra det største pile, da man hellere vil have en konge ud af draw.
+
+
+     */
     public void moveKingFromBiggestPile() {
         try {
+            //have to edit: Biggest pile of DOWNCARDS! not just biggest pile.
+            //have to check for the piles face-down cards.
             List<Object> searchForKing = search.someCardSearch(13);
 
             //Edited the someCardSearch to return all decks with the card in you're searching for.
 
+            //Have to change this code, to allow the player to make the move from, if there is a king available.
+
             System.out.println("Printer al information om det deck der er konge i: " + Arrays.toString(searchForKing.toArray()));
             int size = searchForKing.size();
-            CardDeck currentDeck = board.getDeck("7");
+
+            CardDeck deck = board.getDeck((String) searchForKing.get(0));
+            int currentDeckSize1 = deck.size();
+            //Skal ændres^^skal tjekke for flest facedown card, og ikke bare size()
+
+
+            search.mostFacedownSearch();
+
             for (int i = 0; i<size; i=i+3){
-                if (board.getDeck(Integer.toString(i)).size()>currentDeck.size() ){
+                //mangler at ændre
+                if (currentDeckSize1<board.getDeck(searchForKing.get(i).size()){
                     CardDeck source = board.getDeck((String) searchForKing.get(i));
-                    System.out.println(source);
-                } else System.out.println(currentDeck);
+                }
             }
+            //Nu har vi source fra det deck der har flest kort i sig
 /*
             main.CardDeck src = board.getDeck(srcDeck.toString());
             int index = src.getBottomFaceCardIndex();
@@ -299,16 +330,19 @@ public class AI {
             System.out.println("No kings available");
         }
     }
-}
+
+
+
 
     /*
-    6. Only play a King that will benefit the column(s) with the biggest pile of downcards,
-    unless the play of another King will at least allow a transfer that frees a downcard.
+    8. Don't play or transfer a 5, 6, 7 or 8 anywhere unless at least one of these situations will apply after the play:
 
-    - Søg efter konger
-        - hvis der er flere konger, så tag den konge der er i den pile der er flest kort i, altså med flest downcards
-        - med mindre, at ved at man spiller en anden konge, vil tillade en flytning der frigør et downcard
-
-
+It is smooth with it's next highest even/odd partner in the column
+It will allow a play or transfer that will IMMEDIATELY free a downcard
+There have not been any other cards already played to the column
+You have ABSOLUTELY no other choice to continue playing (this is not a good sign)
      */
+
+}
+
 
