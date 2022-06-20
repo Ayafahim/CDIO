@@ -29,6 +29,7 @@ public class Search {
     public List<Object> someCardSearch(int cardValue) {
         int cardIndex = 0;
         int deckNumber = 0;
+        //int deckSize = 0;
         String cardSuit = "0";
         boolean isCardInPile = false;
 
@@ -41,6 +42,7 @@ public class Search {
             CardDeck sourceDeck = this.board.getDeck(Integer.toString(i));
             int sourceTopCardIndex = (sourceDeck.size()-1);
             Card sourceTopCard = sourceDeck.get(sourceTopCardIndex);
+            //deckSize = sourceDeck.size();
 
             if (sourceTopCard.getValue() == cardValue) {
                 switch (sourceTopCard.getSuit()) {
@@ -54,6 +56,7 @@ public class Search {
                 deckNumber = i;
                 cardIndex = sourceTopCardIndex;
                 returnList.add(deckNumber);
+                //returnList.add(deckSize);
                 returnList.add(cardIndex);
                 returnList.add(cardSuit);
 
@@ -113,6 +116,8 @@ public class Search {
     /**
      * Author Aya
      * Searches for pile with most facedown cards
+     *
+     * edit: might change code, to check for most facedown cards pile, that includes a card that you're searching for.
      */
 
     public void mostFacedownSearch() {

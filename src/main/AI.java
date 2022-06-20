@@ -1,74 +1,160 @@
 package main;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class AI {
-
     private final Search search;
     private final Board board;
+
+    public ArrayList<Move> movesList = new ArrayList<>();
 
     public AI(Search search, Board board) {
         this.search = search;
         this.board = board;
     }
 
-    public void doShit() {
-        System.out.println(search.toString());
-        System.out.println(board.toString());
+    /*ToDo
+        Deck/Discard need to be searchable, with a number of DRAW moves printed in order to obtain the wanted card. (OR JUST DRAW WHEN NO OTHER MOVES ARE AVAILABLE?)
+        Unknown cards need to be taken care of, taking input from the image recognition to be given their values.
+
+      ToDo
+        Look through move types and add them to the list. Moves must have a weight, given by their priority.
+        Moves in order of priority:
+        Ace to foundation
+        Deuce to foundation
+        King to empty spot
+        Number to number
+        Number from discard to number
+
+
+      ToDo
+        Checks that can change priority:
+        Play that frees a downcard (can be recursive) (MAJOR CHECK)
+        Moves that free downcards, should always be prioritized in the order of piles with most downcards (MINOR CHECK)
+        Moves that free a spot must have a waiting King to occupy the spot. Otherwise drop priority to zero. (MAJOR CHECK)
+        Play kings that benefit the column with the most downcards. (MINOR CHECK)
+        Moves to foundations that aren't aces or deuces should only be done if: (MAJOR CHECK)
+            They do not interfere with next-card protection
+            Allow a play/transfer that free a downcard
+            Open a space for a same-color card pile transfer that frees a downcard
+            Clears a spot for an immediate waiting King
+        Don't play/transfer 5-6-7-8 ANYWHERE unless one of these apply:
+            It is smooth
+            It allows for freeing a downcard
+            There have no been any other cards played to the column (only 1 face-up card present)
+            You have NO other choices (MAKE DEBUG STATEMENT FOR THIS SINCE IT'S A BAD SIGN)
+        If stuck in a position, look to re-arrange stacks or play to ace stacks until you can clear an
+        existing pile enough to use an existing card as substitute for the necessary card (DIFFICULT LAST-PRIORITY FEATURE)
+    */
+
+    /** Author: Steven
+     * The main function driving the AI that calls all other functions when looking for a move chosen by the AI!
+     */
+    public void think() {
+
+        movesList.clear(); //empty the list first every time!
+
+        aceMoveToFoundation(); //Add any acemoves to the list with priority 9
+        //deuceMoveToFoundation(); //Add any deucemoves to the list with priority 8
+        moveKingIfDeckEmpty(); //Add any kingmoves to the list with priority 7
+        moveNumberToNumber(); //Add any generic numbermoves to the list with priority 6
+
+        movesList.sort( Collections.reverseOrder(Comparator.comparingInt(Move::getPriority))); //Sort the available moves by priority
+        System.out.println("Sorted moves list:\n" + movesList);
+        try {
+            System.out.println("Attempting the best move in the list :)");
+            board.attemptMove(movesList.get(1));
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("movesList was empty :(");
+        }
 
     }
 
+    //ToDo Needs to search the top of the discard pile for an ace as well.
+
+    /**
+     * Sends any regular discard/number pile to number pile moves to the list with priority 5/6 respectively.
+     */
+    public void moveNumberToNumber() {
+        ArrayList<CardDeck> p = board.numberPiles;
+        CardDeck d = board.discardPile;
+        for (CardDeck pile :p) { //Separate check that adds any move available from the discard pile with priority 5
+            if (d.size() > 0) {
+                if (board.canMoveToNumberPile(d,pile,d.getLast())) {
+                    movesList.add(new Move(d,pile,d.getLast(),5));
+                }
+            }
+        }
+
+        for (CardDeck pile: p) { //Loops through number piles (SOURCE)
+            if (pile.size() > 0) { //There must be at least 1 card in the pile to be moved. (SOURCE)
+                for (int i = 0; i < pile.size(); i++) { //Loop through all cards in the pile (INDEX)
+                    if (pile.get(i).isFaceUp()) { //We only bother checking for cards that are actually face-up (SOURCE)
+                        for (CardDeck pile2: p) { //Again looping through piles (DESTINATION)
+                                if (board.canMoveToNumberPile(pile,pile2,i)) { //Check if the source card can be moved to this destination (LAST CARD)
+                                    movesList.add(new Move(pile,pile2,i,6));
+                                }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     *  PRIORITY 9
+     */
     public void aceMoveToFoundation() {
 
-        //System.out.println(search.someCardSearch(1));
+        System.out.println(search.someCardSearch(1));
 
         List<Object> aceInfo = search.someCardSearch(1);
 
         Object srcDeck = aceInfo.get(0);
-        String isCardInPile = aceInfo.get(3).toString();
         CardDeck src = board.getDeck("0");
         CardDeck destination = null;
 
-        if (isCardInPile.equals("false")){
-            System.out.println("there are no aces in number piles");
+        switch (aceInfo.get(2).toString()) {
+            case "Diamonds" -> destination = board.getDeck("10");
+            case "Clubs" -> destination = board.getDeck("11");
+            case "Spades" -> destination = board.getDeck("9");
+            case "Hearts" -> destination = board.getDeck("8");
         }
-        else {
-            switch (aceInfo.get(2).toString()) {
-                case "Diamonds" -> destination = board.getDeck("10");
-                case "Clubs" -> destination = board.getDeck("11");
-                case "Spades" -> destination = board.getDeck("9");
-                case "Hearts" -> destination = board.getDeck("8");
-            }
-            switch (srcDeck.toString()) {
-                case "1" -> src = board.getDeck("1");
-                case "2" -> src = board.getDeck("2");
-                case "3" -> src = board.getDeck("3");
-                case "4" -> src = board.getDeck("4");
-                case "5" -> src = board.getDeck("5");
-                case "6" -> src = board.getDeck("6");
-                case "7" -> src = board.getDeck("7");
-            }
+        switch (srcDeck.toString()) {
+            case "1" -> src = board.getDeck("1");
+            case "2" -> src = board.getDeck("2");
+            case "3" -> src = board.getDeck("3");
+            case "4" -> src = board.getDeck("4");
+            case "5" -> src = board.getDeck("5");
+            case "6" -> src = board.getDeck("6");
+            case "7" -> src = board.getDeck("7");
+        }
 
-            Move move = new Move(src, destination, (Integer) aceInfo.get(1));
-            try {
-                System.out.println("Move is: " + move);
-                board.attemptMove(move);
-            } catch (Exception e) {
-                System.out.println("move couldn't be done");
-            }
+        Move move = new Move(src, destination, (Integer) aceInfo.get(1),9);//ToDo FIX PRIORITY
+        try {
+            System.out.println("main.Move is: " + move);
+            //board.attemptMove(move);
+            movesList.add(move);
+        } catch (Exception e) {
+            System.out.println("move couldn't be done");
         }
 
     }
 
     /**
-     * Not finished
+     *  PRIORITY 7
+     *  NOT FINISHED
      */
     public void moveKingIfDeckEmpty() {
         //TODO
         // Shouldn't be able to clear a spot if there isn't a king to take that cleared spot
         /**
          * Not finished
+         * Man skal undersøge hvor mange facedown cards der er i et deck, før man laver trækket fra det deck.
+         * Hvis der er 0 facedown kort, så fortsæt heri:
+         *      - Forudsætningen af at der er 0 facedown kort, gør at man gerne vil rykke alle kortene herfra over til en anden bunke.
+         *      - Man må ikke rykke alle kort fra et deck, med mindre der er en konge der kan tage dets plads.
+         *      - Hvis der er en konge, så giv tilladelse til at "clear a spot".
          */
         try {
             List<Object> searchForKing = search.someCardSearch(13);
@@ -80,10 +166,11 @@ public class AI {
             for (int i = 1; i<8; i++){
                 if (board.getDeck(Integer.toString(i)).size() == 0){
                     CardDeck dest = board.getDeck(Integer.toString(i));
-                    Move move = new Move(src, dest, index);
+                    Move move = new Move(src, dest, index,7);//ToDo FIX PRIORITY
                     try {
                         System.out.println("main.Move is: " + move);
-                        board.attemptMove(move);
+                        //board.attemptMove(move);
+                        movesList.add(move);
                     } catch (Exception e) {
                         System.out.println("move couldn't be done");
                     }
@@ -95,6 +182,10 @@ public class AI {
 
     }
 
+    //ToDo Needs to search the top of the discard pile for a deuce as well.
+    /**
+     *  PRIORITY 8
+     */
     public void deuceMoveToFoundation() {
 
         System.out.println(search.someCardSearch(2));
@@ -102,42 +193,32 @@ public class AI {
         List<Object> aceInfo = search.someCardSearch(2);
 
         Object srcDeck = aceInfo.get(0);
-        String isCardInPile = aceInfo.get(3).toString();
         CardDeck src = board.getDeck("0");
         CardDeck destination = null;
 
-        if (isCardInPile.equals("false")){
-            System.out.println("there are no aces in number piles");
+        switch (aceInfo.get(2).toString()) {
+            case "Diamonds" -> destination = board.getDeck("10");
+            case "Clubs" -> destination = board.getDeck("11");
+            case "Spades" -> destination = board.getDeck("9");
+            case "Hearts" -> destination = board.getDeck("8");
         }
-        else {
-            switch (aceInfo.get(2).toString()) {
-                case "Diamonds" -> destination = board.getDeck("10");
-                case "Clubs" -> destination = board.getDeck("11");
-                case "Spades" -> destination = board.getDeck("9");
-                case "Hearts" -> destination = board.getDeck("8");
-            }
-            switch (srcDeck.toString()) {
-                case "1" -> src = board.getDeck("1");
-                case "2" -> src = board.getDeck("2");
-                case "3" -> src = board.getDeck("3");
-                case "4" -> src = board.getDeck("4");
-                case "5" -> src = board.getDeck("5");
-                case "6" -> src = board.getDeck("6");
-                case "7" -> src = board.getDeck("7");
-            }
+        switch (srcDeck.toString()) {
+            case "1" -> src = board.getDeck("1");
+            case "2" -> src = board.getDeck("2");
+            case "3" -> src = board.getDeck("3");
+            case "4" -> src = board.getDeck("4");
+            case "5" -> src = board.getDeck("5");
+            case "6" -> src = board.getDeck("6");
+            case "7" -> src = board.getDeck("7");
+        }
 
-            if (destination.size() == 0){
-                System.out.println("No ace in foundation");
-            }
-            else {
-                Move move = new Move(src, destination, (Integer) aceInfo.get(1));
-                try {
-                    System.out.println("Move is: " + move);
-                    board.attemptMove(move);
-                } catch (Exception e) {
-                    System.out.println("move couldn't be done");
-                }
-            }
+        Move move = new Move(src, destination, (Integer) aceInfo.get(1),8);//ToDo FIX PRIORITY
+        try {
+            System.out.println("main.Move is: " + move);
+            //board.attemptMove(move);
+            movesList.add(move);
+        } catch (Exception e) {
+            System.out.println("move couldn't be done");
         }
 
     }
@@ -174,10 +255,11 @@ public class AI {
             case "7" -> destination = board.getDeck("7");
         }
 
-        Move move = new Move(src, destination, (Integer) openDownCard.get(2));
+        Move move = new Move(src, destination, (Integer) openDownCard.get(2),10);//ToDo FIX PRIORITY
         try {
             System.out.println("main.Move is: " + move);
-            board.attemptMove(move);
+            //board.attemptMove(move);
+            movesList.add(move);
         } catch (Exception e) {
             System.out.println("move couldn't be done");
         }
@@ -185,21 +267,47 @@ public class AI {
 
 
 
+    /*
+    6. Only play a King that will benefit the column(s) with the biggest pile of downcards,
+    unless the play of another King will at least allow a transfer that frees a downcard.
+
+    - Søg efter konger
+        - hvis der er flere konger, så tag den konge der er i den pile der er flest kort i, altså med flest downcards
+        - med mindre, at ved at man spiller en anden konge, vil tillade en flytning der frigør et downcard
+
+        SNAKKET MED ALEC OG AYA:
+        "unless": der er en konge i draw pile, der kan sættes i spil, sådan så at en dronning kan rykkes, og free et downcard.
+        dvs. at man ikke altid rykker en konge fra det største pile, da man hellere vil have en konge ud af draw.
+
+
+     */
     public void moveKingFromBiggestPile() {
         try {
+            //have to edit: Biggest pile of DOWNCARDS! not just biggest pile.
+            //have to check for the piles face-down cards.
             List<Object> searchForKing = search.someCardSearch(13);
 
             //Edited the someCardSearch to return all decks with the card in you're searching for.
 
+            //Have to change this code, to allow the player to make the move from, if there is a king available.
+
             System.out.println("Printer al information om det deck der er konge i: " + Arrays.toString(searchForKing.toArray()));
             int size = searchForKing.size();
-            CardDeck currentDeck = board.getDeck("7");
+
+            CardDeck deck = board.getDeck((String) searchForKing.get(0));
+            int currentDeckSize1 = deck.size();
+            //Skal ændres^^skal tjekke for flest facedown card, og ikke bare size()
+
+
+            search.mostFacedownSearch();
+
             for (int i = 0; i<size; i=i+3){
-                if (board.getDeck(Integer.toString(i)).size()>currentDeck.size() ){
+                //mangler at ændre
+                if (currentDeckSize1<board.getDeck(searchForKing.get(i).size()){
                     CardDeck source = board.getDeck((String) searchForKing.get(i));
-                    System.out.println(source);
-                } else System.out.println(currentDeck);
+                }
             }
+            //Nu har vi source fra det deck der har flest kort i sig
 /*
             main.CardDeck src = board.getDeck(srcDeck.toString());
             int index = src.getBottomFaceCardIndex();
@@ -209,7 +317,8 @@ public class AI {
                     main.Move move = new main.Move(src, dest, index);
                     try {
                         System.out.println("main.Move is: " + move);
-                        board.attemptMove(move);
+                        //board.attemptMove(move);
+                        movesList.add(move);
                     } catch (Exception e) {
                         System.out.println("move couldn't be done");
                     }
@@ -221,16 +330,19 @@ public class AI {
             System.out.println("No kings available");
         }
     }
-}
+
+
+
 
     /*
-    6. Only play a King that will benefit the column(s) with the biggest pile of downcards,
-    unless the play of another King will at least allow a transfer that frees a downcard.
+    8. Don't play or transfer a 5, 6, 7 or 8 anywhere unless at least one of these situations will apply after the play:
 
-    - Søg efter konger
-        - hvis der er flere konger, så tag den konge der er i den pile der er flest kort i, altså med flest downcards
-        - med mindre, at ved at man spiller en anden konge, vil tillade en flytning der frigør et downcard
-
-
+It is smooth with it's next highest even/odd partner in the column
+It will allow a play or transfer that will IMMEDIATELY free a downcard
+There have not been any other cards already played to the column
+You have ABSOLUTELY no other choice to continue playing (this is not a good sign)
      */
+
+}
+
 

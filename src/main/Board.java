@@ -1,9 +1,6 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Board {
 
@@ -27,6 +24,7 @@ public class Board {
     public ArrayList<CardDeck> drawAndDiscardPiles = new ArrayList<>(Arrays.asList(drawPile,discardPile));
     public ArrayList<CardDeck> numberPiles = new ArrayList<>(Arrays.asList(pile1,pile2,pile3,pile4,pile5,pile6,pile7));
     public ArrayList<CardDeck> foundationPiles = new ArrayList<>(Arrays.asList(heartsPile,spadesPile,diamondsPile,clubsPile));
+    public ArrayList<CardDeck> searchPiles = new ArrayList<>(Arrays.asList(discardPile,pile1,pile2,pile3,pile4,pile5,pile6,pile7));
 
     /** Author STEVEN
      *  Parses text input for manual use of the program
@@ -43,7 +41,15 @@ public class Board {
                     break;
                 }
                 case "ai": {
-                    System.out.println("main.AI is not working right now :)");
+                    System.out.println("AI in testing phase :)");
+                    ai.think();
+                    break;
+                }
+                case "debug": { //For debugging purposes. Change the code inside this block as needed to test parts of the AI.
+                    System.out.println("Testing NumberToNumber :)");
+                    ai.moveNumberToNumber();
+                    System.out.println(ai.movesList);
+
                     break;
                 }
                 case "ace": {
@@ -95,12 +101,12 @@ public class Board {
                     if (i.equals("last")) {
                         i = String.valueOf(getDeck(s).size() - 1);
                     }
-                    Move move = new Move(getDeck(s), getDeck(d), Integer.parseInt(i));
+                    Move move = new Move(getDeck(s), getDeck(d), Integer.parseInt(i),1000);//ToDo FIX PRIORITY
                     System.out.println("main.Move is: " + move);
                     attemptMove(move);
                 }
             }
-            /**
+            /*
              * Quick add from Jacob
              */
         } catch (Exception e) {
@@ -114,6 +120,7 @@ public class Board {
 
     }
 
+
     /** Author STEVEN
      Flips newly revealed cards to face-up.
      /ToDo Needs change/deletion once OpenCV is added because cards will be given face-up.
@@ -121,8 +128,15 @@ public class Board {
     public void updateBoardState() {
         for (int i = 0; i < numberPiles.size(); i++) {
             if (numberPiles.get(i).size() > 0) {
-                numberPiles.get(i).get(numberPiles.get(i).size()-1).setFaceUp(true);
+                /*ToDo THIS IS WHERE THE CODE IS NEEDED TO TAKE INPUT FROM IMAGE RECOGNITION. ANY CARDS WITH THE LAST
+                   INDEX IN THE PILES THAT IS FACEDOWN SHOULD TAKE THE NEXT INPUT AND SET THE VALUES ACCORDINGLY. CAN CREATE
+                   INPUT METHOD TO CHANGE THE VALUES OF ANY CARD IN CASE OF ERROR SOMEHOW!
+                */
+                numberPiles.get(i).get(numberPiles.get(i).size()-1).setFaceUp(true); //update the 7 number piles
             }
+        }
+        if (discardPile.size() > 0) {
+            discardPile.get(discardPile.size() - 1).setFaceUp(true); //update top of the discard pile
         }
     }
 

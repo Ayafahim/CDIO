@@ -5,10 +5,21 @@ public class Move {
     private CardDeck destinationDeck;
     private int index;
 
-    public Move(CardDeck source, CardDeck dest, int index) {
+    private int priority;
+
+    public Move(CardDeck source, CardDeck dest, int index, int priority) {
         this.sourceDeck = source;
         this.destinationDeck = dest;
         this.index = index;
+        this.priority = priority;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 
     public void setDestinationDeck(CardDeck destinationDeck) {
@@ -36,6 +47,6 @@ public class Move {
     }
 
     public String toString() {
-        return ("Source: " + sourceDeck.getName() + ", Destination: " + destinationDeck.getName() + ", Index: " + index);
+        return ("Source: " + sourceDeck.getName() + ", Destination: " + destinationDeck.getName() + ", Index: " + index + ", Priority: " + priority);
     }
 }
