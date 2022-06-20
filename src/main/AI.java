@@ -15,8 +15,15 @@ public class AI {
         this.board = board;
     }
 
+    /** Author: Steven
+     * The main function driving the AI that calls all other functions when looking for a move chosen by the AI!
+     */
+    public void think() {
+
+    }
+
     /*ToDo
-        Deck/Discard need to be searchable, with a number of DRAW moves printed in order to obtain the wanted card.
+        Deck/Discard need to be searchable, with a number of DRAW moves printed in order to obtain the wanted card. (OR JUST DRAW WHEN NO OTHER MOVES ARE AVAILABLE?)
         Unknown cards need to be taken care of, taking input from the image recognition to be given their values.
 
       ToDo
@@ -50,7 +57,7 @@ public class AI {
 
 
     */
-
+    //ToDo Needs to search the top of the discard pile for an ace as well.
     public void aceMoveToFoundation() {
 
         System.out.println(search.someCardSearch(1));
@@ -77,7 +84,7 @@ public class AI {
             case "7" -> src = board.getDeck("7");
         }
 
-        Move move = new Move(src, destination, (Integer) aceInfo.get(1));
+        Move move = new Move(src, destination, (Integer) aceInfo.get(1),9);//ToDo FIX PRIORITY
         try {
             System.out.println("main.Move is: " + move);
             board.attemptMove(move);
@@ -106,7 +113,7 @@ public class AI {
             for (int i = 1; i<8; i++){
                 if (board.getDeck(Integer.toString(i)).size() == 0){
                     CardDeck dest = board.getDeck(Integer.toString(i));
-                    Move move = new Move(src, dest, index);
+                    Move move = new Move(src, dest, index,7);//ToDo FIX PRIORITY
                     try {
                         System.out.println("main.Move is: " + move);
                         board.attemptMove(move);
@@ -121,6 +128,7 @@ public class AI {
 
     }
 
+    //ToDo Needs to search the top of the discard pile for a deuce as well.
     public void deuceMoveToFoundation() {
 
         System.out.println(search.someCardSearch(2));
@@ -147,7 +155,7 @@ public class AI {
             case "7" -> src = board.getDeck("7");
         }
 
-        Move move = new Move(src, destination, (Integer) aceInfo.get(1));
+        Move move = new Move(src, destination, (Integer) aceInfo.get(1),8);//ToDo FIX PRIORITY
         try {
             System.out.println("main.Move is: " + move);
             board.attemptMove(move);
@@ -189,7 +197,7 @@ public class AI {
             case "7" -> destination = board.getDeck("7");
         }
 
-        Move move = new Move(src, destination, (Integer) openDownCard.get(2));
+        Move move = new Move(src, destination, (Integer) openDownCard.get(2),10);//ToDo FIX PRIORITY
         try {
             System.out.println("main.Move is: " + move);
             board.attemptMove(move);
