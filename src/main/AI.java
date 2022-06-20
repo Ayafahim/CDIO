@@ -29,6 +29,9 @@ public class AI {
 
       ToDo
         Checks that can change priority:
+        IF a card is sitting on another one, do NOT let it move to another card of the same color its sitting on, i.e. a black 4 sitting on a red 5 should
+        not move to another red 5 as that is pointless and results in a loop.
+        IF a king is already the top card of a stack (not on a downcard), it should never move to another empty pile.
         Play that frees a downcard (can be recursive) (MAJOR CHECK)
         Moves that free downcards, should always be prioritized in the order of piles with most downcards (MINOR CHECK)
         Moves that free a spot must have a waiting King to occupy the spot. Otherwise drop priority to zero. (MAJOR CHECK)
@@ -62,8 +65,9 @@ public class AI {
         movesList.sort( Collections.reverseOrder(Comparator.comparingInt(Move::getPriority))); //Sort the available moves by priority
         System.out.println("Sorted moves list:\n" + movesList);
         try {
-            System.out.println("Attempting the best move in the list :)");
-            board.attemptMove(movesList.get(1));
+            System.out.println("Attempting the best move:");
+            System.out.println(movesList.get(0));
+            board.attemptMove(movesList.get(0));
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("movesList was empty :(");
         }
@@ -72,7 +76,7 @@ public class AI {
 
     //ToDo Needs to search the top of the discard pile for an ace as well.
 
-    /**
+    /** Author: Steven
      * Sends any regular discard/number pile to number pile moves to the list with priority 5/6 respectively.
      */
     public void moveNumberToNumber() {
@@ -105,13 +109,27 @@ public class AI {
      *  PRIORITY 9
      */
     public void aceMoveToFoundation() {
+        ArrayList<CardDeck> p = board.numberPiles;
+        CardDeck d = board.discardPile;
+        //Check for discard pile.
+        if (d.size() > 0) {
+            if (d.get(d.getLast()).getValue() == 1) {
+                movesList.add(new Move(d, search.parseFoundation(d.get(d.getLast())), d.getLast(), 9));
+            }
+        }
+        //Check for number piles
+        for (CardDeck pile: p) {
+            if (pile.size() > 0) {
+                if (pile.get(pile.getLast()).getValue() == 1) {
+                    movesList.add(new Move(pile, search.parseFoundation(pile.get(pile.getLast())), pile.getLast(), 9));
+                }
+            }
+        }
 
-        System.out.println(search.someCardSearch(1));
+        /*
+        //System.out.println(search.someCardSearch(1));
 
         List<Object> aceInfo = search.someCardSearch(1);
-
-        if (aceInfo.size() > 1) {
-            for ()
 
         Object srcDeck = aceInfo.get(0);
         CardDeck src = board.getDeck("0");
@@ -133,14 +151,14 @@ public class AI {
             case "7" -> src = board.getDeck("7");
         }
 
-        Move move = new Move(src, destination, (Integer) aceInfo.get(1), 9);//ToDo FIX PRIORITY
+        Move move = new Move(src, destination, (Integer) aceInfo.get(1),9);//ToDo FIX PRIORITY
         try {
-            System.out.println("main.Move is: " + move);
+            //.out.println("main.Move is: " + move);
+            //board.attemptMove(move);
             movesList.add(move);
         } catch (Exception e) {
-            System.out.println("move couldn't be done");
-        }
-    }
+            //System.out.println("move couldn't be done");
+        }*/
 
     }
 
@@ -162,7 +180,7 @@ public class AI {
         try {
             List<Object> searchForKing = search.someCardSearch(13);
             Object srcDeck = searchForKing.get(0); //This one must be changed later on, we have to move a king from the BIGGEST pile, not just the first king we find.
-            System.out.println("Printer al information om det deck der er konge i: " + Arrays.toString(searchForKing.toArray()));
+            //System.out.println("Printer al information om det deck der er konge i: " + Arrays.toString(searchForKing.toArray()));
 
             CardDeck src = board.getDeck(srcDeck.toString());
             int index = src.getBottomFaceCardIndex();
@@ -171,16 +189,17 @@ public class AI {
                     CardDeck dest = board.getDeck(Integer.toString(i));
                     Move move = new Move(src, dest, index,7);//ToDo FIX PRIORITY
                     try {
-                        System.out.println("main.Move is: " + move);
+                        //System.out.println("main.Move is: " + move);
                         //board.attemptMove(move);
                         movesList.add(move);
                     } catch (Exception e) {
-                        System.out.println("move couldn't be done");
+                        //System.out.println("move couldn't be done");
                     }
-                } else System.out.println("No destination for the king to be put"); //Prints out for all decks, will edit later.
+                } else {//System.out.println("No destination for the king to be put"); //Prints out for all decks, will edit later.
+                }
             }
         } catch (Exception e) {
-            System.out.println("No kings available");
+            //System.out.println("No kings available");
         }
 
     }
@@ -191,7 +210,7 @@ public class AI {
      */
     public void deuceMoveToFoundation() {
 
-        System.out.println(search.someCardSearch(2));
+        //System.out.println(search.someCardSearch(2));
 
         List<Object> aceInfo = search.someCardSearch(2);
 
@@ -217,11 +236,11 @@ public class AI {
 
         Move move = new Move(src, destination, (Integer) aceInfo.get(1),8);//ToDo FIX PRIORITY
         try {
-            System.out.println("main.Move is: " + move);
+            //System.out.println("main.Move is: " + move);
             //board.attemptMove(move);
             movesList.add(move);
         } catch (Exception e) {
-            System.out.println("move couldn't be done");
+            //System.out.println("move couldn't be done");
         }
 
     }
@@ -260,11 +279,11 @@ public class AI {
 
         Move move = new Move(src, destination, (Integer) openDownCard.get(2),10);//ToDo FIX PRIORITY
         try {
-            System.out.println("main.Move is: " + move);
+            //System.out.println("main.Move is: " + move);
             //board.attemptMove(move);
             movesList.add(move);
         } catch (Exception e) {
-            System.out.println("move couldn't be done");
+            //System.out.println("move couldn't be done");
         }
     }
 
@@ -294,7 +313,7 @@ public class AI {
 
             //Have to change this code, to allow the player to make the move from, if there is a king available.
 
-            System.out.println("Printer al information om det deck der er konge i: " + Arrays.toString(searchForKing.toArray()));
+            //System.out.println("Printer al information om det deck der er konge i: " + Arrays.toString(searchForKing.toArray()));
             int size = searchForKing.size();
 
             CardDeck deck = board.getDeck((String) searchForKing.get(0));
@@ -304,12 +323,12 @@ public class AI {
 
             search.mostFacedownSearch();
 
-//            for (int i = 0; i<size; i=i+3){
-//                //mangler at ændre
-//                if (currentDeckSize1<board.getDeck(searchForKing.get(i).size()){
-//                    CardDeck source = board.getDeck((String) searchForKing.get(i));
-//                }
-//            }
+            for (int i = 0; i<size; i=i+3){
+                //mangler at ændre
+                //if (currentDeckSize1<board.getDeck(searchForKing.get(i).size()){
+                  //  CardDeck source = board.getDeck((String) searchForKing.get(i));
+                //}
+            }
             //Nu har vi source fra det deck der har flest kort i sig
 /*
             main.CardDeck src = board.getDeck(srcDeck.toString());
@@ -330,7 +349,7 @@ public class AI {
 
  */
         } catch (Exception e) {
-            System.out.println("No kings available");
+            //System.out.println("No kings available");
         }
     }
 

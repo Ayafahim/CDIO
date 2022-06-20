@@ -123,6 +123,19 @@ public class Search {
         //return Arrays.asList(deckNumber, cardValueIndex, cardSuit, isCardInPile);
     }
 
+    /**
+     * Author STEVEN
+     * @param card
+     * @return The foundation pile matching the given card.
+     */
+    public CardDeck parseFoundation(Card card) {
+        return switch (card.getSuit()) {
+            case HEARTS -> board.heartsPile;
+            case SPADES -> board.spadesPile;
+            case DIAMONDS -> board.diamondsPile;
+            case CLUBS -> board.clubsPile;
+        };
+    }
 
     /**
      * Author Aya
