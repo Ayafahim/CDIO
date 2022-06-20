@@ -113,9 +113,6 @@ public class Board {
         }
         catch (Exception e) {
             e.printStackTrace();
-            Scanner sc = new Scanner(System.in);
-            String input2 = sc.nextLine();
-            parseInput(input2);
         }
 
     }
