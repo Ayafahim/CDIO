@@ -15,13 +15,6 @@ public class AI {
         this.board = board;
     }
 
-    /** Author: Steven
-     * The main function driving the AI that calls all other functions when looking for a move chosen by the AI!
-     */
-    public void think() {
-
-    }
-
     /*ToDo
         Deck/Discard need to be searchable, with a number of DRAW moves printed in order to obtain the wanted card. (OR JUST DRAW WHEN NO OTHER MOVES ARE AVAILABLE?)
         Unknown cards need to be taken care of, taking input from the image recognition to be given their values.
@@ -54,10 +47,55 @@ public class AI {
             You have NO other choices (MAKE DEBUG STATEMENT FOR THIS SINCE IT'S A BAD SIGN)
         If stuck in a position, look to re-arrange stacks or play to ace stacks until you can clear an
         existing pile enough to use an existing card as substitute for the necessary card (DIFFICULT LAST-PRIORITY FEATURE)
-
-
     */
+
+    /** Author: Steven
+     * The main function driving the AI that calls all other functions when looking for a move chosen by the AI!
+     */
+    public void think() {
+
+        movesList.clear(); //empty the list first every time!
+
+        aceMoveToFoundation(); //Add any acemoves to the list with priority 9
+        deuceMoveToFoundation(); //Add any deucemoves to the list with priority 8
+        moveKingIfDeckEmpty(); //Add any kingmoves to th list with priority 7
+
+    }
+
     //ToDo Needs to search the top of the discard pile for an ace as well.
+
+    /**
+     * Sends any regular discard/number pile to number pile moves to the list with priority 6.
+     */
+    public void moveNumberToNumber() {
+        ArrayList<CardDeck> p = board.numberPiles;
+        CardDeck d = board.discardPile;
+        for (CardDeck pile :p) {
+            if (pile.size() > 0) {
+                if (board.canMoveToNumberPile(d,pile,d.getLast())) {
+                    movesList.add(new Move(d,pile,d.getLast(),6));
+                }
+            }
+        }
+
+        for (CardDeck pile: p) { //Loops through number piles (SOURCE)
+            if (pile.size() > 0) { //There must be at least 1 card in the pile to be moved. (SOURCE)
+                for (int i = 0; i < pile.size(); i++) { //Loop through all cards in the pile (INDEX)
+                    if (pile.get(i).isFaceUp()) { //We only bother checking for cards that are actually face-up (SOURCE)
+                        for (CardDeck pile2: p) { //Again looping through piles (DESTINATION)
+                                if (board.canMoveToNumberPile(pile,pile2,i)) { //Check if the source card can be moved to this destination (LAST CARD)
+                                    movesList.add(new Move(pile,pile2,i,6));
+                                }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     *  PRIORITY 9
+     */
     public void aceMoveToFoundation() {
 
         System.out.println(search.someCardSearch(1));
@@ -95,7 +133,8 @@ public class AI {
     }
 
     /**
-     * Not finished
+     *  PRIORITY 7
+     *  NOT FINISHED
      */
     public void moveKingIfDeckEmpty() {
         //TODO
@@ -129,6 +168,9 @@ public class AI {
     }
 
     //ToDo Needs to search the top of the discard pile for a deuce as well.
+    /**
+     *  PRIORITY 8
+     */
     public void deuceMoveToFoundation() {
 
         System.out.println(search.someCardSearch(2));

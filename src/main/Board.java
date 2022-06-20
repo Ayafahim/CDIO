@@ -48,6 +48,10 @@ public class Board {
                     ai.think();
                     break;
                 }
+                case "debug": { //For debugging purposes. Change the code inside this block as needed to test parts of the AI.
+                    System.out.println("Testing NumberToNumber :)");
+                    ai.moveNumberToNumber();
+                }
                 case "ace": {
                     ai.aceMoveToFoundation();
                     break;

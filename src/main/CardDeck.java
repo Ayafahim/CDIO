@@ -135,6 +135,13 @@ public class CardDeck {
     public void remove(int index) { cards.remove(index);
     }
 
+    /**
+     * @return The index of the last card in the pile.
+     */
+    public int getLast() {
+        return this.size()-1;
+    }
+
     //Call this function to receive the index of the top card in the deck
     public Integer getBottomFaceCardIndex() {
         return getNumberOfFaceDownCards();
