@@ -189,8 +189,10 @@ public class Board {
         //Checks for attempting a move of king to empty pile.
         if (destination.size() == 0 ) {
             if (source.get(index).getValue() == 13) {
-                if (source.get(index).isFaceUp()) {
-                    return true;
+                if (index > 0) {
+                    if (source.get(index).isFaceUp()) {
+                        return true;
+                    }
                 }
             }
             else return false;
