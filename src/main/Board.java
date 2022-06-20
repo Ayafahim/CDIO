@@ -1,9 +1,6 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Board {
 
@@ -51,6 +48,9 @@ public class Board {
                 case "debug": { //For debugging purposes. Change the code inside this block as needed to test parts of the AI.
                     System.out.println("Testing NumberToNumber :)");
                     ai.moveNumberToNumber();
+                    System.out.println(ai.movesList);
+
+                    break;
                 }
                 case "ace": {
                     ai.aceMoveToFoundation();

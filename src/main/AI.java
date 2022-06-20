@@ -1,8 +1,6 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class AI {
     private final Search search;
@@ -57,8 +55,17 @@ public class AI {
         movesList.clear(); //empty the list first every time!
 
         aceMoveToFoundation(); //Add any acemoves to the list with priority 9
-        deuceMoveToFoundation(); //Add any deucemoves to the list with priority 8
-        moveKingIfDeckEmpty(); //Add any kingmoves to th list with priority 7
+        //deuceMoveToFoundation(); //Add any deucemoves to the list with priority 8
+        moveKingIfDeckEmpty(); //Add any kingmoves to the list with priority 7
+        moveNumberToNumber();
+        movesList.sort( Collections.reverseOrder(Comparator.comparingInt(Move::getPriority))); //Sort the available moves by priority
+        System.out.println("Sorted moves list:\n" + movesList);
+        try {
+            System.out.println("Attempting the best move in the list :)");
+            board.attemptMove(movesList.get(1));
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("movesList was empty :(");
+        }
 
     }
 
@@ -71,7 +78,7 @@ public class AI {
         ArrayList<CardDeck> p = board.numberPiles;
         CardDeck d = board.discardPile;
         for (CardDeck pile :p) {
-            if (pile.size() > 0) {
+            if (d.size() > 0) {
                 if (board.canMoveToNumberPile(d,pile,d.getLast())) {
                     movesList.add(new Move(d,pile,d.getLast(),6));
                 }
@@ -125,7 +132,8 @@ public class AI {
         Move move = new Move(src, destination, (Integer) aceInfo.get(1),9);//ToDo FIX PRIORITY
         try {
             System.out.println("main.Move is: " + move);
-            board.attemptMove(move);
+            //board.attemptMove(move);
+            movesList.add(move);
         } catch (Exception e) {
             System.out.println("move couldn't be done");
         }
@@ -155,7 +163,8 @@ public class AI {
                     Move move = new Move(src, dest, index,7);//ToDo FIX PRIORITY
                     try {
                         System.out.println("main.Move is: " + move);
-                        board.attemptMove(move);
+                        //board.attemptMove(move);
+                        movesList.add(move);
                     } catch (Exception e) {
                         System.out.println("move couldn't be done");
                     }
@@ -200,7 +209,8 @@ public class AI {
         Move move = new Move(src, destination, (Integer) aceInfo.get(1),8);//ToDo FIX PRIORITY
         try {
             System.out.println("main.Move is: " + move);
-            board.attemptMove(move);
+            //board.attemptMove(move);
+            movesList.add(move);
         } catch (Exception e) {
             System.out.println("move couldn't be done");
         }
@@ -242,7 +252,8 @@ public class AI {
         Move move = new Move(src, destination, (Integer) openDownCard.get(2),10);//ToDo FIX PRIORITY
         try {
             System.out.println("main.Move is: " + move);
-            board.attemptMove(move);
+            //board.attemptMove(move);
+            movesList.add(move);
         } catch (Exception e) {
             System.out.println("move couldn't be done");
         }
@@ -274,7 +285,8 @@ public class AI {
                     main.Move move = new main.Move(src, dest, index);
                     try {
                         System.out.println("main.Move is: " + move);
-                        board.attemptMove(move);
+                        //board.attemptMove(move);
+                        movesList.add(move);
                     } catch (Exception e) {
                         System.out.println("move couldn't be done");
                     }

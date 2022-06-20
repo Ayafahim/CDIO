@@ -47,6 +47,6 @@ public class Move {
     }
 
     public String toString() {
-        return ("Source: " + sourceDeck.getName() + ", Destination: " + destinationDeck.getName() + ", Index: " + index);
+        return ("Source: " + sourceDeck.getName() + ", Destination: " + destinationDeck.getName() + ", Index: " + index + ", Priority: " + priority);
     }
 }
