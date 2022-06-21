@@ -141,6 +141,9 @@ public class CardDeck {
     public int getLast() {
         return this.size()-1;
     }
+    public int getSecondLast(){
+        return this.size()-2;
+    }
 
     //Call this function to receive the index of the top card in the deck
     public Integer getBottomFaceCardIndex() {

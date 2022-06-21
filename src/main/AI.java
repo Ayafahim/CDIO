@@ -68,6 +68,7 @@ public class AI {
         moveNumberToNumber(); //Add any generic numbermoves to the list with priority 60
         drawMove(); //Draws cards with priority 10
         freeDownCardMove(); // add number of downcards to priority for each move in moveslist
+        dontMoveUnless();
 
         movesList.sort(Collections.reverseOrder(Comparator.comparingInt(Move::getPriority))); //Sort the available moves by priority
         System.out.println("Sorted moves list:\n" + movesList);
@@ -329,16 +330,14 @@ public class AI {
 
         if (movesList.size() > 0) {
             for (Move move : movesList) {
-                if (move.getSourceDeck() != board.drawPile ) {
-                   int numberOfFaceDownCards = move.getSourceDeck().getNumberOfFaceDownCards();
+                if (move.getSourceDeck() != board.drawPile) {
+                    int numberOfFaceDownCards = move.getSourceDeck().getNumberOfFaceDownCards();
                     move.setPriority(move.getPriority() + numberOfFaceDownCards);
                 }
             }
         }
-
-
-
-      /*  ArrayList<CardDeck> sP = board.numberPiles;
+/*
+        ArrayList<CardDeck> sP = board.numberPiles;
         ArrayList<CardDeck> dP = board.numberPiles;
 
         for (CardDeck sourcePile : sP) {
@@ -457,10 +456,41 @@ public class AI {
     }
 
 
+    public void dontMoveUnless() {
+        try {
+            ArrayList<CardDeck> source = board.numberPiles;
+            for (CardDeck sourcePile : source) {
+                int srcTopCardIndex = sourcePile.getBottomFaceCardIndex();
+                Card srcTopCard = sourcePile.get(srcTopCardIndex);
 
+                if (srcTopCard.getValue() == 5 || srcTopCard.getValue() == 6 ||
+                        srcTopCard.getValue() == 7 || srcTopCard.getValue() == 8) {
+                    ArrayList<CardDeck> destination = board.numberPiles;
+                    for (CardDeck destinationPile : destination) {
+
+
+                        if (sourcePile.get(sourcePile.getLast()).getValue() - destinationPile.get(destinationPile.getLast()).getValue() == -1 &&
+                                destinationPile.get(destinationPile.getLast()).isBlack() && sourcePile.get(sourcePile.getLast()).isRed() ||
+                                sourcePile.get(sourcePile.getLast()).getValue() - destinationPile.get(destinationPile.getLast()).getValue() == -1 &&
+                                        destinationPile.get(destinationPile.getLast()).isRed() && sourcePile.get(sourcePile.getLast()).isBlack()) {
+
+                            if (destinationPile.get(destinationPile.getSecondLast()).isFaceUp()) {
+                                if (destinationPile.get(destinationPile.getSecondLast()).getSuit() == sourcePile.get(sourcePile.getLast()).getSuit()) {
+                                    movesList.add(new Move(sourcePile, destinationPile, sourcePile.getLast(), 120));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Move couldn't be made");
+        }
+    }
 
     /*
     8. Don't play or transfer a 5, 6, 7 or 8 anywhere unless at least one of these situations will apply after the play:
+
 
 It is smooth with it's next highest even/odd partner in the column
 It will allow a play or transfer that will IMMEDIATELY free a downcard
@@ -496,7 +526,6 @@ You have ABSOLUTELY no other choice to continue playing (this is not a good sign
 
 
          */
-
 
 
 }
