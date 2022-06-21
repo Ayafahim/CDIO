@@ -14,7 +14,7 @@ public class Game {
     public void startGame() throws Exception {
         Board board = new Board();
         board.initialPile.populate("cards.txt");
-        board.initialPile.shuffleDeck();
+        //board.initialPile.shuffleDeck();
         board.initialPopulateBoard();
         AI ai = new AI(new Search(board), board);
 

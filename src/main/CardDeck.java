@@ -42,7 +42,7 @@ public class CardDeck {
         String input = scanner.nextLine();
         String[] rawCardInput = input.split(",");
         for (int i = 0; i < rawCardInput.length; i++) {
-            cards.add(new Card(parseSuit(rawCardInput[i]), parseValue(rawCardInput[i].substring(1))));
+            cards.add(new Card(parseSuit(rawCardInput[i]), -1)); //parseValue(rawCardInput[i].substring(1)))
         }
         scanner.close();
     }

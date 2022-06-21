@@ -133,6 +133,9 @@ public class Board {
             if (numberPiles.get(i).size() > 0) {
 
                 Main test = new Main();
+
+
+
                 System.out.println(test.test());
 
                 /*
