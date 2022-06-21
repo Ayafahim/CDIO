@@ -69,7 +69,7 @@ public class AI {
         moveNumberToNumber(); //Add any generic numbermoves to the list with priority 60
         drawMove(); //Draws cards with priority 10
         freeDownCardMove(); // add number of downcards to priority for each move in moveslist
-        dontMoveUnless();
+        //dontMoveUnless();
 
         movesList.sort(Collections.reverseOrder(Comparator.comparingInt(Move::getPriority))); //Sort the available moves by priority
         System.out.println("Sorted moves list:\n" + movesList);

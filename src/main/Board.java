@@ -314,7 +314,7 @@ public class Board {
                 //modified order simulates flipping 3 cards simultaneously
                 discard.add(draw.get(draw.size()-1));
                 draw.remove(draw.size()-1);
-                discard.get(discard.size()-1).setFaceUp(true,imageRecInput);
+                //discard.get(discard.size()-1).setFaceUp(true,imageRecInput);
             }
         }
         else {
@@ -420,11 +420,9 @@ public class Board {
                 }
 
             }
-            printBoard();
         }
-        moveCardDeckToDeck(initialPile, drawPile, 0, false);
-    }
-
+            moveCardDeckToDeck(initialPile, drawPile, 0, false);
+        }
     /** Author STEVEN
      * Prints out a TUI representation of the board.
      */
