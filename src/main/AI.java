@@ -1,5 +1,6 @@
 package main;
 
+import java.io.IOException;
 import java.util.*;
 
 public class AI {
@@ -76,7 +77,7 @@ public class AI {
             System.out.println("Attempting the best move:");
             System.out.println(movesList.get(0));
             board.attemptMove(movesList.get(0));
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (ArrayIndexOutOfBoundsException | IOException e) {
             System.out.println("movesList was empty :(");
         }
 

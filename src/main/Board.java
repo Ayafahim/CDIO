@@ -408,6 +408,7 @@ public class Board {
      * Creates the board using the initial card deck. Make sure the deck is shuffled beforehand.
      */
     public void initialPopulateBoard() throws IOException {
+        imageRecInput.initiate();
         for (int i = 1; i <= 7; i++) {
             //Fills each card pile with 1-7 cards, respectively. Then it flips the last card face up.
             moveCardDeckToDeck(initialPile, getDeck(Integer.toString(i)),

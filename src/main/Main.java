@@ -14,18 +14,23 @@ public class Main {
 
 
     public static void main(String[] args) throws Exception {
+        new Game().startGame();
+    }
+
+    public void initiate() throws IOException {
         server = new ServerSocket(8080);
         System.out.println("waiting for connection on port 8080");
         client = server.accept();
         System.out.println("got connection on port 8080");
-        new Game().startGame();
     }
 
     public String test() throws IOException {
 
         BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+        System.out.println("Awaiting card to be read :)");
         fromImageRec = in.readLine();
         in.close();
+        System.out.println("Card read.");
 
         return fromImageRec;
     }
