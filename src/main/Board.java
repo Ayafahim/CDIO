@@ -409,11 +409,16 @@ public class Board {
      */
     public void initialPopulateBoard() throws IOException {
         imageRecInput.initiate();
+        //Fills each card pile with 1-7 cards, respectively. Then it flips the last card face up.
         for (int i = 1; i <= 7; i++) {
-            //Fills each card pile with 1-7 cards, respectively. Then it flips the last card face up.
-            moveCardDeckToDeck(initialPile, getDeck(Integer.toString(i)),
-                    initialPile.size() - (i), false);
-            getDeck(Integer.toString(i)).get(i - 1).setFaceUp(true,imageRecInput);
+            for (int j = 1; j <= i; j++) {
+                moveCardDeckToDeck(initialPile, getDeck(Integer.toString(i)),
+                        initialPile.getLast(), false);
+                if (i == j) {
+                    getDeck(Integer.toString(i)).get(i - 1).setFaceUp(true, imageRecInput);
+                }
+                printBoard();
+            }
 
         }
         moveCardDeckToDeck(initialPile, drawPile, 0, false);
