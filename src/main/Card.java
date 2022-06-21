@@ -21,7 +21,15 @@ public class Card {
         faceUp = false;
     }
 
-    public void setFaceUp(boolean up){this.faceUp = up;}
+    public void setFaceUp(boolean up){
+
+
+
+
+
+
+        this.faceUp = up;
+    }
 
     public Suit getSuit(){return this.suit;}
     public String getSuitLetter(){if (!faceUp) return "]"; return parseSuitReverse(suit);}

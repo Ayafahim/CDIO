@@ -13,14 +13,15 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         server = new ServerSocket(8080);
-        System.out.println("wait for connection on port 8080");
+        System.out.println("waiting for connection on port 8080");
         client = server.accept();
-
         System.out.println("got connection on port 8080");
         new Game().startGame();
     }
 
     public String test() throws IOException {
+
+
         //while (true) { //basically while game is running
 
         BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));

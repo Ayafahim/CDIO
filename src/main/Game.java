@@ -10,8 +10,15 @@ import java.util.Scanner;
  */
 public class Game {
 
+    public Main test = new Main();
+
 
     public void startGame() throws Exception {
+        System.out.println("testing");
+        test.test();
+        System.out.println("done.");
+
+
         Board board = new Board();
         board.initialPile.populate("cards.txt");
         //board.initialPile.shuffleDeck();

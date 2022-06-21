@@ -132,12 +132,6 @@ public class Board {
         for (int i = 0; i < numberPiles.size(); i++) {
             if (numberPiles.get(i).size() > 0) {
 
-                Main test = new Main();
-
-
-
-                System.out.println(test.test());
-
                 /*
                 ToDo THIS IS WHERE THE CODE IS NEEDED TO TAKE INPUT FROM IMAGE RECOGNITION. ANY CARDS WITH THE LAST
                    INDEX IN THE PILES THAT IS FACEDOWN SHOULD TAKE THE NEXT INPUT AND SET THE VALUES ACCORDINGLY. CAN CREATE
