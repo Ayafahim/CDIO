@@ -24,11 +24,14 @@ public class Card {
     }
 
     public void setFaceUp(boolean up, Main imageRecInput) throws IOException {
-        if (!this.faceUp) {
+        if (!up) {
+            this.faceUp = false;
+        }
+        else {
             String input = imageRecInput.test();
             this.setSuit(parseSuit(input));
             this.setValue(Integer.parseInt(input.substring(1)));
-            this.faceUp = up;
+            this.faceUp = true;
             System.out.println("Card set face up: " + this.suit + " " + this.value + " " + this.suit);
         }
 
