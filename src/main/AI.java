@@ -211,6 +211,7 @@ public class AI {
                         //System.out.println("move couldn't be done");
                     }
                 } else {//System.out.println("No destination for the king to be put"); //Prints out for all decks, will edit later.
+                    movesList.add(new Move(board.drawPile, board.discardPile, 0, 10));
                 }
             }
         } catch (Exception e) {
@@ -374,11 +375,8 @@ public class AI {
      */
     public void moveKingFromBiggestPile() {
         try {
-            //have to edit: Biggest pile of DOWNCARDS! not just biggest pile.
-            //have to check for the piles face-down cards.
-            List<Object> searchForKing = search.someCardSearch(13);
 
-            //Edited the someCardSearch to return all decks with the card in you're searching for.
+            List<Object> searchForKing = search.someCardSearch(13);
 
             //Have to change this code, to allow the player to make the move from, if there is a king available.
 
@@ -432,7 +430,38 @@ It is smooth with it's next highest even/odd partner in the column
 It will allow a play or transfer that will IMMEDIATELY free a downcard
 There have not been any other cards already played to the column
 You have ABSOLUTELY no other choice to continue playing (this is not a good sign)
-     */
+
+    Ikke ryk 5, 6, 7 eller 8 nogensteder; MEDMINDRE mindst en af disse situationer virker efter du har rykket dem.
+
+
+    Vi skal tjekke om trækket er lovligt.
+    Vi trækker al information ind som parametre, for at tjekke om trækket er lovligt:
+    If: du har lyst til at rykke hjerter 8, så skal mindst én!!! af de kommende fungere:
+        - kortet du gerne vil rykke hjerter 8 på, skal ligges på en pile, med kun 2 forskellige kulør, heraf en af dem skal være den samme kulør som hjerter 8 (hjerte)
+            - vi har brug for disse parametre: destination og source pile kulører for faceup. Der skal maks være to forskellige.
+            tjek source pile face up kulør: sk
+            tjek destination pile face up kulør: dk
+                if sk og dk har samme slags kulører (2 forskellige slags), så move
+                if source og destination pile faceup cards only have 2 different suits, then play.
+
+        - ved at du rykker hjerter 8, så vil det frigøre et downcard (hjerter 8 må ikke rykke fra en pile, som så gør den tom, da dette træk altid skal frigøre et downcard). Alec har lavet freeDownCardMove
+            - Vi har brug for disse parametre: om der er mere end 1 kort i source pile
+            Hvis ja, så lav move
+
+        - Der har ikke allerede været nogen kort der er blevet spillet til den pile.
+            (Forstår ikke helt, men formoder: en pile der ikke er blevet spillet noget fra, er en pile, som kun har ét faceup card på sig, og har det originale antal kort i pile; pile 5 har 5 kort i sig, og et faceup card som originalt)
+            - Vi har brug for disse parametre: antal kort og antal faceup card i destination pile. destination pile skal have det samme antal kort som da den startede, dvs. pile 5 har 5 kort, og kun ét face up kort.
+            hvis dette er opfyldt, så move.
+
+         - du rykker hjerter 8 kun hvis du ikke har andre muligheder.
+            - vi har brug for disse parametre: none of the above virkede. Dette er en else, og last case scenario. Dette gøres hvis de forrige ikke lykkes.
+            Dvs. move hjerter 8, hvis ikke nogen af de forrige virkede (if else)
+
+
+
+         */
+
+
 
 }
 
