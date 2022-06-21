@@ -82,18 +82,6 @@ public class CardDeck {
         Collections.shuffle(cards);
     }
 
-    public ArrayList<Card> dealCards(int numberOfCards) throws NotEnoughCardsException{
-        if (this.cards.size() >= numberOfCards){
-            ArrayList<Card> dealtCards = new ArrayList<>();
-            for (int i = numberOfCards; i != 0; i--){
-                dealtCards.add(this.popCard());
-            }
-            dealtCards.get(this.cards.size()-1).setFaceUp(true);
-            return dealtCards;
-        } else {
-            throw new NotEnoughCardsException("The deck only has" + cards.size() + "cards");
-        }
-    }
 
     public String toString() {
         StringBuilder s = new StringBuilder();

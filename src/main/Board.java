@@ -10,6 +10,8 @@ import java.util.*;
 
 public class Board {
 
+    public Main imageRecInput = new Main(); //For image rec input.
+
     //Initialize all the piles contained in the board
     public CardDeck initialPile = new CardDeck("Initial Deck"); //id = "deck"
     public CardDeck drawPile = new CardDeck("Draw Pile"); // "draw"
@@ -138,18 +140,18 @@ public class Board {
                    INPUT METHOD TO CHANGE THE VALUES OF ANY CARD IN CASE OF ERROR SOMEHOW!
                 */
 
-                numberPiles.get(i).get(numberPiles.get(i).size()-1).setFaceUp(true); //update the 7 number piles
+                numberPiles.get(i).get(numberPiles.get(i).size()-1).setFaceUp(true,imageRecInput); //update the 7 number piles
             }
         }
         if (discardPile.size() > 0) {
-            discardPile.get(discardPile.size() - 1).setFaceUp(true); //update top of the discard pile
+            discardPile.get(discardPile.size() - 1).setFaceUp(true,imageRecInput); //update top of the discard pile
         }
     }
 
     /** Author STEVEN
      * Given a move object, checks the source & destination piles and attempts to move it there.
      */
-    public boolean attemptMove(Move move) {
+    public boolean attemptMove(Move move) throws IOException {
         CardDeck s = move.getSourceDeck();
         CardDeck d = move.getDestinationDeck();
         int x = move.getIndex();
@@ -289,12 +291,12 @@ public class Board {
      * Simply moves a card or several from 1 deck to another. Checks for legality of moves must be done before calling
      * this function. The function moves every card from the given index to the end of the list, in order.
      */
-    public void moveCardDeckToDeck(CardDeck source, CardDeck destination, int index, boolean flipFaceUp) {
+    public void moveCardDeckToDeck(CardDeck source, CardDeck destination, int index, boolean flipFaceUp) throws IOException {
 
         while (source.size() > index) {
             destination.add(source.get(index));
             source.remove(index);
-            destination.get(destination.size() - 1).setFaceUp(flipFaceUp);
+            destination.get(destination.size() - 1).setFaceUp(flipFaceUp,imageRecInput);
         }
     }
 
@@ -302,7 +304,7 @@ public class Board {
      *  Draws a card from the deck and puts it in the discard pile face-up. If the draw pile is empty, fills the draw
      *  pile with the discard pile, retaining their natural order.
      */
-    public void draw3Cards() {
+    public void draw3Cards() throws IOException {
         //New code to fit the competition requirements. Old code commented out below.
         CardDeck draw = drawPile;
         CardDeck discard = discardPile;
@@ -312,7 +314,7 @@ public class Board {
                 //modified order simulates flipping 3 cards simultaneously
                 discard.add(draw.get(draw.size()-1));
                 draw.remove(draw.size()-1);
-                discard.get(discard.size()-1).setFaceUp(true);
+                discard.get(discard.size()-1).setFaceUp(true,imageRecInput);
             }
         }
         else {
@@ -405,12 +407,12 @@ public class Board {
     /** Author STEVEN
      * Creates the board using the initial card deck. Make sure the deck is shuffled beforehand.
      */
-    public void initialPopulateBoard() {
+    public void initialPopulateBoard() throws IOException {
         for (int i = 1; i <= 7; i++) {
             //Fills each card pile with 1-7 cards, respectively. Then it flips the last card face up.
             moveCardDeckToDeck(initialPile, getDeck(Integer.toString(i)),
                     initialPile.size() - (i), false);
-            getDeck(Integer.toString(i)).get(i - 1).setFaceUp(true);
+            getDeck(Integer.toString(i)).get(i - 1).setFaceUp(true,imageRecInput);
 
         }
         moveCardDeckToDeck(initialPile, drawPile, 0, false);

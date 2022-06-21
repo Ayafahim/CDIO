@@ -1,5 +1,7 @@
 package main;
 
+import java.io.IOException;
+
 /** Author STEVEN
  * main.Card object to be used in Arraylists representing the board.
  */
@@ -21,14 +23,31 @@ public class Card {
         faceUp = false;
     }
 
-    public void setFaceUp(boolean up){
+    public void setFaceUp(boolean up, Main imageRecInput) throws IOException {
+        if (!this.faceUp) {
+            String input = imageRecInput.test();
+            this.setSuit(parseSuit(input));
+            this.setValue(Integer.parseInt(input.substring(1)));
+            this.faceUp = up;
+            System.out.println("Card set face up: " + this.suit + " " + this.value + " " + this.suit);
+        }
 
 
 
 
 
 
-        this.faceUp = up;
+
+
+    }
+    private Suit parseSuit(String s) {
+        return switch (s.substring(0,1)) {
+            case "H" -> Suit.HEARTS;
+            case "S" -> Suit.SPADES;
+            case "C" -> Suit.CLUBS;
+            case "D" -> Suit.DIAMONDS;
+            default -> throw new IllegalStateException("Unexpected value: " + s.split("")[0]);
+        };
     }
 
     public Suit getSuit(){return this.suit;}
@@ -46,6 +65,7 @@ public class Card {
             case CLUBS -> "C";
         };
     }
+
 
     public String parseValueReverse(int n) {
         //New code to follow the competition specifications. Old code below.
