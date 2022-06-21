@@ -416,6 +416,7 @@ public class Board {
                         initialPile.getLast(), false);
                 if (i == j) {
                     getDeck(Integer.toString(i)).get(i - 1).setFaceUp(true, imageRecInput);
+                    System.out.println("card set face up in -> " + getDeck(Integer.toString(i)));
                 }
 
             }
