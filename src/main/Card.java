@@ -5,8 +5,13 @@ package main;
  */
 public class Card {
 
-    private final Suit suit;
-    private final int value;
+    private Suit suit;
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    private int value;
     private boolean faceUp;
 
 
@@ -21,6 +26,9 @@ public class Card {
     public Suit getSuit(){return this.suit;}
     public String getSuitLetter(){if (!faceUp) return "]"; return parseSuitReverse(suit);}
     public int getValue(){return this.value;}
+    public void setSuit(Suit suit){
+        this.suit = suit;
+    }
     public String getValueLetter() {if (!faceUp) return "["; return parseValueReverse(value);}
     private String parseSuitReverse(Suit suit) {
         return switch (suit) {

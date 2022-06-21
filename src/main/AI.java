@@ -220,6 +220,42 @@ public class AI {
 
     }
 
+
+    //9
+    //ToDo FIX PRIORITY
+    public  void buildFoundationStack(int cardValue){
+
+        ArrayList<CardDeck> p = board.numberPiles;
+        CardDeck d = board.discardPile;
+        //Check for discard pile.
+        if (d.size() > 0) {
+            if (d.get(d.getLast()).getValue() == cardValue) {
+                movesList.add(new Move(d, search.parseFoundation(d.get(d.getLast())), d.getLast(), 1));
+            }
+        }
+        //Check for number piles
+        for (CardDeck pile : p) {
+            if (pile.size() > 0) {
+                if (pile.get(pile.getLast()).getValue() == cardValue) {
+                    movesList.add(new Move(pile, search.parseFoundation(pile.get(pile.getLast())), pile.getLast(), 1));
+                }
+            }
+        }
+    }
+
+    public void ifStuck(){
+        int amountOfDraws = board.discardPile.size() / 3;
+        if ((board.discardPile.size() % 3) == 0){
+
+
+        }
+    }
+
+
+
+
+
+
     //ToDo Needs to search the top of the discard pile for a deuce as well.
 
     /**

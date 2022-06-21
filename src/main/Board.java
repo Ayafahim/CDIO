@@ -1,6 +1,12 @@
 package main;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.*;
+
 
 public class Board {
 
@@ -118,18 +124,23 @@ public class Board {
 
     }
 
-
     /** Author STEVEN
      Flips newly revealed cards to face-up.
      /ToDo Needs change/deletion once OpenCV is added because cards will be given face-up.
      */
-    public void updateBoardState() {
+    public void updateBoardState() throws IOException {
         for (int i = 0; i < numberPiles.size(); i++) {
             if (numberPiles.get(i).size() > 0) {
-                /*ToDo THIS IS WHERE THE CODE IS NEEDED TO TAKE INPUT FROM IMAGE RECOGNITION. ANY CARDS WITH THE LAST
+
+                Main test = new Main();
+                System.out.println(test.test());
+
+                /*
+                ToDo THIS IS WHERE THE CODE IS NEEDED TO TAKE INPUT FROM IMAGE RECOGNITION. ANY CARDS WITH THE LAST
                    INDEX IN THE PILES THAT IS FACEDOWN SHOULD TAKE THE NEXT INPUT AND SET THE VALUES ACCORDINGLY. CAN CREATE
                    INPUT METHOD TO CHANGE THE VALUES OF ANY CARD IN CASE OF ERROR SOMEHOW!
                 */
+
                 numberPiles.get(i).get(numberPiles.get(i).size()-1).setFaceUp(true); //update the 7 number piles
             }
         }
