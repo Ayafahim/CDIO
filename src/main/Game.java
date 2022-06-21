@@ -11,7 +11,6 @@ import java.util.Scanner;
 public class Game {
 
     public void startGame() throws Exception {
-
         Board board = new Board();
         board.initialPile.populate("cards.txt");
         //board.initialPile.shuffleDeck();
