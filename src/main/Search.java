@@ -142,7 +142,7 @@ public class Search {
      * edit: might change code, to check for most facedown cards pile, that includes a card that you're searching for.
      */
 
-    public void mostFacedownSearch() {
+    public int mostFacedownSearch() {
         int longest = 0;
         int deckNumber = 0;
         for (int i = 1; i <= 7; i++) {
@@ -152,7 +152,9 @@ public class Search {
                 deckNumber = i;
             }
         }
-        System.out.println("pile " + deckNumber + " has most facedown cards, with:" + longest + " facedown cards");
+        //Edit: just changed it to return the decknumber
+        return deckNumber;
+//        System.out.println("pile " + deckNumber + " has most facedown cards, with:" + longest + " facedown cards");
     }
 
     /**

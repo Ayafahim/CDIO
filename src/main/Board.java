@@ -211,8 +211,22 @@ public class Board {
             }
             //Source color is opposite of destination color
             if ((source.get(index).isRed() && destination.get(destination.size() - 1).isBlack()) || (source.get(index).isBlack() && destination.get(destination.size() - 1).isRed())) {
-                suit = true;
+
+                //makes sure we dont end up en loop transfering the same cards between to cards with same color
+                //only interested if index of card isn't 0 and the card isn't in discard pile
+                if (index > 0 && source != discardPile) {
+                    if (source.get(index - 1).isRed() && destination.get(destination.size() - 1).isRed() || source.get(index - 1).isBlack() && destination.get(destination.size() - 1).isBlack()) {
+                        suit = false;
+                    }
+                    else {
+                        suit = true;
+                    }
+                } else {
+                    suit = true;
+                }
             }
+
+
             //Both cards must be face-up for the move to make any sense
             isFaceUp = areFaceUp(source, destination, index);
             //Can only move multiple cards if the source deck is a number pile.

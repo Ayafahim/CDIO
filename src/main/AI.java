@@ -26,15 +26,18 @@ public class AI {
         Number to number
         Number from discard to number
 
+        FIXED:
+        1. IF a card is sitting on another one, do NOT let it move to another card of the same color its sitting on, i.e. a black 4 sitting on a red 5 should
+        not move to another red 5 as that is pointless and results in a loop.
+
+        The next 3 are fixed since the freeDowncardMove will prioritize all moves possible with most downcards or any at all:
+        2. Moves that free downcards, should always be prioritized in the order of piles with most downcards (MINOR CHECK)
+        3. Increase priority if king can be moved to empty pile from another pile which allows for freeing a downcard
+        4. Play that frees a downcard (can be recursive) (MAJOR CHECK)
 
       ToDo
         Checks that can change priority:
-        Increase priority if king can be moved to empty pile from another pile which allows for freeing a downcard
-        IF a card is sitting on another one, do NOT let it move to another card of the same color its sitting on, i.e. a black 4 sitting on a red 5 should
-        not move to another red 5 as that is pointless and results in a loop.
         IF a king is already the top card of a stack (not on a downcard), it should never move to another empty pile.
-        Play that frees a downcard (can be recursive) (MAJOR CHECK)
-        Moves that free downcards, should always be prioritized in the order of piles with most downcards (MINOR CHECK)
         Moves that free a spot must have a waiting King to occupy the spot. Otherwise drop priority to zero. (MAJOR CHECK)
         Play kings that benefit the column with the most downcards. (MINOR CHECK)
         Moves to foundations that aren't aces or deuces should only be done if: (MAJOR CHECK)
@@ -64,7 +67,7 @@ public class AI {
         moveKingIfDeckEmpty(); //Add any kingmoves to the list with priority 70
         moveNumberToNumber(); //Add any generic numbermoves to the list with priority 60
         drawMove(); //Draws cards with priority 10
-        freeDownCardMove();
+        freeDownCardMove(); // add number of downcards to priority for each move in moveslist
 
         movesList.sort(Collections.reverseOrder(Comparator.comparingInt(Move::getPriority))); //Sort the available moves by priority
         System.out.println("Sorted moves list:\n" + movesList);
@@ -282,10 +285,23 @@ public class AI {
     /**
      * Author Alec
      * makes a move that frees a downcard if it is possble
+     * Edit Aya: goes through moves list and changes priority for the moves if they can free a downcard by adding number of downcards
+     * to priority ex. move can free 6 downcards,  priority += 6
      */
     public void freeDownCardMove() {
 
-        ArrayList<CardDeck> sP = board.numberPiles;
+        if (movesList.size() > 0) {
+            for (Move move : movesList) {
+                if (move.getSourceDeck() != board.drawPile ) {
+                   int numberOfFaceDownCards = move.getSourceDeck().getNumberOfFaceDownCards();
+                    move.setPriority(move.getPriority() + numberOfFaceDownCards);
+                }
+            }
+        }
+
+
+
+      /*  ArrayList<CardDeck> sP = board.numberPiles;
         ArrayList<CardDeck> dP = board.numberPiles;
 
         for (CardDeck sourcePile : sP) {
@@ -301,7 +317,7 @@ public class AI {
                     }
                 }
             }
-        }
+        }*/
        /* //System.out.println(search.searchIfDownCardCanBeFreed());
 
         List<Object> openDownCard = search.searchIfDownCardCanBeFreed();
