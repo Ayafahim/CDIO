@@ -26,10 +26,11 @@ public class Main {
     }
 
     public String test() throws IOException {
+        System.out.println("Awaiting card to be read :)");
         client = server.accept();
         System.out.println("got connection on port 8080");
         in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-        System.out.println("Awaiting card to be read :)");
+
         fromImageRec = in.readLine();
         //in.close();
         System.out.println("Card read.");

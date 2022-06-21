@@ -32,7 +32,7 @@ public class Card {
             this.setSuit(parseSuit(input));
             this.setValue(Integer.parseInt(input.substring(1)));
             this.faceUp = true;
-            System.out.println("Card set face up: " + this.suit + " " + this.value + " " + this.suit);
+            System.out.println("Card set face up: " + this.suit + " " + this.value);
         }
 
 
