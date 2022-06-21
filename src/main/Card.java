@@ -27,7 +27,7 @@ public class Card {
         if (!up) {
             this.faceUp = false;
         }
-        else {
+        else if (!this.faceUp) {
             String input = imageRecInput.test();
             this.setSuit(parseSuit(input));
             this.setValue(Integer.parseInt(input.substring(1)));
