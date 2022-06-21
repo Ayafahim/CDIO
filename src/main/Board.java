@@ -417,9 +417,9 @@ public class Board {
                 if (i == j) {
                     getDeck(Integer.toString(i)).get(i - 1).setFaceUp(true, imageRecInput);
                 }
-                printBoard();
-            }
 
+            }
+            printBoard();
         }
         moveCardDeckToDeck(initialPile, drawPile, 0, false);
     }
