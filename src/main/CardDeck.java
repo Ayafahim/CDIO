@@ -27,6 +27,9 @@ public class CardDeck {
         this.name = name;
     }
 
+    /**
+     * FOR COMPETITION REPLACE THE cards.add call as comment beside it says. INSTRUCTION #1
+     */
     public void populate(String deckName) throws IOException {
         File file = new File("resources/" + deckName);
         if (!file.exists())
@@ -41,8 +44,8 @@ public class CardDeck {
 
         String input = scanner.nextLine();
         String[] rawCardInput = input.split(",");
-        for (int i = 0; i < rawCardInput.length; i++) {
-            cards.add(new Card(parseSuit(rawCardInput[i]), -1)); //parseValue(rawCardInput[i].substring(1)))
+        for (String s : rawCardInput) {
+            cards.add(0,new Card(parseSuit(s), parseValue(s.substring(1)))); //parseValue(rawCardInput[i].substring(1)) <- REPLACE THIS CODE WITH -1
         }
         scanner.close();
     }
@@ -89,6 +92,7 @@ public class CardDeck {
         for (Card card : cards) {
             s.append(card.toString()).append("; ");
         }
+        s.append("\n");
         return s.toString();
     }
 

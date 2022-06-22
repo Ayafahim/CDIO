@@ -23,8 +23,12 @@ public class Card {
         faceUp = false;
     }
 
+    /**
+     * FOR COMPETITION, DELETE CURRENT CODE AND UNCOMMENT THE REST. INSTRUCTION #2
+     */
     public void setFaceUp(boolean up, Main imageRecInput) throws IOException {
-        if (!up) {
+        this.faceUp = up;
+        /*if (!up) {
             this.faceUp = false;
         }
         else if (!this.faceUp) {
@@ -33,15 +37,7 @@ public class Card {
             this.setValue(Integer.parseInt(input.substring(1)));
             this.faceUp = true;
             System.out.println("Card set face up: " + this.suit + " " + this.value);
-        }
-
-
-
-
-
-
-
-
+        }*/
     }
     private Suit parseSuit(String s) {
         return switch (s.substring(0,1)) {

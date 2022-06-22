@@ -1,10 +1,6 @@
 package main;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.*;
 
 
@@ -50,7 +46,7 @@ public class Board {
                 }
                 case "":
                 case "ai": {
-                    System.out.println("AI in testing phase :)");
+                    //System.out.println("AI in testing phase :)");
                     ai.think();
                     break;
                 }
@@ -61,26 +57,12 @@ public class Board {
 
                     break;
                 }
-                case "ace": {
-                    ai.aceMoveToFoundation();
-                    break;
-                }
-                case "deuce": {
-                    ai.deuceMoveToFoundation();
-                    break;
-                }
-                case "downcard": {
-                    ai.freeDownCardMove();
+                case "panic": {
+                    ai.panicMode = !ai.panicMode; //Flips panic mode like a switch :D
+                    ai.printPanicState();
                 }
                 case "draw": {
                     draw3Cards();
-                    break;
-                }
-                case "king": {
-                    ai.moveKingIfDeckEmpty();
-                    break;
-                }case "king1": {
-                    ai.moveKingFromBiggestPile();
                     break;
                 }
                 case "restart": {
@@ -148,6 +130,20 @@ public class Board {
         }
     }
 
+    /**
+     * Author STEVEN
+     * @param suit a given suit.
+     * @return Returns the foundation matching the given suit.
+     */
+    public CardDeck getSuitPile(Suit suit) {
+        return switch (suit) {
+            case HEARTS -> heartsPile;
+            case SPADES -> spadesPile;
+            case DIAMONDS -> diamondsPile;
+            case CLUBS -> clubsPile;
+        };
+    }
+
     /** Author STEVEN
      * Given a move object, checks the source & destination piles and attempts to move it there.
      */
@@ -191,7 +187,7 @@ public class Board {
             }
         }
         //If the move wasnt legal, and wasnt executed
-        System.out.println("Illegal move sent to attemptMove() -> Source: " + s.toString() + " Destination: " + d.toString() + " Index: " + x);
+        System.out.println("Illegal move sent to attemptMove() -> Source: " + s.toString() + " Destination: " + d.toString() + " Index: " + x + " Card: " + s.get(x));
         return false;
     }
 
@@ -319,7 +315,7 @@ public class Board {
         }
         else {
             shuffleDiscardIntoDraw();
-            System.out.println("Perform STOCK move!");
+            System.out.println("The last DRAW is instead a STOCK move!");
             //does not call the method again as they're considered separate moves.
         }
 
@@ -411,12 +407,12 @@ public class Board {
         imageRecInput.initiate();
         //Fills each card pile with 1-7 cards, respectively. Then it flips the last card face up.
         for (int i = 1; i <= 7; i++) {
-            for (int j = 1; j <= i; j++) {
-                moveCardDeckToDeck(initialPile, getDeck(Integer.toString(i)),
+            for (int j = i; j <= 7; j++) {
+                moveCardDeckToDeck(initialPile, getDeck(Integer.toString(j)),
                         initialPile.getLast(), false);
                 if (i == j) {
                     getDeck(Integer.toString(i)).get(i - 1).setFaceUp(true, imageRecInput);
-                    System.out.println("card set face up in -> " + getDeck(Integer.toString(i)));
+                    //System.out.println("card set face up in -> " + getDeck(Integer.toString(i)));
                 }
 
             }

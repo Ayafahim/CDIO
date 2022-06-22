@@ -1,13 +1,18 @@
 package main;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.*;
 
 public class AI {
     private final Search search;
     private final Board board;
 
+    public boolean panicMode = false;
+
     public ArrayList<Move> movesList = new ArrayList<>();
+
+    public ArrayList<Move> memory = new ArrayList<>(20);
 
     public AI(Search search, Board board) {
         this.search = search;
@@ -65,44 +70,178 @@ public class AI {
 
         aceMoveToFoundation(); //Add any acemoves to the list with priority 90
         deuceMoveToFoundation(); //Add any deucemoves to the list with priority 80
-        moveKingIfDeckEmpty(); //Add any kingmoves to the list with priority 70
+        //moveKingIfDeckEmpty(); //Add any kingmoves to the list with priority 70
         moveNumberToNumber(); //Add any generic numbermoves to the list with priority 60
-        drawMove(); //Draws cards with priority 10
-        freeDownCardMove(); // add number of downcards to priority for each move in moveslist
-        //dontMoveUnless();
+        drawMove(); //Draws cards with priority 20
+        moveToFoundation(); //Adds moves to foundations with priority 10
+
+        if (findRepeatStateInMemory()) {
+            panicMode = true;
+            //System.out.println("REPEAT BOARD STATE DETECTED!");
+            //printPanicState();
+        }
+
+        if (board.discardPile.size() + board.drawPile.size() == 3 && board.discardPile.size() != 3) {
+            System.out.println("DRAW/DISCARD only have 3 cards. Flipping them immediately to avoid being stuck.");
+            try {
+                movesList.add(new Move(board.drawPile, board.discardPile, 0, 10000000));
+            } catch (Exception e) {
+                System.out.println("Error wtf?");
+            }
+        }
+
+        performChecks(); //Performs checks that alter priority before execution.
+
+
 
         movesList.sort(Collections.reverseOrder(Comparator.comparingInt(Move::getPriority))); //Sort the available moves by priority
-        System.out.println("Sorted moves list:\n" + movesList);
+        //System.out.println("Sorted moves list:\n" + movesList);
         try {
-            System.out.println("Attempting the best move:");
+            //System.out.println("Attempting the best move:");
+            if (movesList.size() == 0) {
+                boolean won = true;
+                for (CardDeck pile: board.searchPiles) {
+                    if (pile.size() != 0) {
+                        won = false;
+                        break;
+                    }
+                }
+                if (won) {
+                    gameWon(); //You win! :D
+                    System.exit(0);
+                }
+            }
             System.out.println(movesList.get(0));
             board.attemptMove(movesList.get(0));
+            if (!board.isFoundationPile(movesList.get(0).getDestinationDeck())) { //If the executed move was NOT to a foundation pile, disengage panic mode.
+                if (panicMode) {
+                    //System.out.println("NON-Draw move was executed, so there is no need to panic!");
+                    //panicMode = false;
+                    //printPanicState();
+                }
+            }
+            addToMemory(movesList.get(0));
         } catch (ArrayIndexOutOfBoundsException | IOException e) {
             System.out.println("movesList was empty :(");
+
         }
 
     }
 
-    /**
-     * PRIORITY 10 FOR DRAWING CARDS.
+    /** AUTHOR Steven
+     * Loops through each move and performs all the checks on each of them, altering their priorities.
      */
-    public void drawMove() {
-        movesList.add(new Move(board.drawPile, board.discardPile, 0, 10));
+    public void performChecks() {
+        for (Move move: movesList) {
+            freeDownCardCheck(move); // add number of downcards to priority for each move in moveslist
+            numberMoveIsKingCheck(move); //Adds priority to a numberToNumber move if a king is being moved to an empty spot.
+            panicCheck(move); //Adds 20 priority to foundation moves while panic mode is engaged, bringing their prio to 30, higher than drawing more cards.
+        }
     }
 
-    //ToDo Needs to search the top of the discard pile for an ace as well.
+    public void panicCheck(Move move) {
+        if (panicMode) {
+            if (board.isFoundationPile(move.getDestinationDeck())) {
+                move.setPriority(move.getPriority() + 20);
+            }
+        }
+    }
+
+    public void numberMoveIsKingCheck(Move move) {
+        /*  Source must be a number pile
+            Move must be a King
+            The index must be 0
+
+            If these 3 conditions apply, the move is useless.
+         */
+        if (board.isNumberPile(move.getSourceDeck()) && move.getSourceDeck().get(move.getIndex()).getValue() == 13 && move.getIndex() == 0) {
+            move.setPriority(0);
+        }
+        /*
+            Destination must be a number pile
+            Destination deck must be empty.
+            Card being moved must be a king (This should always be true)
+
+         */
+        else if (move.getDestinationDeck().size() == 0 && move.getSourceDeck().get(move.getIndex()).getValue() == 13 && board.isNumberPile(move.getDestinationDeck())) {
+            move.setPriority(move.getPriority() + 10); //This move should increase from 60 to 70, generally, putting it only behind ace and deuce moves.
+        }
+    }
+
+
+    /**
+     * Adds moves where cards can be put on the foundations. Does not check for aces and deuces. PRIORITY 10
+     */
+    public void moveToFoundation() {
+        for (CardDeck pile:board.searchPiles) {
+            //Matches the number of cards in the foundation with the value of the card. The card must be 1 larger, i.e. a 5 of hearts can be placed on a hearts foundation of size 4.
+            if (pile.size() > 0) {
+                if (pile.get(pile.getLast()).getValue() - board.getSuitPile(pile.get(pile.getLast()).getSuit()).size() == 1) {
+                    movesList.add(new Move(pile, board.getSuitPile(pile.get(pile.getLast()).getSuit()), pile.getLast(), 10));
+                }
+            }
+        }
+    }
+
+    /** Author STEVEN
+     * @return A boolean of whether a repeat state was found.
+     */
+    public boolean findRepeatStateInMemory() {
+
+        if (memory.size() < 4) { //Logic isn't solid, but will not activate panic mode during the start of the game.
+            return false;
+        }
+        for (Move savedState: memory) {
+            if (!(savedState.getDestinationDeck() == board.discardPile)) { //If any moves are non-DRAW, return false
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void printPanicState() {
+        if (panicMode) {
+            System.out.println("PANIC MODE ENGAGED!!! :O");
+        }
+        else {
+            System.out.println("PANIC MODE disengaged.... wooh =)");
+        }
+    }
+
+    /**AUTHOR Steven
+     * Method to add a boardstate to the memory.
+     */
+    public void addToMemory(Move move) {
+        memory.add(move);
+        if (memory.size() > (board.discardPile.size() + board.drawPile.size()) + 3) {
+            memory.remove(0); //The whole draw pile should be passed through
+        }
+        /*for (double i = (board.discardPile.size() + board.drawPile.size()) * 1.34; i < memory.size(); i++) {
+            memory.remove(0); //Removes the oldest memories if there are too many saved states.
+        }*/
+    }
+
+    /**
+     * PRIORITY 20 FOR DRAWING CARDS.
+     */
+    public void drawMove() {
+        if (board.drawPile.size() + board.discardPile.size() > 3) {
+            movesList.add(new Move(board.drawPile, board.discardPile, 0, 20));
+        }
+    }
 
     /**
      * Author: Steven
-     * Sends any regular discard/number pile to number pile moves to the list with priority 5/6 respectively.
+     * Sends any regular discard/number pile to number pile moves to the list with priority 59/60 respectively.
      */
     public void moveNumberToNumber() {
         ArrayList<CardDeck> p = board.numberPiles;
         CardDeck d = board.discardPile;
         for (CardDeck pile : p) { //Separate check that adds any move available from the discard pile with priority 5
             if (d.size() > 0) {
-                if (board.canMoveToNumberPile(d, pile, d.getLast())) {
-                    movesList.add(new Move(d, pile, d.getLast(), 50));
+                if (board.canMoveToNumberPile(d, pile, d.getLast())) { //Checks if move is possible
+                        movesList.add(new Move(d, pile, d.getLast(), 59));
                 }
             }
         }
@@ -123,7 +262,7 @@ public class AI {
     }
 
     /**
-     * PRIORITY 9
+     * PRIORITY 90
      */
     public void aceMoveToFoundation() {
         ArrayList<CardDeck> p = board.numberPiles;
@@ -327,16 +466,13 @@ public class AI {
      * Edit Aya: goes through moves list and changes priority for the moves if they can free a downcard by adding number of downcards
      * to priority ex. move can free 6 downcards,  priority += 6
      */
-    public void freeDownCardMove() {
+    public void freeDownCardCheck(Move move) {
 
-        if (movesList.size() > 0) {
-            for (Move move : movesList) {
                 if (move.getSourceDeck() != board.drawPile) {
                     int numberOfFaceDownCards = move.getSourceDeck().getNumberOfFaceDownCards();
                     move.setPriority(move.getPriority() + numberOfFaceDownCards);
                 }
-            }
-        }
+
 /*
         ArrayList<CardDeck> sP = board.numberPiles;
         ArrayList<CardDeck> dP = board.numberPiles;
@@ -486,6 +622,13 @@ public class AI {
             }
         } catch (Exception e) {
             System.out.println("Move couldn't be made");
+        }
+    }
+
+    public void gameWon() {
+        board.printBoard();
+        for (int i = 0; i < 10; i++) {
+            System.out.println("WINNER WINNER CHICKEN DINNER NICE JOB CONGRATS WOHOO EASY PEASY! :)");
         }
     }
 
