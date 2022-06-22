@@ -63,6 +63,8 @@ public class AI {
     /**
      * Author: Steven
      * The main function driving the AI that calls all other functions when looking for a move chosen by the AI!
+     * Uncomment line 121 (panicMode = false) for more correct behavior that takes up a lot of moves to do.
+     * It can be used by turning off panic mode manually when wanted using the text command.
      */
     public void think() {
 

@@ -22,10 +22,10 @@ public class Game {
         printCommandOptions();
         do {
             board.updateBoardState();
-            //board.printBoard(); //comment this out during auto mode
-            //System.out.println("Ready for Input"); //comment this out during auto mode
-            //input = sc.nextLine(); //comment this out to turn on auto mode.
-            input = "ai"; //uncomment this to turn on auto mode
+            board.printBoard(); //comment this out during auto mode
+            System.out.println("Ready for Input"); //comment this out during auto mode
+            input = sc.nextLine(); //comment this out to turn on auto mode.
+            //input = "ai"; //uncomment this to turn on auto mode
             board.parseInput(input);
         } while (!Objects.equals(input, "goodbye"));
 

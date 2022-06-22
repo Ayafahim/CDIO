@@ -24,11 +24,12 @@ public class Card {
     }
 
     /**
-     * FOR COMPETITION, DELETE CURRENT CODE AND UNCOMMENT THE REST. INSTRUCTION #2
+     * FOR COMPETITION, DELETE CURRENT CODE AND UNCOMMENT THE REST. INSTRUCTION #2 - OTHER IS IN CARDDECK CLASS
      */
     public void setFaceUp(boolean up, Main imageRecInput) throws IOException {
-        this.faceUp = up;
-        /*if (!up) {
+        //this.faceUp = up;
+        // IMAGE REC CODE SECTION ---------------------------------------------------
+        if (!up) {
             this.faceUp = false;
         }
         else if (!this.faceUp) {
@@ -37,7 +38,8 @@ public class Card {
             this.setValue(Integer.parseInt(input.substring(1)));
             this.faceUp = true;
             System.out.println("Card set face up: " + this.suit + " " + this.value);
-        }*/
+        }
+        // IMAGE REC CODE SECTION -----------------------------------------------------
     }
     private Suit parseSuit(String s) {
         return switch (s.substring(0,1)) {
