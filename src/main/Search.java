@@ -80,17 +80,16 @@ public class Search {
         return returnList;
     }
 
-
+    /**
+     * Author Jacob
+     * Finding a deck with specific card in it and returns all decks with the specific card in.
+     */
     public List<Object> someDeckSearch(int cardValue) {
-        //Finding a deck with specific card in it.
-        //Returns all decks with the specific card in.
         int cardValueIndex = 0;
         int deckNumber = 0;
         String cardSuit = "0";
 
-
         List<Object> returnList = new ArrayList<>();
-
 
         //for loop iterates through each pile and checks value of each card facing up
         for (int i = 7; i >= 1; i--) { //edit Jacob: Searching from the biggest pile to smallest
@@ -113,12 +112,9 @@ public class Search {
                 returnList.add(deckNumber);
                 returnList.add(cardValueIndex);
                 returnList.add(cardSuit);
-
-//                break;
             }
         }
         return returnList;
-        //return Arrays.asList(deckNumber, cardValueIndex, cardSuit, isCardInPile);
     }
 
     /**
@@ -152,9 +148,8 @@ public class Search {
                 deckNumber = i;
             }
         }
-        //Edit: just changed it to return the decknumber
         return deckNumber;
-//        System.out.println("pile " + deckNumber + " has most facedown cards, with:" + longest + " facedown cards");
+
     }
 
     /**
@@ -162,7 +157,6 @@ public class Search {
      * Searches to see if there is a play to free a downcard, if there are multiple, always free
      * the pile which have the most downcards.
      */
-    // Algoritmen er ikke helt færdig inu, den kan udvides
     public List<Object> searchIfDownCardCanBeFreed() {
         int cardValueIndex = 0;
         boolean found = false;

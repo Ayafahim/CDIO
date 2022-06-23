@@ -110,17 +110,10 @@ public class Board {
 
     /** Author STEVEN
      Flips newly revealed cards to face-up.
-     /ToDo Needs change/deletion once OpenCV is added because cards will be given face-up.
      */
     public void updateBoardState() throws IOException {
         for (int i = 0; i < numberPiles.size(); i++) {
             if (numberPiles.get(i).size() > 0) {
-
-                /*
-                ToDo THIS IS WHERE THE CODE IS NEEDED TO TAKE INPUT FROM IMAGE RECOGNITION. ANY CARDS WITH THE LAST
-                   INDEX IN THE PILES THAT IS FACEDOWN SHOULD TAKE THE NEXT INPUT AND SET THE VALUES ACCORDINGLY. CAN CREATE
-                   INPUT METHOD TO CHANGE THE VALUES OF ANY CARD IN CASE OF ERROR SOMEHOW!
-                */
 
                 numberPiles.get(i).get(numberPiles.get(i).size()-1).setFaceUp(true,imageRecInput); //update the 7 number piles
             }
@@ -193,6 +186,7 @@ public class Board {
 
     /** Author STEVEN
      * Check if the index card in the source pile is allowed to be moved to the destination number pile.
+     * Ayas edit: i made changes so that we wont get stuck in a loop
      */
     public boolean canMoveToNumberPile(CardDeck source, CardDeck destination, int index) {
         boolean value = false;
@@ -231,8 +225,6 @@ public class Board {
                     suit = true;
                 }
             }
-
-
             //Both cards must be face-up for the move to make any sense
             isFaceUp = areFaceUp(source, destination, index);
             //Can only move multiple cards if the source deck is a number pile.
@@ -338,11 +330,7 @@ public class Board {
     public boolean areFaceUp(CardDeck source, CardDeck destination, int index) {
         return source.get(index).isFaceUp();
     }
-
-    /** Author STEVEN
-     *  Checks if a move is legal purely based on which pile is being transferred from as well as how many cards are
-     *  being moved.
-     */
+    
     public boolean numberOfCardsMovedIsLegal(CardDeck source, CardDeck destination, int index) {
         boolean isLegal = false;
         //If moving 1 card, move is legal
@@ -362,9 +350,7 @@ public class Board {
     public boolean isNumberPile(CardDeck source) {
         return source == pile1 || source == pile2 || source == pile3 || source == pile4 || source == pile5 || source == pile6 || source == pile7;
     }
-    /** Author STEVEN
-     * Helper function for determining pile type.
-     */
+
     public boolean isDrawPile(CardDeck source) {
         return source == drawPile;
     }
@@ -446,6 +432,9 @@ public class Board {
 
     }
 
+    /** Author Alec
+     * Returns number of cards on board
+     */
     public int numberOfCardsOnBoard() {
         return drawPile.size() + discardPile.size() + pile1.size() + pile2.size() + pile3.size() + pile4.size() + pile5.size() + pile6.size() + pile7.size() + heartsPile.size() + spadesPile.size() + diamondsPile.size() + clubsPile.size();
     }

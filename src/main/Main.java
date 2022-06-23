@@ -25,7 +25,10 @@ public class Main {
 
     }
 
-    public String test() throws IOException {
+    /** Authors Emin & Saif
+     Connects image rec & AI
+     */
+    public String connectToImageRec() throws IOException {
         System.out.println("Awaiting card to be read :)");
         client = server.accept();
         System.out.println("got connection on port 8080");
@@ -34,7 +37,6 @@ public class Main {
         fromImageRec = in.readLine();
         //in.close();
         System.out.println("Card read.");
-
 
         return fromImageRec;
     }

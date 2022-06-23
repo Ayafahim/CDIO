@@ -171,7 +171,7 @@ public class AI {
     }
 
 
-    /**
+    /** Author Aya
      * Adds moves where cards can be put on the foundations. Does not check for aces and deuces. PRIORITY 10
      */
     public void moveToFoundation() {
@@ -219,9 +219,6 @@ public class AI {
         if (memory.size() > (board.discardPile.size() + board.drawPile.size()) + 3) {
             memory.remove(0); //The whole draw pile should be passed through
         }
-        /*for (double i = (board.discardPile.size() + board.drawPile.size()) * 1.34; i < memory.size(); i++) {
-            memory.remove(0); //Removes the oldest memories if there are too many saved states.
-        }*/
     }
 
     /**
@@ -263,7 +260,7 @@ public class AI {
         }
     }
 
-    /**
+    /** Author Aya
      * PRIORITY 90
      */
     public void aceMoveToFoundation() {
@@ -284,43 +281,10 @@ public class AI {
             }
         }
 
-        /*
-        //System.out.println(search.someCardSearch(1));
-
-        List<Object> aceInfo = search.someCardSearch(1);
-
-        Object srcDeck = aceInfo.get(0);
-        CardDeck src = board.getDeck("0");
-        CardDeck destination = null;
-
-        switch (aceInfo.get(2).toString()) {
-            case "Diamonds" -> destination = board.getDeck("10");
-            case "Clubs" -> destination = board.getDeck("11");
-            case "Spades" -> destination = board.getDeck("9");
-            case "Hearts" -> destination = board.getDeck("8");
-        }
-        switch (srcDeck.toString()) {
-            case "1" -> src = board.getDeck("1");
-            case "2" -> src = board.getDeck("2");
-            case "3" -> src = board.getDeck("3");
-            case "4" -> src = board.getDeck("4");
-            case "5" -> src = board.getDeck("5");
-            case "6" -> src = board.getDeck("6");
-            case "7" -> src = board.getDeck("7");
-        }
-
-        Move move = new Move(src, destination, (Integer) aceInfo.get(1),9);//ToDo FIX PRIORITY
-        try {
-            //.out.println("main.Move is: " + move);
-            //board.attemptMove(move);
-            movesList.add(move);
-        } catch (Exception e) {
-            //System.out.println("move couldn't be done");
-        }*/
-
     }
 
     /**
+     * Author Jacob
      * PRIORITY 7
      * NOT FINISHED
      */
@@ -351,21 +315,22 @@ public class AI {
                         //board.attemptMove(move);
                         movesList.add(move);
                     } catch (Exception e) {
-                        //System.out.println("move couldn't be done");
+                        System.out.println("move couldn't be done");
                     }
                 } else {//System.out.println("No destination for the king to be put"); //Prints out for all decks, will edit later.
                     movesList.add(new Move(board.drawPile, board.discardPile, 0, 10));
                 }
             }
         } catch (Exception e) {
-            //System.out.println("No kings available");
+            System.out.println("No kings available");
         }
 
     }
 
-
-    //9
-    //ToDo FIX PRIORITY
+    /** Author Aya
+     * 9: moves given card to foundation pile
+     * ToDo FIX PRIORITY
+     */
     public  void buildFoundationStack(int cardValue){
 
         ArrayList<CardDeck> p = board.numberPiles;
@@ -395,13 +360,8 @@ public class AI {
     }
 
 
-
-
-
-
-    //ToDo Needs to search the top of the discard pile for a deuce as well.
-
     /**
+     * Author Aya
      * PRIORITY 8
      */
     public void deuceMoveToFoundation() {
@@ -465,7 +425,7 @@ public class AI {
     /**
      * Author Alec
      * makes a move that frees a downcard if it is possble
-     * Edit Aya: goes through moves list and changes priority for the moves if they can free a downcard by adding number of downcards
+     * Edit Aya, to fit new structure: goes through moves list and changes priority for the moves if they can free a downcard by adding number of downcards
      * to priority ex. move can free 6 downcards,  priority += 6
      */
     public void freeDownCardCheck(Move move) {
@@ -493,59 +453,13 @@ public class AI {
                 }
             }
         }*/
-       /* //System.out.println(search.searchIfDownCardCanBeFreed());
 
-        List<Object> openDownCard = search.searchIfDownCardCanBeFreed();
-        Object srcDeck = openDownCard.get(0);
-        CardDeck src = board.getDeck("0");
-        CardDeck destination = null;
-
-        switch (srcDeck.toString()) {
-            case "1" -> src = board.getDeck("1");
-            case "2" -> src = board.getDeck("2");
-            case "3" -> src = board.getDeck("3");
-            case "4" -> src = board.getDeck("4");
-            case "5" -> src = board.getDeck("5");
-            case "6" -> src = board.getDeck("6");
-            case "7" -> src = board.getDeck("7");
-        }
-
-        switch (openDownCard.get(1).toString()) {
-            case "1" -> destination = board.getDeck("1");
-            case "2" -> destination = board.getDeck("2");
-            case "3" -> destination = board.getDeck("3");
-            case "4" -> destination = board.getDeck("4");
-            case "5" -> destination = board.getDeck("5");
-            case "6" -> destination = board.getDeck("6");
-            case "7" -> destination = board.getDeck("7");
-        }
-
-        Move move = new Move(src, destination, (Integer) openDownCard.get(2),100);//ToDo FIX PRIORITY
-        try {
-            //System.out.println("main.Move is: " + move);
-            //board.attemptMove(move);
-            movesList.add(move);
-        } catch (Exception e) {
-            //System.out.println("move couldn't be done");
-        }
-
-        */
     }
 
-
-    /*
-    6. Only play a King that will benefit the column(s) with the biggest pile of downcards,
-    unless the play of another King will at least allow a transfer that frees a downcard.
-
-    - Søg efter konger
-        - hvis der er flere konger, så tag den konge der er i den pile der er flest kort i, altså med flest downcards
-        - med mindre, at ved at man spiller en anden konge, vil tillade en flytning der frigør et downcard
-
-        SNAKKET MED ALEC OG AYA:
-        "unless": der er en konge i draw pile, der kan sættes i spil, sådan så at en dronning kan rykkes, og free et downcard.
-        dvs. at man ikke altid rykker en konge fra det største pile, da man hellere vil have en konge ud af draw.
-
-
+    /**
+     * Author Jacob
+     * 6. Only play a King that will benefit the column(s) with the biggest pile of downcards,
+     * unless the play of another King will at least allow a transfer that frees a downcard.
      */
     public void moveKingFromBiggestPile() {
         try {
@@ -554,7 +468,6 @@ public class AI {
 
             //Have to change this code, to allow the player to make the move from, if there is a king available.
 
-            //System.out.println("Printer al information om det deck der er konge i: " + Arrays.toString(searchForKing.toArray()));
             int size = searchForKing.size();
 
             CardDeck deck = board.getDeck((String) searchForKing.get(0));
@@ -594,7 +507,14 @@ public class AI {
         }
     }
 
-
+    /**
+     * Authors Jacob & Alec
+     *  8. Don't play or transfer a 5, 6, 7 or 8 anywhere unless at least one of these situations will apply after the play:
+     * It is smooth with it's next highest even/odd partner in the column
+     * It will allow a play or transfer that will IMMEDIATELY free a downcard
+     * There have not been any other cards already played to the column
+     * You have ABSOLUTELY no other choice to continue playing (this is not a good sign)
+     */
     public void dontMoveUnless() {
         try {
             ArrayList<CardDeck> source = board.numberPiles;
@@ -633,46 +553,6 @@ public class AI {
             System.out.println("WINNER WINNER CHICKEN DINNER NICE JOB CONGRATS WOHOO EASY PEASY! :)");
         }
     }
-
-    /*
-    8. Don't play or transfer a 5, 6, 7 or 8 anywhere unless at least one of these situations will apply after the play:
-
-
-It is smooth with it's next highest even/odd partner in the column
-It will allow a play or transfer that will IMMEDIATELY free a downcard
-There have not been any other cards already played to the column
-You have ABSOLUTELY no other choice to continue playing (this is not a good sign)
-
-    Ikke ryk 5, 6, 7 eller 8 nogensteder; MEDMINDRE mindst en af disse situationer virker efter du har rykket dem.
-
-
-    Vi skal tjekke om trækket er lovligt.
-    Vi trækker al information ind som parametre, for at tjekke om trækket er lovligt:
-    If: du har lyst til at rykke hjerter 8, så skal mindst én!!! af de kommende fungere:
-        - kortet du gerne vil rykke hjerter 8 på, skal ligges på en pile, med kun 2 forskellige kulør, heraf en af dem skal være den samme kulør som hjerter 8 (hjerte)
-            - vi har brug for disse parametre: destination og source pile kulører for faceup. Der skal maks være to forskellige.
-            tjek source pile face up kulør: sk
-            tjek destination pile face up kulør: dk
-                if sk og dk har samme slags kulører (2 forskellige slags), så move
-                if source og destination pile faceup cards only have 2 different suits, then play.
-
-        - ved at du rykker hjerter 8, så vil det frigøre et downcard (hjerter 8 må ikke rykke fra en pile, som så gør den tom, da dette træk altid skal frigøre et downcard). Alec har lavet freeDownCardMove
-            - Vi har brug for disse parametre: om der er mere end 1 kort i source pile
-            Hvis ja, så lav move
-
-        - Der har ikke allerede været nogen kort der er blevet spillet til den pile.
-            (Forstår ikke helt, men formoder: en pile der ikke er blevet spillet noget fra, er en pile, som kun har ét faceup card på sig, og har det originale antal kort i pile; pile 5 har 5 kort i sig, og et faceup card som originalt)
-            - Vi har brug for disse parametre: antal kort og antal faceup card i destination pile. destination pile skal have det samme antal kort som da den startede, dvs. pile 5 har 5 kort, og kun ét face up kort.
-            hvis dette er opfyldt, så move.
-
-         - du rykker hjerter 8 kun hvis du ikke har andre muligheder.
-            - vi har brug for disse parametre: none of the above virkede. Dette er en else, og last case scenario. Dette gøres hvis de forrige ikke lykkes.
-            Dvs. move hjerter 8, hvis ikke nogen af de forrige virkede (if else)
-
-
-
-         */
-
 
 }
 

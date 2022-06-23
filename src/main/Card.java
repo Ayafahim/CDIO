@@ -33,7 +33,7 @@ public class Card {
             this.faceUp = false;
         }
         else if (!this.faceUp) {
-            String input = imageRecInput.test();
+            String input = imageRecInput.connectToImageRec();
             this.setSuit(parseSuit(input));
             this.setValue(Integer.parseInt(input.substring(1)));
             this.faceUp = true;

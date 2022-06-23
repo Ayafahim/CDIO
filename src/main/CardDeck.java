@@ -36,12 +36,6 @@ public class CardDeck {
             throw new FileNotFoundException("Could not find " + file.getPath());
 
         Scanner scanner = new Scanner(file);
-        /*String next;
-        while (scanner.hasNextLine()) {
-            next = scanner.nextLine();
-            cards.add(new main.Card(parseSuit(next), parseValue(next)));
-        }*/
-
         String input = scanner.nextLine();
         String[] rawCardInput = input.split(",");
         for (String s : rawCardInput) {
@@ -60,7 +54,7 @@ public class CardDeck {
         };
     }
 
-    /**
+    /** Author Jacob
     Used in order to move the discard pile back to the draw pile, UNDER the cards already there.
     */
     public void appendToIndexOne(Card card) {
@@ -70,15 +64,6 @@ public class CardDeck {
     private int parseValue(String s) {
         //new code to follow specifications for the competition. Old code commented out below.
         return Integer.parseInt(s);
-
-        /*return switch (s.split("")[1]) {
-            case "A" -> 1;
-            case "T" -> 10;
-            case "J" -> 11;
-            case "Q" -> 12;
-            case "K" -> 13;
-            default -> Integer.parseInt(s.split("")[1]);
-        };*/
     }
 
     public void shuffleDeck() {
@@ -127,7 +112,7 @@ public class CardDeck {
     public void remove(int index) { cards.remove(index);
     }
 
-    /**
+    /** Author Alec
      * @return The index of the last card in the pile.
      */
     public int getLast() {
@@ -147,18 +132,15 @@ public class CardDeck {
         int number = 0;
         for (Card card : this.cards){
             if(!card.isFaceUp()){
-
-                //System.out.println("Debug - " + card + " is face down");
-
                 number++;
-
-                //System.out.println("Debug - Number of face down cards is " +number);
             }
         }
         return number;
     }
 
-    // Returns all cards in the deck
+    /** Author Aya
+     * @return all cards in the deck
+     */
     public ArrayList<Card> getCards(){
         return this.cards;
     }
@@ -167,7 +149,7 @@ public class CardDeck {
         cards.clear();
     }
 
-    // Returns a sublist of all the faceup cards in the deck
+    //  Returns a sublist of all the faceup cards in the deck
     public ArrayList<Card> getFaceUpCards(){
         int lastFaceDownIndex = getNumberOfFaceDownCards()-1;
         return (ArrayList<Card>) this.cards.subList(lastFaceDownIndex+1, this.cards.size());
@@ -180,7 +162,8 @@ public class CardDeck {
                 deckCard.getSuit() == card.getSuit();
     }
 
-    // Call this function to check if popping the topcard will free a downcard
+
+    // Aya: Call this function to check if popping the topcard will free a downcard
     public boolean canFreeDownCard(){
 
         return !(getNumberOfFaceDownCards() == 0);
